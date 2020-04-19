@@ -36,6 +36,7 @@
             },
             // 关闭单个标签
             closeTags(index) {
+                debugger
                 const delItem = this.tagsList.splice(index, 1)[0];
                 const item = this.tagsList[index] ? this.tagsList[index] : this.tagsList[index - 1];
                 if (item) {
@@ -115,7 +116,7 @@
 <style>
     .tags {
         position: relative;
-        height: 30px;
+        height: 34px;
         overflow: hidden;
         background: #fff;
         padding-right: 120px;
@@ -135,8 +136,8 @@
         font-size: 12px;
         overflow: hidden;
         cursor: pointer;
-        height: 23px;
-        line-height: 23px;
+        height: 26px;
+        line-height: 26px;
         border: 1px solid #e9eaec;
         background: #fff;
         padding: 0 5px 0 12px;
@@ -177,8 +178,9 @@
         padding-top: 1px;
         text-align: center;
         width: 110px;
-        height: 30px;
+        height: 34px;
         background: #fff;
+        padding-top: 3px;
         box-shadow: -3px 0 15px 3px rgba(0, 0, 0, .1);
         z-index: 10;
     }
