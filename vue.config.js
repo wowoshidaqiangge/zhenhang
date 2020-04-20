@@ -1,7 +1,16 @@
 const path = require('path')
+
+const resolve = dir => {
+  return path.join(__dirname, dir)
+}
+
 module.exports = {
     baseUrl: './',
     assetsDir: 'static',
+    outputDir: 'dist',
+    // 如果你不需要使用eslint，把lintOnSave设为false即可
+    lintOnSave: false,
+    // 设为false打包时不生成.map文件
     productionSourceMap: false,
     // devServer: {
     //     proxy: {
@@ -19,5 +28,14 @@ module.exports = {
           preProcessor: 'less',
           patterns: [path.resolve(__dirname, "assets/less/variable.less")] // 引入全局样式变量
         }
+    },
+    //设置全局路径
+    chainWebpack: (config)=>{
+      config.resolve.alias
+          .set('@', resolve('src'))
+          .set('assets',resolve('src/assets'))
+          .set('api',resolve('src/api'))
+          .set('components',resolve('src/components'))
   }
+
 }

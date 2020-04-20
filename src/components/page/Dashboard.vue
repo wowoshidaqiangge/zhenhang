@@ -1,12 +1,13 @@
 <template>
     <div class="bj" @click="gotroute">
        <p>我是首页 —— 大强哥</p>
+       
     </div>
 </template>
 
 <script>
 
-import bus from '../common/bus';
+// import bu from 'assets/img/1001417.jpg';
 export default {
     name: 'dashboard',
     data() {
@@ -35,7 +36,7 @@ export default {
 .bj{
     width: 100%;
     height: 100%;
-    background: url('../../assets/img/1001417.jpg') no-repeat;
+    background: url('~@/assets/img/1001417.jpg') no-repeat;
     background-size: 100%;
     p{
       text-align: center;
