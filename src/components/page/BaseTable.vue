@@ -10,7 +10,7 @@
         <div class="container">
             <div class="handle-box">
                 <el-button
-                    type="primary"
+                    type="add"
                     icon="el-icon-delete"
                     class="handle-del mr10"
                     @click="delAllSelection"
@@ -20,7 +20,7 @@
                     <el-option key="2" label="湖南省" value="湖南省"></el-option>
                 </el-select>
                 <el-input v-model="query.name" placeholder="用户名" class="handle-input mr10"></el-input>
-                <el-button type="primary" icon="el-icon-search" @click="handleSearch">搜索</el-button>
+                <el-button type="add" icon="el-icon-search" @click="handleSearch">搜索</el-button>
             </div>
             <el-table
                 :data="tableData"
@@ -187,7 +187,9 @@ export default {
 };
 </script>
 
-<style scoped>
+<style>
+
+
 .handle-box {
     margin-bottom: 20px;
 }

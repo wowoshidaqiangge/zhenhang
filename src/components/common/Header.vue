@@ -6,6 +6,7 @@
             <i v-else class="el-icon-s-unfold"></i>
         </div>
         <div class="logo">臻航生产管理系统</div>
+       
         <div class="header-right">
             <div class="header-user-con">
                 <!-- 全屏显示 -->
@@ -43,6 +44,9 @@
                 </el-dropdown>
             </div>
         </div>
+         <div class="nowtime">
+            {{currentTime}} &nbsp;{{nowWeek}}
+        </div>
     </div>
 </template>
 <script>
@@ -53,7 +57,10 @@ export default {
             collapse: false,
             fullscreen: false,
             name: 'linxin',
-            message: 2
+            message: 2,
+            timer: "",//定义一个定时器的变量
+            currentTime: '', // 获取当前时间
+            nowWeek:''
         };
     },
     computed: {
@@ -62,7 +69,49 @@ export default {
             return username ? username : this.name;
         }
     },
+    beforeCreate(){
+        var _this = this; //声明一个变量指向Vue实例this，保证作用域一致
+        this.timer = setInterval(function() {
+          _this.setnowtime()
+        }, 1000);
+    },
+    mounted(){
+
+    },
+    created() {
+        
+        
+    },
+    beforeDestroy() {
+        if (this.timer) {
+            clearInterval(this.timer); // 在Vue实例销毁前，清除我们的定时器
+        }
+    },
     methods: {
+        setnowtime(){
+            const weeks = ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六']
+            const wk = new Date().getDay()
+            this.currentTime = //修改数据date
+            new Date().getFullYear() +
+            "/" +
+            (new Date().getMonth() + 1) +
+            "/" +
+            new Date().getDate() +
+            " " +
+            this.appendZero(new Date().getHours()) +
+            ":" +
+            this.appendZero(new Date().getMinutes()) +
+            ":" +
+            this.appendZero(new Date().getSeconds()) ;
+            this.nowWeek  = weeks[wk]
+        },
+        appendZero(obj) {
+            if (obj < 10) {
+                return "0" + obj;
+            } else {
+                return obj;
+            }
+        },
         // 用户名下拉菜单选择事件
         handleCommand(command) {
             if (command == 'loginout') {
@@ -115,21 +164,28 @@ export default {
     position: relative;
     box-sizing: border-box;
     width: 100%;
-    height: 70px;
+    height: 60px;
     font-size: 22px;
-    color: #fff;
+    color: #2f4b76;
+}
+.nowtime{
+    float:right;
+    line-height: 60px;
+    padding-right: 30px;
+    font-size: 16px;
 }
 .collapse-btn {
     float: left;
     padding: 0 21px;
     cursor: pointer;
-    line-height: 70px;
+    line-height: 60px;
 }
 .header .logo {
    
     float: left;
     width: 250px;
-    line-height: 70px;
+    line-height: 60px;
+    letter-spacing: 2px;
 }
 .header-right {
     float: right;
@@ -137,7 +193,7 @@ export default {
 }
 .header-user-con {
     display: flex;
-    height: 70px;
+    height: 60px;
     align-items: center;
 }
 .btn-fullscreen {
@@ -165,7 +221,7 @@ export default {
     color: #fff;
 }
 .btn-bell .el-icon-bell {
-    color: #fff;
+    /* color: #fff; */
 }
 .user-name {
     margin-left: 10px;
@@ -180,7 +236,7 @@ export default {
     border-radius: 50%;
 }
 .el-dropdown-link {
-    color: #fff;
+    /* color: #fff; */
     cursor: pointer;
 }
 .el-dropdown-menu__item {

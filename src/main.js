@@ -9,6 +9,7 @@ import 'element-ui/lib/theme-chalk/index.css'; // 默认主题
 import './assets/css/icon.css';
 import './components/common/directives';
 import 'babel-polyfill';
+import '@/components/common/otherRender.js'
 
 Vue.config.productionTip = false;
 Vue.use(VueI18n);
@@ -22,7 +23,7 @@ const i18n = new VueI18n({
 
 //使用钩子函数对路由进行权限跳转
 router.beforeEach((to, from, next) => {
-    document.title = `${to.meta.title} | vue-manage-system`;
+    document.title = `${to.meta.title}`;
     const role = localStorage.getItem('ms_username');
     if (!role && to.path !== '/login') {
         next('/login');
@@ -40,6 +41,28 @@ router.beforeEach((to, from, next) => {
         }
     }
 });
+Vue.directive('otherRender',{
+    inserted:function (el,name,vm) {
+      var  icon='';
+      var  vClass='';
+      var  type=vm.context.type;
+      AllBrnName:forEach(function (item) {
+        if(type.indexOf(item.type)!=-1){
+          vClass=item.class;
+          icon=item.icon;
+        }
+      });
+      var  className=el.getAttribute('class').split('');
+      className.push(vClass)
+      el.setAttribute('class',className.jion(''));
+      //添加图标
+      vm.context.otherRender=function (h) {
+        return h('i',{
+          class:icon
+        })
+      }
+    }
+  })
 
 new Vue({
     router,

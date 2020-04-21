@@ -4,9 +4,9 @@
             class="sidebar-el-menu"
             :default-active="onRoutes"
             :collapse="collapse"
-            background-color="#324157"
-            text-color="#bfcbd9"
-            active-text-color="#20a0ff"
+            background-color="#4c5e79"
+            text-color="#fff"
+            active-text-color="#fff"
             unique-opened
             router
         >
@@ -118,12 +118,17 @@ export default {
 };
 </script>
 
-<style scoped>
+<style>
+
+.el-menu-item.is-active {
+    background-color: #409baf !important;
+}
+
 .sidebar {
     display: block;
     position: absolute;
     left: 0;
-    top: 70px;
+    top: 60px;
     bottom: 0;
     overflow-y: scroll;
 }
@@ -131,7 +136,7 @@ export default {
     width: 0;
 }
 .sidebar-el-menu:not(.el-menu--collapse) {
-    width: 250px;
+    width: 215px;
 }
 .sidebar > ul {
     height: 100%;

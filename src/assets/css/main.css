@@ -23,14 +23,15 @@ a {
 
 .content-box {
     position: absolute;
-    left: 250px;
+    left: 215px;
     right: 0;
-    top: 70px;
+    top: 60px;
     bottom: 0;
     padding-bottom: 30px;
     -webkit-transition: left .3s ease-in-out;
     transition: left .3s ease-in-out;
     background: #f0f0f0;
+    border-top: 1px solid #64a3d3;
 }
 
 .content {
@@ -175,3 +176,4 @@ a {
 .v-note-wrapper .v-note-panel {
     min-height: 500px;
 }
+
