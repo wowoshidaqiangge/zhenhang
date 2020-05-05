@@ -78,3 +78,26 @@ Vue.directive('dialogDrag', {
         }
     }
 })
+
+Vue.directive('otherRender',{
+    inserted:function (el,name,vm) {
+      var  icon='';
+      var  vClass='';
+      var  type=vm.context.type;
+      AllBrnName:forEach(function (item) {
+        if(type.indexOf(item.type)!=-1){
+          vClass=item.class;
+          icon=item.icon;
+        }
+      });
+      var  className=el.getAttribute('class').split('');
+      className.push(vClass)
+      el.setAttribute('class',className.jion(''));
+      //添加图标
+      vm.context.otherRender=function (h) {
+        return h('i',{
+          class:icon
+        })
+      }
+    }
+})

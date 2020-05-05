@@ -19,7 +19,69 @@ export default new Router({
                     component: () => import(/* webpackChunkName: "dashboard" */ '../components/page/Dashboard.vue'),
                     meta: { title: '系统首页' }
                 },
-             
+
+                // 设备管理
+                {
+                    path: '/control',
+                    component: () => import(/* webpackChunkName: "table" */ '../components/page/device/control.vue'),
+                    meta: { title: '运行监控' }
+                },
+                {
+                    path: '/statistics',
+                    component: () => import(/* webpackChunkName: "table" */ '../components/page/device/statistics.vue'),
+                    meta: { title: '设备统计' }
+                },
+                {
+                    path: '/maintenance',
+                    component: () => import(/* webpackChunkName: "table" */ '../components/page/device/maintenance.vue'),
+                    meta: { title: '设备维保' }
+                },
+                
+                //生产管理
+                {
+                    path: '/assignment',
+                    component: () => import(/* webpackChunkName: "table" */ '../components/page/production/assignment.vue'),
+                    meta: { title: '任务统计' }
+                },
+                {
+                    path: '/production',
+                    component: () => import(/* webpackChunkName: "table" */ '../components/page/production/production.vue'),
+                    meta: { title: '生产任务' }
+                },
+                 //数据统计
+                 {
+                    path: '/mainstatistics',
+                    component: () => import(/* webpackChunkName: "table" */ '../components/page/datastat/mainstatistics.vue'),
+                    meta: { title: '维保统计' }
+                },
+                {
+                    path: '/eqperformance',
+                    component: () => import(/* webpackChunkName: "table" */ '../components/page/datastat/eqperformance.vue'),
+                    meta: { title: '设备绩效' }
+                },
+                {
+                    path: '/poperformance',
+                    component: () => import(/* webpackChunkName: "table" */ '../components/page/datastat/poperformance.vue'),
+                    meta: { title: '生产绩效' }
+                },
+
+                //人员管理
+                
+
+                {
+                    path: '/staff',
+                    component: () => import(/* webpackChunkName: "table" */ '../components/page/permanagement/staff.vue'),
+                    meta: { title: '员工管理' }
+                },
+                {
+                    path: '/jurisdiction',
+                    component: () => import(/* webpackChunkName: "table" */ '../components/page/permanagement/jurisdiction.vue'),
+                    meta: { title: '权限管理' }
+                },
+
+
+
+                
                 {
                     path: '/table',
                     component: () => import(/* webpackChunkName: "table" */ '../components/page/BaseTable.vue'),

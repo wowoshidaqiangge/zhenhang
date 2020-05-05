@@ -3,8 +3,8 @@
         <div class="ms-login">
             <div class="ms-title">后台管理系统</div>
             <el-form :model="param" :rules="rules" ref="login" label-width="0px" class="ms-content">
-                <el-form-item prop="account">
-                    <el-input v-model="param.account" placeholder="account">
+                <el-form-item prop="username">
+                    <el-input v-model="param.username" placeholder="username">
                         <el-button slot="prepend" icon="el-icon-lx-people"></el-button>
                     </el-input>
                 </el-form-item>
@@ -29,27 +29,47 @@
 
 
 <script>
-// import {Login} from 'api/index'
+import {login} from 'api/index'
+import { mapActions ,mapState} from 'vuex'
 export default {
     data: function() {
         return {
             param: {
-                account: 'admin',
-                password: '123123',
+                username: 'admin',
+                password: '123456',
             },
             rules: {
-                account: [{ required: true, message: '请输入用户名', trigger: 'blur' }],
+                username: [{ required: true, message: '请输入用户名', trigger: 'blur' }],
                 password: [{ required: true, message: '请输入密码', trigger: 'blur' }],
             },
         };
     },
+   
     methods: {
+        ...mapActions([
+            'handleLogin',
+        ]),
         submitForm() {
             this.$refs.login.validate(valid => {
                 if (valid) {
+                     this.handleLogin(this.param).then(res=>{
                         this.$message.success('登录成功');
-                        localStorage.setItem('ms_username', this.param.account);
-                        this.$router.push('/')
+                        localStorage.setItem('ms_username', res.username);
+                        localStorage.setItem('TagsList','')
+                        this.$router.push('/')   
+                     })
+                  
+                    // login(this.param).then(res=>{
+                    //  if(res.code==='0'){
+                    //       this.$message.success('登录成功');
+                    //      localStorage.setItem('userId', res.data.id);
+                    //      localStorage.setItem('ms_username', res.data.username);
+                    //      this.$router.push('/')   
+                    //  }
+                    // })
+                    // this.$message.success('登录成功');
+                    // localStorage.setItem('ms_username', this.param.username);
+                    // this.$router.push('/')   
                 } else {
                     this.$message.error('请输入账号和密码');
                     console.log('error submit!!');

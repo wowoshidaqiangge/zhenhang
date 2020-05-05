@@ -23,9 +23,9 @@
 .message-title{
     color: #20a0ff;
 }
-.collapse-btn:hover{
+/* .collapse-btn:hover{
     background: rgb(40,52,70);
-}
+} */
 .el-button--add{
     color: #FFF !important;
     background-color: #409baF !important;

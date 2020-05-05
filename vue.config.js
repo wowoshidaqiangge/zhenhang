@@ -5,24 +5,25 @@ const resolve = dir => {
 }
 
 module.exports = {
-    baseUrl: './',
+  publicPath: './',
     assetsDir: 'static',
     outputDir: 'dist',
     // 如果你不需要使用eslint，把lintOnSave设为false即可
     lintOnSave: false,
     // 设为false打包时不生成.map文件
     productionSourceMap: false,
-    // devServer: {
-    //     proxy: {
-    //         '/api':{
-    //             target:'http://jsonplaceholder.typicode.com',
-    //             changeOrigin:true,
-    //             pathRewrite:{
-    //                 '/api':''
-    //             }
-    //         }
-    //     }
-    // }
+    devServer: {
+      disableHostCheck: true, //webpack4.0 开启热更新
+        // proxy: {
+        //     '/api':{
+        //         target:'http://jsonplaceholder.typicode.com',
+        //         changeOrigin:true,
+        //         pathRewrite:{
+        //             '/api':''
+        //         }
+        //     }
+        // }
+    },
     pluginOptions: {
         'style-resources-loader': {
           preProcessor: 'less',
