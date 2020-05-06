@@ -9,6 +9,7 @@ export default new Router({
             path: '/',
             redirect: '/dashboard'
         },
+
         {
             path: '/',
             component: () => import(/* webpackChunkName: "home" */ '../components/common/Home.vue'),
@@ -128,6 +129,11 @@ export default new Router({
             path: '/login',
             component: () => import(/* webpackChunkName: "login" */ '../components/page/Login.vue'),
             meta: { title: '登录' }
+        },
+        {
+            path: '/headman',
+            component: () => import(/* webpackChunkName: "login" */ '../components/page/headman/index.vue'),
+            meta: { title: '领单报工' }
         },
         {
             path: '*',

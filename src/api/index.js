@@ -331,6 +331,18 @@ export const selectProduceWorkRate = query => {
 
 
 
+// 班组长
+
+// 领单报工 页列表
+export const listByUserId = query => {
+  return request({
+      url: `/api/producetask/produceTaskAssign/listByUserId`,
+      method: 'get',
+      params:query,
+      headers: {'userId': localStorage.getItem('userId')}
+  });
+}
+
 
 export const fetchData = query => {
     return request({
