@@ -43,7 +43,7 @@
                 }else{
                     this.$router.push('/');
                 }
-                localStorage.setItem('TagsList',JSON.stringify(this.tagsList))
+                sessionStorage.setItem('TagsList',JSON.stringify(this.tagsList))
             },
             // 关闭全部标签
             closeAll(){
@@ -56,7 +56,7 @@
                     return item.path === this.$route.fullPath;
                 })
                 this.tagsList = curItem;
-                localStorage.setItem('TagsList',JSON.stringify(curItem) )
+                sessionStorage.setItem('TagsList',JSON.stringify(curItem) )
             },
             // 设置标签
             setTags(route){
@@ -73,7 +73,7 @@
                         name: route.matched[1].components.default.name
                     })
                 }
-                localStorage.setItem('TagsList',JSON.stringify(this.tagsList))
+                sessionStorage.setItem('TagsList',JSON.stringify(this.tagsList))
                 bus.$emit('tags', this.tagsList);
             },
             handleTags(command){
@@ -92,7 +92,10 @@
         },
         created(){
            //  防止刷新使标签丢失
-            this.tagsList = JSON.parse(localStorage.getItem('TagsList'))
+           if(sessionStorage.getItem('TagsList')){
+               this.tagsList = JSON.parse(sessionStorage.getItem('TagsList'))
+           }
+            
             this.setTags(this.$route);
             // 监听关闭当前页面的标签页
             bus.$on('close_current_tags', () => {

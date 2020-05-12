@@ -2,8 +2,6 @@
   <div class="poper">
        <div class="top">
             <el-form :inline="true" :model="formInline" class="demo-form-inline">
-
-         
              <el-form-item label="日期:" class="handle-select mr10" :label-width="formLabelWidth">
                   <el-date-picker
                     v-model="value1"
@@ -11,8 +9,6 @@
                     placeholder="选择年">
                     </el-date-picker>
              </el-form-item>
-           
-            
               <el-form-item class="handle-select mr1">
                   <el-button type="success" icon="el-icon-refresh-right" @click="resetting">重置</el-button>
               </el-form-item>
@@ -40,7 +36,6 @@ export default {
             value1:'',
             formInline:{},
             formLabelWidth:'80px',
-           
         }
     },
     created(){

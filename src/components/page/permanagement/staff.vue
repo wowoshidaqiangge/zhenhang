@@ -20,8 +20,8 @@
                <el-select v-model="value"  placeholder="地址" class="handle-select mr10">
                     
                 </el-select>
-                <el-input  placeholder="用户名" class="elinput"></el-input>
-                <el-button type="add" icon="el-icon-search">搜索</el-button>
+                <el-input  placeholder="用户名" class="elinput" v-model="value1" @keyup.enter.native="search()"></el-input>
+                <el-button type="add" icon="el-icon-search" @click="search">搜索</el-button>
           </div>
           <div class="bot" v-loading='botloading'  element-loading-spinner="el-icon-loading" element-loading-text="加载中...">
              <el-table
@@ -81,6 +81,7 @@ export default {
     },
     data() {
         return {
+            value1:'',
             tit:'',
             dialogFormVisible:false,
             leftloading:false,
@@ -112,7 +113,9 @@ export default {
         this.getuserPage()
     },
     methods: {
-        
+        search(){
+            console.log('123')
+        },
         handleCurrentChange(val) {
             this.page.current = val
             this.getuserPage()

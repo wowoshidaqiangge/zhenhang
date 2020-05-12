@@ -3,13 +3,13 @@ import Router from 'vue-router';
 
 Vue.use(Router);
 
-export default new Router({
+
+const router= new Router({
     routes: [
         {
             path: '/',
             redirect: '/dashboard'
         },
-
         {
             path: '/',
             component: () => import(/* webpackChunkName: "home" */ '../components/common/Home.vue'),
@@ -25,64 +25,99 @@ export default new Router({
                 {
                     path: '/control',
                     component: () => import(/* webpackChunkName: "table" */ '../components/page/device/control.vue'),
-                    meta: { title: '运行监控' }
+                    meta: { title: '运行监控',keepAlive: true }
                 },
                 {
                     path: '/statistics',
                     component: () => import(/* webpackChunkName: "table" */ '../components/page/device/statistics.vue'),
-                    meta: { title: '设备统计' }
+                    meta: { title: '设备统计',keepAlive: true }
                 },
                 {
                     path: '/maintenance',
                     component: () => import(/* webpackChunkName: "table" */ '../components/page/device/maintenance.vue'),
-                    meta: { title: '设备维保' }
+                    meta: { title: '设备维保',keepAlive: true }
                 },
                 
                 //生产管理
                 {
                     path: '/assignment',
                     component: () => import(/* webpackChunkName: "table" */ '../components/page/production/assignment.vue'),
-                    meta: { title: '任务统计' }
+                    meta: { title: '生产工单',keepAlive: false }
                 },
                 {
                     path: '/production',
                     component: () => import(/* webpackChunkName: "table" */ '../components/page/production/production.vue'),
-                    meta: { title: '生产任务' }
+                    meta: { title: '生产任务',keepAlive: false }
                 },
                  //数据统计
                  {
                     path: '/mainstatistics',
                     component: () => import(/* webpackChunkName: "table" */ '../components/page/datastat/mainstatistics.vue'),
-                    meta: { title: '维保统计' }
+                    meta: { title: '维保统计',keepAlive: true }
                 },
                 {
                     path: '/eqperformance',
                     component: () => import(/* webpackChunkName: "table" */ '../components/page/datastat/eqperformance.vue'),
-                    meta: { title: '设备绩效' }
+                    meta: { title: '设备绩效',keepAlive: true }
                 },
                 {
                     path: '/poperformance',
                     component: () => import(/* webpackChunkName: "table" */ '../components/page/datastat/poperformance.vue'),
-                    meta: { title: '生产绩效' }
+                    meta: { title: '生产绩效',keepAlive: true }
                 },
 
                 //人员管理
                 
-
                 {
                     path: '/staff',
                     component: () => import(/* webpackChunkName: "table" */ '../components/page/permanagement/staff.vue'),
-                    meta: { title: '员工管理' }
+                    meta: { title: '员工管理',keepAlive: true }
                 },
                 {
                     path: '/jurisdiction',
                     component: () => import(/* webpackChunkName: "table" */ '../components/page/permanagement/jurisdiction.vue'),
-                    meta: { title: '权限管理' }
+                    meta: { title: '权限管理',keepAlive: true }
                 },
 
 
 
+                // 维保管理
+                {
+                    path: '/mainplan',
+                    component: () => import(/* webpackChunkName: "table" */ '../components/page/main/mainplan.vue'),
+                    meta: { title: '维保计划',keepAlive: true }
+                },
+                {
+                    path: '/mainrecord',
+                    component: () => import(/* webpackChunkName: "table" */ '../components/page/main/mainrecord.vue'),
+                    meta: { title: '保养记录',keepAlive: true }
+                },
+                {
+                    path: '/repairrecord',
+                    component: () => import(/* webpackChunkName: "table" */ '../components/page/main/repairrecord.vue'),
+                    meta: { title: '维修记录',keepAlive: true }
+                },
                 
+
+                // 配置管理
+                {
+                    path: '/material',
+                    component: () => import(/* webpackChunkName: "table" */ '../components/page/dispose/material.vue'),
+                    meta: { title: '物料管理',keepAlive: true }
+                },
+                {
+                    path: '/product',
+                    component: () => import(/* webpackChunkName: "table" */ '../components/page/dispose/product.vue'),
+                    meta: { title: '产品管理',keepAlive: true }
+                },
+                {
+                    path: '/record',
+                    component: () => import(/* webpackChunkName: "table" */ '../components/page/dispose/record.vue'),
+                    meta: { title: '设备档案',keepAlive: true }
+                },
+
+
+
                 {
                     path: '/table',
                     component: () => import(/* webpackChunkName: "table" */ '../components/page/BaseTable.vue'),
@@ -132,7 +167,9 @@ export default new Router({
         },
         {
             path: '/headman',
+            // redirect: '/headman',
             component: () => import(/* webpackChunkName: "login" */ '../components/page/headman/index.vue'),
+            
             meta: { title: '领单报工' }
         },
         {
@@ -141,3 +178,20 @@ export default new Router({
         }
     ]
 });
+
+router.beforeEach((to, from, next) => {
+  
+   if(from.fullPath ==='/headman'){
+       if(to.fullPath ==='/login'){
+            next()
+       }else{
+            next({path:'/headman'})
+       }
+     
+   }else{
+    next()
+   }
+  
+})
+export default router
+

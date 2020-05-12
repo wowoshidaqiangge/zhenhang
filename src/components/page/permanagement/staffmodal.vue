@@ -78,7 +78,7 @@ export default {
             isclose:true,
             sureload:false,
             deptlist:[],
-            rolelist:[],
+            rolelist:[{name:'班组长',id:'1000'}],
             form: {
                 name: '',
                 phone: '',
@@ -136,7 +136,8 @@ export default {
        getrolePage(){
            rolePage().then(res=>{
                if(res.code==='0'){
-                   this.rolelist = res.data.records
+                //    this.rolelist =[{name:'班组长',id:'1000'}]
+                   this.rolelist.push(...res.data.records) 
                }
            })
        },

@@ -113,13 +113,14 @@ export default {
             },
             totals:0,
             columnlist:[
-                { prop:'id',label:'序号'},
+                { prop:'index',label:'序号'},
                 { prop:'deviceName',label:'设备名称'},
                 { prop:'maintenanceState',label:'维保状态'},
                 { prop:'planTime',label:'预计时间'},
                 { prop:'executeUser',label:'执行人'},
                 { prop:'createTime',label:'创建时间'},
-            ]
+            ],
+            rules:{}
             
         }
     },
@@ -179,6 +180,9 @@ export default {
       getplanPage(){
           planPage(this.page).then(res=>{
               if(res.code==='0'){
+                  res.data.records.map((item,index)=>{
+                      item.index = index + 1 
+                  })
                   this.tableData = res.data.records
                   this.pagesize = parseInt(res.data.current)
                   this.totals = parseInt(res.data.total)

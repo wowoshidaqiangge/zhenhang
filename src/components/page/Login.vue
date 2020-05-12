@@ -2,18 +2,21 @@
     <div class="login-wrap">
         <div class="ms-login">
             <div class="ms-title">后台管理系统</div>
-            <el-form :model="param" :rules="rules" ref="login" label-width="0px" class="ms-content">
+            <el-form :model="param"  ref="login" label-width="0px" class="ms-content">
                 <el-form-item prop="username">
-                    <el-input v-model="param.username" placeholder="username">
-                        <el-button slot="prepend" icon="el-icon-lx-people"></el-button>
+                    <el-input type="text" v-if='isshow' v-model="param.username" areadonly  placeholder="请输入账号" ref="getFocus" @keyup.enter.native="submitForm('0')">
+                        <el-button slot="prepend" icon="el-icon-lx-people" ></el-button>
                     </el-input>
                 </el-form-item>
                 <el-form-item prop="password">
                     <el-input
                         type="password"
-                        placeholder="password"
+                        v-if='isshow'
+                       
+                        auto-complete="new-password"
+                        placeholder="请输入密码"
                         v-model="param.password"
-                        @keyup.enter.native="submitForm()"
+                        @keyup.enter.native="submitForm('1')"
                     >
                         <el-button slot="prepend" icon="el-icon-lx-lock"></el-button>
                     </el-input>
@@ -35,28 +38,53 @@ export default {
     data: function() {
         return {
             param: {
-                username: 'admin',
-                password: '123456',
+                username: '',
+                password: '',
             },
             rules: {
                 username: [{ required: true, message: '请输入用户名', trigger: 'blur' }],
                 password: [{ required: true, message: '请输入密码', trigger: 'blur' }],
             },
+            isshow:false,
         };
     },
-   
+    mounted(){
+        setTimeout(()=>{
+            this.isshow =true
+        },1)
+         if (this.timer) {
+                clearTimeout(this.timer);
+                }
+                this.timer = setTimeout(() => {// 100毫秒延迟解决第二次打开弹框，输入框不自动获取焦点的bug
+                    this.$refs.getFocus.focus();
+                }, 100);
+    },
     methods: {
         ...mapActions([
             'handleLogin',
         ]),
-        submitForm() {
+        
+        submitForm(id) {
+            var that = this
             this.$refs.login.validate(valid => {
                 if (valid) {
-                     this.handleLogin(this.param).then(res=>{
+                 
+                    var obj = {}
+                    if(id==='0'){
+                        obj ={icCard:that.param.username}
+                    }else{
+                        obj = {...that.param}
+                    }
+                     this.handleLogin(obj).then(res=>{
                         this.$message.success('登录成功');
                         localStorage.setItem('ms_username', res.username);
                         localStorage.setItem('TagsList','')
-                        this.$router.push('/')   
+                          
+                        if(res.roleId ==='1000'){
+                            this.$router.push('/headman')  
+                        }else{
+                            this.$router.push('/')  
+                        }
                      })
                   
                     // login(this.param).then(res=>{
@@ -76,7 +104,8 @@ export default {
                     return false;
                 }
             });
-        },
+        }
+       
     },
 };
 </script>
@@ -86,7 +115,7 @@ export default {
     position: relative;
     width: 100%;
     height: 100%;
-    background-image: url(../../assets/img/login-bg.jpg);
+    background-image: url(../../assets/img/wms31.png);
     background-size: 100%;
 }
 .ms-title {
@@ -94,17 +123,19 @@ export default {
     line-height: 50px;
     text-align: center;
     font-size: 20px;
-    color: #000;
+    color: #fff;
     border-bottom: 1px solid #ddd;
 }
 .ms-login {
+    background-image: url(../../assets/img/login.png);
+    background-size: 100% 100%;
     position: absolute;
-    left: 50%;
-    top: 50%;
+    left: 76%;
+    top: 60%;
     width: 350px;
     margin: -190px 0 0 -175px;
     border-radius: 5px;
-    background: rgba(255, 255, 255, 0.3);
+    /* background: rgba(255, 255, 255, 0.3); */
     overflow: hidden;
 }
 .ms-content {

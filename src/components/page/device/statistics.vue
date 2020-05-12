@@ -68,7 +68,7 @@ export default {
             formLabelWidth:'60px',
           
             optionProps: {
-                checkStrictly: true,
+                // checkStrictly: true,
                 value: 'id',
                 label: 'title',
                 children: 'deviceList'

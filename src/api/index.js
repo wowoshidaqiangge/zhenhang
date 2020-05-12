@@ -23,8 +23,6 @@ export const userListMenu = query => {
   });
 }
 
-
-
 //  人员管理
 
 // 权限列表
@@ -280,7 +278,102 @@ export const produceTaskpage = query => {
 }
 
 
+// 新增生产
+export const produceTask = query => {
+  return request({
+      url: `/api/producetask/produceTask`,
+      method: 'post',
+      data:query,
+      headers: {'userId': localStorage.getItem('userId')}
+  });
+}
 
+// 查看详情
+export const produceTaskid = query => {
+  return request({
+      url: `/api/producetask/produceTask/${query.id}`,
+      method: 'get',
+  });
+}
+// 生产任务修改
+export const produceTaskput = query => {
+  return request({
+    url: '/api/producetask/produceTask',
+    data:query,
+    method: 'put',
+  })
+}
+// 删除生产任务
+export const produceTaskdelete = query => {
+  return request({
+      url: `/api/producetask/produceTask/${query.id}`,
+      method: 'delete',
+  });
+}
+
+// 锁定解锁任务
+export const updateProduceTaskLockById = query => {
+  return request({
+    url: '/api/producetask/produceTask/updateProduceTaskLockById',
+    data:query,
+    method: 'put',
+  })
+}
+
+
+
+
+// 生产任务工单
+export const produceTaskPlanpage = query => {
+  return request({
+      url: `/api/producetask/produceTaskPlan/page`,
+      method: 'get',
+      params:query
+  });
+}
+
+//  查看工单详情
+export const produceTaskPlanid = query => {
+  return request({
+      url: `/api/producetask/produceTaskPlan/${query.id}`,
+      method: 'get',
+  });
+}
+
+// 工单分解
+export const saveProduceTaskPlan = query => {
+  return request({
+      url: `/api/producetask/produceTask/saveProduceTaskPlan`,
+      method: 'post',
+      data:query
+  });
+}
+//  查询部门下用户
+
+export const userListByDept = query => {
+  return request({
+      url: `/api/auth/user/userListByDept`,
+      method: 'get',
+  });
+}
+// 派单 修改  重新派单
+export const produceTaskAssign = query => {
+  return request({
+      url: `/api/producetask/produceTaskAssign`,
+      method: 'post',
+      data:query
+  });
+}
+
+// 报工记录
+
+export const pageByProduceTaskPlanId = query => {
+  return request({
+      url: `/api/producetask/produceTaskReport/pageByProduceTaskPlanId`,
+      method: 'get',
+      params:query
+  });
+}
 
 
 
@@ -333,12 +426,33 @@ export const selectProduceWorkRate = query => {
 
 // 班组长
 
-// 领单报工 页列表
+//首页列表
 export const listByUserId = query => {
   return request({
       url: `/api/producetask/produceTaskAssign/listByUserId`,
       method: 'get',
       params:query,
+      headers: {'userId': localStorage.getItem('userId')}
+  });
+}
+
+
+//领单
+export const updateTaskPlanClaimById = query => {
+  return request({
+      url: `/api/producetask/produceTaskAssign/updateTaskPlanClaimById`,
+      method: 'put',
+      params:query,
+  });
+}
+
+// 报工
+
+export const produceTaskReport = query => {
+  return request({
+      url: `/api/producetask/produceTaskReport`,
+      method: 'post',
+      data:query,
       headers: {'userId': localStorage.getItem('userId')}
   });
 }

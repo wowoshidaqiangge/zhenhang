@@ -20,31 +20,74 @@
              <el-table
                 :data="tableData"
                 stripe
+                :height='screenWidth'
+                border
                 style="width: 100%">
 
                 <el-table-column
-                v-for="(item,index) in columnlist"
-                :key="index"
-                :width="item.width"
-                :prop="item.prop"
-                :label="item.label"
-                align="center"
+                    v-for="(item,index) in columnlist"
+                    :key="index"
+                    :width="item.width"
+                    :prop="item.prop"
+                    :label="item.label"
+                    align="center"
                 >
                 </el-table-column>
-               
-                <el-table-column label="操作" width="180" align="center">
+                <el-table-column
+                    label="状态"
+                    width="70">
+                    <template slot-scope="scope">
+                        <div slot="reference" class="name-wrapper">
+                            <span v-if="scope.row.state=='1' " style="color:rgb(40,176,40);font-weight:600">{{ scope.row.produceTaskState }}</span>
+                            <span v-if="scope.row.state=='2' " style="color:rgb(255,153,19);font-weight:600">{{ scope.row.produceTaskState }}</span>
+                            <span v-if="scope.row.state=='3' " style="color:rgb(69,79,201);font-weight:600">{{ scope.row.produceTaskState }}</span>
+                            <span v-if="scope.row.state=='4' " style="color:rgb(231,52,58);font-weight:600">{{ scope.row.produceTaskState }}</span>
+                            <span v-if="scope.row.state=='5' " style="color:rgb(143,143,143);font-weight:600">{{ scope.row.produceTaskState }}</span>
+                        </div>
+                    </template>
+                </el-table-column>
+                <el-table-column
+                    label="进度"
+                    width="55">
+                    <template slot-scope="scope">
+                        <div slot="reference" class="name-wrapper">
+                            <span style="color:rgb(40,176,40)">{{ scope.row.produceProgress }}</span>
+                        </div>
+                    </template>
+                </el-table-column>
+                <el-table-column
+                    label="用时"
+                    width="50">
+                    <template slot-scope="scope">
+                        <div slot="reference" class="name-wrapper">
+                            <span v-if='scope.row.produceDuration'>{{ scope.row.produceDuration }}</span>
+                        </div>
+                    </template>
+                </el-table-column>
+                <el-table-column label="操作" width="210" >
                             <template slot-scope="scope">
                                 <el-button
                                     type="success"
+                                    v-if="scope.row.state=='3' || scope.row.state=='2' ||scope.row.state=='1' "
                                     plain
-                                    icon="el-icon-edit"
+                                    @click="handleUntie(5, scope.row.id)"
+                                >锁定</el-button>
+                                <el-button
+                                    type="warning"
+                                     v-if="scope.row.state=='5' "
+                                    plain
+                                    @click="handleUntie(6, scope.row.id)"
+                                >解锁</el-button>
+                                 <el-button
+                                    type="info"
+                                     v-if="scope.row.state=='1'"
+                                    plain
                                     @click="handleEdit(scope.$index, scope.row)"
                                 >修改</el-button>
-                               
                                 <el-button
-                                    type="info"
+                                    type="danger"
                                     plain
-                                    icon="el-icon-delete"
+                                     v-if="scope.row.state=='1' || scope.row.state=='2'"
                                     class="red"
                                     @click="handleDelete(scope.$index, scope.row)"
                                 >删除</el-button>
@@ -56,76 +99,126 @@
                 <el-pagination
                     :background='true'
                     :current-page.sync="pagesize"
-                    
+                    @current-change="handleCurrentChange"
                     layout="total, prev, pager, next"
                     :total="totals">
                 </el-pagination>
             </div>
           </div>
-          <Modal :dialogFormVisible='dialogFormVisible' @close='close'/>
+          <Modal :dialogFormVisible='dialogFormVisible' @close='close' :tit='tit' ref='promodal'/>
   </div>
 </template>
 
 <script>
-import { produceTaskpage } from 'api/index'
+import { produceTaskpage,produceTaskdelete,updateProduceTaskLockById } from 'api/index'
 import Modal from './modal'
+import { mapState } from 'vuex'
 export default {
     name: 'production',
     components:{
         Modal
+    },
+    computed:{
+        ...mapState(['screenHeight'])
+    },
+    watch: {
+        // 监听高度
+        screenHeight (newVal, oldVal) {
+            if(newVal){
+                this.screenWidth = (newVal-200) + 'px'
+            }
+        }
     },
     data() {
         return {
             dialogFormVisible:false,
             value:'',
             value1:'',
+            tit:'',
             page:{
                 current:1,
                 size:10
             },
             tableData:[],
             columnlist:[
-                {prop:'',label:'序号'},
+                {prop:'index',label:'序号',width:'50'},
                 {prop:'taskNumber',label:'工单号'},
-                // {prop:'productName',label:'物料名称'},
-                // {prop:'productCode',label:'物料编码'},
-                // {prop:'specificationModel',label:'规格型号'},
-                {prop:'planYield',label:'计划生产量'},
-                {prop:'planStartTime',label:'计划开始时间'},
-                {prop:'state',label:'状态'},
-                {prop:'produceProgress',label:'进度',width:'100'},
-                {prop:'produceDuration',label:'用时',width:'100'},
-             
+                {prop:'deviceType',label:'部门'},
+                {prop:'productName',label:'物料名称'},
+                {prop:'productCode',label:'物料编码'},
+                {prop:'specificationModel',label:'规格型号',width:'70'},
+                {prop:'planYield',label:'计划生产量',width:'95'},
+                {prop:'planStartTime',label:'开始时间',width:'90'},
+                {prop:'planEndTime',label:'结束时间',width:'90'},
+                {prop:'createTime',label:'创建时间',width:'90'},
+                {prop:'createUser',label:'下单人',width:'70'},
             ],
             pagesize:1,
-            totals:0
+            totals:0,
+            screenWidth:'520px'
         }
     },
+   
     created(){
         this.getproduceTaskpage()
     },
     methods: {
         getproduceTaskpage(){
             produceTaskpage(this.page).then(res=>{
-                debugger
                 if(res.code==='0'){
+                    res.data.records.map((item,index)=>{
+                        item.index = index + 1
+                        item.planStartTime = item.planStartTime.split(' ')[0]
+                        item.planEndTime = item.planEndTime.split(' ')[0]
+                        item.createTime = item.createTime.split(' ')[0]
+                    })
                     this.tableData = res.data.records
                     this.pagesize = parseInt(res.data.current)
                     this.totals = parseInt(res.data.total)
                 }
             })
         },
+        handleCurrentChange(val){
+            this.page.current=val
+            this.getproduceTaskpage()
+        },
         add(){
-            debugger
+            this.tit = '新增任务'
             this.dialogFormVisible = true
         },
-        close(){
+        close(num){
             this.dialogFormVisible = false
+            if(num==='0'){
+                this.getproduceTaskpage()
+            }
+        },
+        handleEdit(h,m){
+             this.tit = '编辑任务'
+             this.$refs.promodal.getproduceTaskid(m)
+             this.dialogFormVisible = true
+           
+        },
+        handleDelete(h,m){
+            produceTaskdelete(m).then(res=>{
+                if(res.code==='0'){
+                    this.$message.success(res.msg)
+                    this.getproduceTaskpage()
+                }
+            })
+        },
+        // 锁定解锁
+        handleUntie(h,m){
+            var obj = {id:m,state:h}
+            updateProduceTaskLockById(obj).then(res=>{
+                if(res.code==='0'){
+                    this.$message.success(res.msg)
+                    this.getproduceTaskpage()
+                }
+            })
         }
     }
 }
 </script>
-
 
 <style lang='less'>
     .production{

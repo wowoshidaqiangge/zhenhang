@@ -1,12 +1,13 @@
 <template>
   <div class="mainstatistics">
-       <div>
+       <div class="top">
            <el-col>
             <el-form :inline="true" :model="terms" ref="termsForm">
                 <el-col :span="4">
                     <el-form-item label="选择年份" prop="yearParam">
                         <el-date-picker
-                                v-model="terms.yearParam"
+                               v-model="terms.yearParam"
+                                @change="changeyear"
                                 type="year" format="yyyy"
                                 placeholder="选择年">
                         </el-date-picker>
@@ -16,7 +17,8 @@
                 <el-col :span="4">
                     <el-form-item label="选择月份" prop="monthParam">
                         <el-date-picker
-                                v-model="terms.monthParam"
+                        v-model="terms.monthParam"
+                                  @change="changemon"
                                 type="month" format="MM"
                                 placeholder="选择月">
                         </el-date-picker>
@@ -25,7 +27,7 @@
 
                 <el-col :span="5">
                     <el-form-item label="选择设备" prop='deviceId' >
-                        <el-select v-model="terms.deviceId" placeholder="选择设备">
+                        <el-select v-model="terms.deviceId" clearable  placeholder="选择设备">
                             <el-option v-for="item in deviceList" :label="item.name" :key='item.id' :value="item.id"></el-option>
                         </el-select>
                     </el-form-item>
@@ -33,7 +35,7 @@
 
                 <el-col :span="5">
                     <el-form-item label="维保类型" prop='state'>
-                        <el-select v-model="terms.state" placeholder="选择维保类型">
+                        <el-select v-model="terms.state" clearable  placeholder="选择维保类型">
                             <el-option v-for='item in stateArr' :label="item.label" :value="item.value"
                                        :key="item.value"></el-option>
                         </el-select>
@@ -47,8 +49,6 @@
                         <!-- <el-button type="success" @click="handleExport">导出报告</el-button> -->
                     </el-form-item>
                 </el-col>
-
-
             </el-form>
         </el-col>
        </div>
@@ -62,6 +62,9 @@
            <el-table
             :data="tableData"
             height="510"
+            v-loading='isload'
+            element-loading-text="拼命加载中"
+            element-loading-spinner="el-icon-loading"
             style="width: 100%">
             <el-table-column
                 prop="deviceName"
@@ -72,16 +75,15 @@
                 v-for="(item,index) in columnlist"
                 :key="index"
                 :index='index'
-
                 :prop="item.prop"
                 :label="item.label"
                 align="center"
                 >
                 <template slot-scope="scope">
-                    <img  v-if="(scope.row.deviceMaintainList[scope.column.index].state.split(',').findIndex(v=> v==1)!==-1)" src="~@/assets/img/suc.png"/>
-                    <img  v-if="(scope.row.deviceMaintainList[scope.column.index].state.split(',').findIndex(v=> v==2)!==-1)" src="~@/assets/img/error.png"/>
-                    <img  v-if="(scope.row.deviceMaintainList[scope.column.index].state.split(',').findIndex(v=> v==3)!==-1)" src="~@/assets/img/repair.png"/>
-                    <img  v-if="(scope.row.deviceMaintainList[scope.column.index].state.split(',').findIndex(v=> v==4)!==-1)" src="~@/assets/img/circle.png"/>
+                    <img  v-if="scope.row.deviceMaintainList[scope.column.index]&&(scope.row.deviceMaintainList[scope.column.index].state.split(',').findIndex(v=> v==1)!==-1)" src="~@/assets/img/suc.png"/>
+                    <img  v-if="scope.row.deviceMaintainList[scope.column.index]&&(scope.row.deviceMaintainList[scope.column.index].state.split(',').findIndex(v=> v==2)!==-1)" src="~@/assets/img/error.png"/>
+                    <img  v-if="scope.row.deviceMaintainList[scope.column.index]&&(scope.row.deviceMaintainList[scope.column.index].state.split(',').findIndex(v=> v==3)!==-1)" src="~@/assets/img/repair.png"/> 
+                    <img  v-if="scope.row.deviceMaintainList[scope.column.index]&&(scope.row.deviceMaintainList[scope.column.index].state.split(',').findIndex(v=> v=='4')!==-1)" src="~@/assets/img/circle.png"/>
                 </template>
             </el-table-column>
         </el-table>
@@ -99,6 +101,7 @@ export default {
             tableData:[],
             columnlist:[],
             deviceList:[],
+            isload:false,
             terms: {
                     yearParam: '',
                     monthParam: '',
@@ -116,31 +119,33 @@ export default {
         this.getDeviceList()
     },
     methods: {
-        // handleEdit(h,m){
-        //     debugger
-        //     console.log(m.row.deviceMaintainList[m.column.index].state.split(','))
-        
-        // },
+      
       getselectDeviceMaintainData(){
+          this.isload = true
           selectDeviceMaintainData(this.terms).then(res=>{
+               this.isload = false
               if(res.code==='0'){
-                  let arr = []
-                   var arr1 = {}
-                  res.data.map((item,index) => {
+                let arr = []
+                var arr1 = {}
+                this.columnlist= []
+                res.data.map((item,index) => {
                     arr1 = {}
+                    //处理数据格式
                     item.deviceMaintainList.map((h,j)=>{
                         if(index=='0'){
                             this.columnlist.push({label: h.dateTime,prop:`state${j}`})
                         }
                         arr1[`dateTime${j}`] = h.dateTime
-                        arr1[`dateList${j}`] = h.dateList
+                        // arr1[`dateList${j}`] = h.dateList
                         arr1[`state${j}`] = h.state
                     })
                         arr.push({ ...item,...arr1})
                     });
-                    this.tableData = arr
-                  console.log(this.columnlist)
-              }
+                    this.$nextTick(()=>{
+                        this.tableData = arr
+                    })
+                   console.log(this.columnlist)
+                }
           })
         },
         getDeviceList(){
@@ -150,10 +155,14 @@ export default {
                     }
                 })
         },
+        changeyear(i){
+          this.terms.yearParam =  moment(i).format('YYYY')
+            
+        },
+        changemon(i){
+            this.terms.monthParam = moment(i).format('MM')
+        },
         onSubmit(){
-            this.terms.monthParam = moment(this.terms.monthParam[0]).format('MM')
-            this.terms.yearParam = moment(this.terms.yearParam[0]).format('YYYY')
-            console.log(this.terms)
             this.getselectDeviceMaintainData()
         },
         onReset(){
@@ -177,6 +186,9 @@ export default {
         display: flex;
         padding: 0 5px;
         flex-direction: column;
+        .top{
+            padding-left: 5px;
+        }
         .el-form-item__content{
             
             .el-date-editor{
@@ -199,6 +211,7 @@ export default {
         .titimg{
             display: flex;
             padding-bottom: 10px;
+            padding-left: 5px;
             span{
                 display: flex;
                 align-items: center;
@@ -214,6 +227,15 @@ export default {
         .bot{
             // flex: 1;
             // overflow: auto;
+            .is-scrolling-left{
+                height: 471px !important;
+            }
+            .is-scrolling-right{
+                 height: 471px !important;
+            }
+            .is-scrolling-middle{
+                 height: 471px !important;
+            }
         }
     }
 </style>
