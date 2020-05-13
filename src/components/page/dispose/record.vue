@@ -12,7 +12,7 @@
             <el-table
                 :data="tableData"
                 stripe
-                height="520"
+                :height="screenWidth"
                 style="width: 100%">
                 <el-table-column
                 v-for="(item,index) in columnlist"
@@ -79,8 +79,9 @@
 </template>
 
 <script>
-import {devicepage,updateState} from 'api/main'
+import {devicepage,updateState,devicedelete} from 'api/main'
 import recordModal from './recordmodal'
+import { mapState } from 'vuex'
 export default {
     name: 'record',
     components:{
@@ -108,12 +109,21 @@ export default {
             dialogFormVisible:false,
             tit:'',
             pagesize:1,
-            totals:0
+            totals:0,
+            screenWidth:'520px'
         }
     },
-     computed: {
-       
+    computed:{
+        ...mapState(['screenHeight'])
     },
+    watch: {
+        screenHeight (newVal, oldVal) {
+            if(newVal){
+                this.screenWidth = (newVal-200) + 'px'
+            }
+        }
+    },
+  
     created(){
         this.getdevicepage()
     },
@@ -163,9 +173,29 @@ export default {
             }
             // obj = JSON.stringify(obj)
             updateState(obj).then(res=>{
-
+                if(res.code==='0'){
+                    this.$message.success(res.msg)
+                    this.getdevicepage()
+                }
             })
         },
+        // 删除
+        handledistribute(h,m){
+            this.$confirm('确定要删除吗？', '提示', {
+                type: 'warning'
+            })
+            .then(() => {
+                   devicedelete(m).then(res=>{
+                        if(res.code==='0'){
+                            this.$message.success(res.msg)
+                            this.getdevicepage()
+                        }
+
+                    })
+            })
+            .catch(() => {});
+            
+        }
        
     }
 }

@@ -62,6 +62,7 @@
            <el-table
             :data="tableData"
             height="510"
+            border
             v-loading='isload'
             element-loading-text="拼命加载中"
             element-loading-spinner="el-icon-loading"

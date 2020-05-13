@@ -87,6 +87,7 @@ export default {
                            name: item.name,
                            type: item.type,
                            data: item.data,
+                            stack:'总量',
                             barWidth: item.barWidth
                        });
                 })

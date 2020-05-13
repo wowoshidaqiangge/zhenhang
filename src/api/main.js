@@ -30,6 +30,15 @@ export const devicepage = query => {
     });
   }
 
+// 修改
+export const deviceupdate = query => {
+  return request({
+      url: `/api/device/update`,
+      data:query,
+      method: 'put',
+  });
+}
+
  //查看设备详情
  export const deviceid = query => {
     return request({
@@ -43,10 +52,74 @@ export const devicepage = query => {
   export const updateState = query => {
     return request({
         url: `/api/device/updateState`,
-        method: 'put',
         data:query,
-        // dataType:'json',
-       
+        method: 'put',
     });
   }
   
+
+  // 删除设备
+  export const devicedelete = query => {
+    return request({
+        url: `/api/device/${query.id}`,
+        method: 'delete',
+        params:query
+    });
+  }
+  
+// 根据设备类型查询设备编号
+export const getListByToType = query => {
+  return request({
+      url: `/api/device/getListByToType`,
+      method: 'get',
+      params:query
+  });
+}
+
+
+  //保养计划
+  export const maintenancepage = query => {
+    return request({
+        url: `/api/maintain/maintenance/page`,
+        method: 'get',
+        params:query
+    });
+  }
+  
+  // 新增保养计划
+  export const maintenanceadd = query => {
+    return request({
+        url: `/api/maintain/maintenance`,
+        method: 'post',
+        data:query,
+     
+    });
+  }
+  
+  // 查看保养计划详情
+  export const maintenanceid = query => {
+    return request({
+        url: `/api/maintain/maintenance/${query.id}`,
+        method: 'get',
+        params:query
+    });
+  }
+
+  //修改
+  export const maintenanceput = query => {
+    return request({
+        url: `/api/maintain/maintenance`,
+        data:query,
+        method: 'put',
+    });
+  }
+  // 删除
+  export const maintenancedelete = query => {
+    return request({
+        url: `/api/maintain/maintenance/${query.id}`,
+        data:query,
+        method: 'delete',
+    });
+  }
+
+ 

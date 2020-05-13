@@ -37,33 +37,51 @@
                         </el-form-item>
                     </el-col>
                </div>
-                     <el-col :span="12" v-if="tit!=='工单分解'">
-                        <el-form-item label="部门" :label-width="formLabelWidth" prop='userId' >
-                                 <el-cascader
-                                    v-model="form.userId"
-                                    :options="getuserList"
-                                    :props='casprops'
-                                    
-                                    @change="handleChange">
-                                </el-cascader>
-                        </el-form-item>
-                    </el-col>
-                   
-                     <el-col :span="12" v-if="tit!=='工单分解'">
-                        <el-form-item label="生产设备" :label-width="formLabelWidth" prop='deviceId'>
-                                <el-select v-model="form.deviceId" placeholder="请选择">
-                                    <el-option
-                                        v-for="item in devicelist"
-                                        :key="item.id"
-                                        :label="item.name"
-                                        :value="item.id">
-                                    </el-option>
-                                </el-select>
-                        </el-form-item>
-                    </el-col>
-
+                 <el-col :span="24"  class="upload-demo" v-if="tit!=='工单分解' ">
+                    <span style="line-height:32px;font-size: 18px;color: #324170;">工艺文件上传:</span>
+                        <el-upload
+                            :action="host"
+                            :data="ossParams"
+                            :on-success="handleSuccess"
+                            :before-upload="beforeUpload"
+                            :limit='limit'
+                            class="upload-demo1"
+                            :on-remove="handleRemove"
+                            :on-exceed='exceed'
+                            :file-list="fileList">
+                            <el-button size="small" type="primary">点击上传</el-button>
+                            <!-- <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div> -->
+                        </el-upload>
+                </el-col>
+                 <div v-if="tit!=='工单分解'">
+                     <p style="line-height:32px;font-size: 18px;color: #324170;padding:10px 0">请选择派单设备和人员:</p>
+                        <el-col :span="12" >
+                            <el-form-item label="部门" :label-width="formLabelWidth" prop='userId' >
+                                    <el-cascader
+                                        v-model="form.userId"
+                                        :options="getuserList"
+                                        :props='casprops'
+                                        
+                                        @change="handleChange">
+                                    </el-cascader>
+                            </el-form-item>
+                        </el-col>
+                    
+                        <el-col :span="12" >
+                            <el-form-item label="生产设备" :label-width="formLabelWidth" prop='deviceId'>
+                                    <el-select v-model="form.deviceId" placeholder="请选择">
+                                        <el-option
+                                            v-for="item in devicelist"
+                                            :key="item.id"
+                                            :label="item.name"
+                                            :value="item.id">
+                                        </el-option>
+                                    </el-select>
+                            </el-form-item>
+                        </el-col>
+                 </div>
             </el-form> 
-    
+           
             <el-col :span="24" v-if="tit==='工单分解'">
                 <span>分解工单数:</span>
                 <el-input-number v-model="num" @change="handleChange" :min="0" :max="5" style="margin:10px 0 20px 23px"></el-input-number>
@@ -76,20 +94,7 @@
                  </div>
             </el-col>
 
-            <!-- <el-col :span="24" >
-                <span style="line-height:32px">文件上传:</span>
-                <div>
-                    <el-upload
-                        class="upload-demo"
-                        drag
-                        action="http://jsonplaceholder.typicode.com/api/posts/"
-                        multiple>
-                        <i class="el-icon-upload"></i>
-                        <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
-                       
-                    </el-upload>
-                </div>
-            </el-col> -->
+            
 
         </el-row>
         
@@ -104,6 +109,7 @@
 
 <script>
 import { produceTaskPlanid,saveProduceTaskPlan,deviceList,userListByDept, produceTaskAssign } from 'api/index'
+import { onenet } from 'api/onenet'
 import moment from 'moment'
 export default {
     name: 'assignmodal',
@@ -118,6 +124,17 @@ export default {
     },
     data() {
         return {
+            limit:1,
+            host:'http://thingcom-dianliuji.oss-cn-hangzhou.aliyuncs.com',
+            ossParams: {
+                OSSAccessKeyId: '',
+                policy: '',
+                signature: '',
+                expire: '',
+                key: '',                      // key后面有用，先默认设空字符串
+                success_action_status: '200'  // 默认200
+            },
+            fileList:[],
             form: {
                 productName: '',
                 productCode: '',
@@ -127,7 +144,9 @@ export default {
                 planStartTime: '',
                 planEndTime: '',
                 yieldList:[],
-                userId :''
+                userId :'',
+                technologyName:'',
+                technology:''
             },
             formLabelWidth: '80px',
             num:0,
@@ -153,6 +172,55 @@ export default {
         this.getuserListByDept()
     },
     methods: {
+        handleSuccess (res, file) {
+                var a  = this.host + '/' + this.ossParams.key
+                this.form.technologyName = file.name
+                this.form.technology = a
+        },
+        // 上传之前的回调
+        beforeUpload: async function (file) {
+            await this.backOssInfo(file)
+        },
+        handleRemove(file, fileList){
+            this.$message.success('删除成功')
+            this.fileList = []
+            this.form.technologyName = ''
+            this.form.technology = ''
+        },
+        exceed(files, fileList){
+            this.$message.error('最多只能上传一个文件！')
+        },
+        // 获取oss签名数据
+        backOssInfo: function (file) {
+            return new Promise(function (resolve, reject) {
+                onenet.ossInfo().then(function (response) {
+                if (response === undefined) {
+                    this.$message.error(response.error)
+                    reject()
+                } else {
+                    this.ossParams.OSSAccessKeyId = response.accessid
+                    this.ossParams.policy = response.policy
+                    this.ossParams.signature = response.signature
+                    this.ossParams.key = localStorage.getItem('userId') + this.randomWord(true, 9, 12)
+                    resolve()
+                }
+                }.bind(this))
+            }.bind(this))
+        },
+        randomWord (randomFlag, min, max) {
+            let str = ''
+            let range = min
+            let arr = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
+            // 随机产生
+            if (randomFlag) {
+                range = Math.round(Math.random() * (max - min)) + min
+            }
+            for (let i = 0; i < range; i++) {
+                let pos = Math.round(Math.random() * (arr.length - 1))
+                str += arr[pos]
+            }
+            return str
+        },
         // 设备列表
         getdeviceList(){
             deviceList().then(res=>{
@@ -174,7 +242,10 @@ export default {
        getproduceTaskPlanid(id){
            var obj = {id:id.produceTaskPlanId}
            produceTaskPlanid(obj).then(res=>{
-              res.data.userId = res.data.executeUserId
+               res.data.userId = res.data.executeUserId
+               if(res.data.technologyName){
+                   this.fileList.push({name:res.data.technologyName,url:res.data.technology})
+               }
                this.form = res.data
            })
        },
@@ -271,7 +342,7 @@ export default {
         .modalcont{
           padding: 25px 0;
           border: 1px dashed #aaa;
-          margin-bottom: 15px;
+          margin-bottom: 25px;
           height: 140px;
 
         }
@@ -279,6 +350,17 @@ export default {
             padding: 10px 0;
             font-size: 18px;
             color: #324170;
+        }
+        .upload-demo{
+            margin-bottom: 20px;
+             .upload-demo1{
+                 padding: 10px;
+             }
+            .el-upload{
+                width: 80px;
+                height: 32px;
+                border: none;
+            }
         }
         
     }

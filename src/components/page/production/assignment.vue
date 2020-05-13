@@ -220,7 +220,7 @@ export default {
      },
      // 修改
      handleEdit(h,m){
-         this.tit = '派单'
+         this.tit = '修改'
          this.$refs.assignmodal.getproduceTaskPlanid(m)
          this.dialogFormVisible = true
      },

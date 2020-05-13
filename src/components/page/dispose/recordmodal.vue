@@ -77,7 +77,7 @@
 </template>
 
 <script>
-import { deviceToTypeList,devicesave,deviceid} from 'api/main'
+import { deviceToTypeList,devicesave,deviceid,deviceupdate} from 'api/main'
 import { deviceTypeList} from 'api/index'
 
 export default {
@@ -172,12 +172,22 @@ export default {
        marksure(form){
             this.$refs[form].validate((valid) => {
                 if (valid) {
-                  devicesave(this.form).then(res=>{
-                     if(res.code==='0'){
-                         this.$message.success(res.msg)
-                         this.close('0')
-                     }
-                  })
+                   if(this.tit== '新增档案'){
+                       devicesave(this.form).then(res=>{
+                            if(res.code==='0'){
+                                this.$message.success(res.msg)
+                                this.close('0')
+                            }
+                        })
+                   }else{
+                       deviceupdate(this.form).then(res=>{
+                            if(res.code==='0'){
+                                this.$message.success(res.msg)
+                                this.close('0')
+                            }
+                       })
+                   }
+                  
                    
                 } else {
                     console.log('error submit!!');
