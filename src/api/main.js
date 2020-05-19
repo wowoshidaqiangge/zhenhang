@@ -122,4 +122,78 @@ export const getListByToType = query => {
     });
   }
 
+
+  //保养记录分页查询
+  export const mainrecordpage = query => {
+    return request({
+        url: `/api/maintain/maintenance/pageRecord`,
+        method: 'get',
+        params:query
+    });
+  }
+    // 查看保养计划详情
+    export const mainrecordid = query => {
+      return request({
+          url: `/api/maintain/maintenance/getRecord/${query.id}`,
+          method: 'get',
+          params:query
+      });
+    }
+    //填报保养记录
+    export const mainrecordput = query => {
+      return request({
+          url: `/api/maintain/maintenance/updateContent`,
+          data:query,
+          method: 'put',
+      });
+    }
+
+
+  //维修记录分页查询
+  export const repairrecordpage = query => {
+    return request({
+        url: `/api/maintain/repair/page`,
+        method: 'get',
+        params:query
+    });
+  }
+  // 查看维修记录详情
+  export const mainrepairid = query => {
+    return request({
+        url: `/api/maintain/repair/${query.id}`,
+        method: 'get'
+    });
+  }
  
+  //修改维修记录
+  export const mainrepairput = query => {
+    return request({
+        url: `/api/maintain/repair`,
+        data:query,
+        method: 'put',
+    });
+  }
+  //新增维修记录
+  export const mainrepairadd = query => {
+    return request({
+        url: `/api/maintain/repair`,
+        data:query,
+        method: 'post',
+    });
+  }
+  //删除维修记录
+  export const mainrepairdel = query => {
+    return request({
+        url: `/api/maintain/repair/${query.id}`,
+        data:query,
+        method: 'delete',
+    });
+  }
+  //查看设备详情
+  export const devInfo = query => {
+    return request({
+        url: `/api/device/${query.id}`,
+        data:query,
+        method: 'get',
+    });
+  }
