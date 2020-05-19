@@ -49,6 +49,16 @@ const router= new Router({
                     component: () => import(/* webpackChunkName: "table" */ '../components/page/production/production.vue'),
                     meta: { title: '生产任务',keepAlive: false }
                 },
+                {
+                    path: '/purchase',
+                    component: () => import(/* webpackChunkName: "table" */ '../components/page/production/purchase.vue'),
+                    meta: { title: '采购信息',keepAlive: false }
+                },
+                {
+                    path: '/order',
+                    component: () => import(/* webpackChunkName: "table" */ '../components/page/production/order.vue'),
+                    meta: { title: '订单管理',keepAlive: false }
+                },
                  //数据统计
                  {
                     path: '/mainstatistics',
@@ -65,7 +75,17 @@ const router= new Router({
                     component: () => import(/* webpackChunkName: "table" */ '../components/page/datastat/poperformance.vue'),
                     meta: { title: '生产绩效',keepAlive: true }
                 },
-
+                {
+                    path: '/devicemain',
+                    component: () => import(/* webpackChunkName: "table" */ '../components/page/datastat/devicemain.vue'),
+                    meta: { title: '设备保养',keepAlive: true }
+                },
+                {
+                    path: '/devicerepair',
+                    component: () => import(/* webpackChunkName: "table" */ '../components/page/datastat/devicerepair.vue'),
+                    meta: { title: '设备维修',keepAlive: true }
+                },
+                
                 //人员管理
                 
                 {

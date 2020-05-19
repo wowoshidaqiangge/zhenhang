@@ -73,7 +73,7 @@ export default {
               {prop:'remark',label:'备注'},
             ],
             tableData:[],
-            screenWidth:'520px',
+            screenWidth:(document.body.clientHeight-215) + 'px',
             page:{
               current:1,
               size:10
@@ -143,17 +143,10 @@ export default {
        width: 100%;
        height: 100%;
         .top{
-                height: 45px;
-                line-height: 45px;
-            .mr10{
-                margin-left: 50%;
-                width: 10%;
-            }
+                height: 50px;
+                margin-top:10px;
         }
-        .elinput{
-             width: 20%;
-            margin: 0 2% 0 5px;
-        }
+      
          .page{
                 margin-top: 10px;
                 float: right;

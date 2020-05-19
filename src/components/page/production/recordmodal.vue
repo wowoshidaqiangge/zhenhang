@@ -25,6 +25,7 @@
 
 <script>
 import { pageByProduceTaskPlanId} from 'api/index'
+
 import moment from 'moment'
 export default {
     name: 'recordmodal',
@@ -59,7 +60,6 @@ export default {
     },
     methods: {
        getpageByProduceTaskPlanId(id){
-           debugger
            var obj ={produceTaskPlanId:id,...this.page}
            pageByProduceTaskPlanId(obj).then(res=>{
                if(res.code==='0'){

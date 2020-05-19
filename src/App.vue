@@ -26,6 +26,7 @@ export default {
   },
 
   mounted () {
+    
     window.onresize = () => {
       this.changeScreenHeight(document.documentElement.clientHeight)
     }

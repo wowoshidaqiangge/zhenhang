@@ -55,6 +55,17 @@ export const userPage = query => {
   });
 }
 
+// 员工禁用和启用
+
+export const updateValid = query => {
+  return request({
+    url: '/api/auth/user/updateValid',
+    data:query,
+    method: 'put',
+    
+  })
+}
+
 
 // 角色列表
 
@@ -393,7 +404,7 @@ export const selectDeviceWorkTimeList = query => {
 
 
 
-// 维保统计
+// 维保统计  设备保养
 export const selectDeviceMaintainData = query => {
   return request({
       url: `/api/device/deviceMaintain/selectDeviceMaintainData`,
@@ -403,9 +414,34 @@ export const selectDeviceMaintainData = query => {
 }
 
 
+//设备保养表格
+export const selectDeviceMaintainList = query => {
+  return request({
+      url: `/api/device/deviceMaintain/selectDeviceMaintainList`,
+      method: 'get',
+      params:query
+  });
+}
 
 
+// 设备维修
+export const selectDeviceRepairData = query => {
+  return request({
+      url: `/api/device/deviceMaintain/selectDeviceRepairData`,
+      method: 'get',
+      params:query
+  });
+}
 
+
+// 设备维修列表
+export const selectDeviceRepairList = query => {
+  return request({
+      url: `/api/device/deviceMaintain/selectDeviceRepairList`,
+      method: 'get',
+      params:query
+  });
+}
 
 
 

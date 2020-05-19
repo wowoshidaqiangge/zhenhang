@@ -15,18 +15,47 @@
         </el-tree>
       </div>
       <div class="right" >
-          <div class="top">
-              <el-button type="add" icon='el-icon-circle-plus-outline' @click="add">新增</el-button>
-               <el-select v-model="value"  placeholder="地址" class="handle-select mr10">
-                    
-                </el-select>
-                <el-input  placeholder="用户名" class="elinput" v-model="value1" @keyup.enter.native="search()"></el-input>
-                <el-button type="add" icon="el-icon-search" @click="search">搜索</el-button>
-          </div>
+           <div class="top">
+                <el-row>
+                    <el-form :model="seachinfo"  ref="seachinfo"  class="demo-ruleForm">
+                    <el-col :span="12">
+                        <el-form-item label="" >
+                            <el-button type="add" icon='el-icon-circle-plus-outline' @click="add">新增</el-button>
+                        </el-form-item>
+                    </el-col>
+                   
+                    <el-col :span="3" style="margin:0 20px">
+                        <el-form-item label=""  prop="isValid" >
+                            <el-select v-model="seachinfo.isValid"  placeholder="状态" >
+                                <el-option
+                                    v-for="item in options"
+                                    :key="item.value"
+                                    :label="item.name"
+                                    :value="item.value">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="3" style="margin-right:10px">
+                        <el-form-item label=""  prop="userNameOrPhone" >
+                            <el-input  placeholder="用户名" v-model="seachinfo.userNameOrPhone" class="elinput"> </el-input>
+                        </el-form-item>
+                        
+                    </el-col>
+                    <el-col :span="4">
+                        <el-form-item label="" >
+                                <el-button type="add" icon="el-icon-search" @click="seachinfo1">搜索</el-button>
+                                <el-button type="success" icon="el-icon-refresh-right" @click="resetting">重置</el-button>
+                        </el-form-item>
+                    </el-col>
+                    </el-form>
+                </el-row>
+            </div>
           <div class="bot" v-loading='botloading'  element-loading-spinner="el-icon-loading" element-loading-text="加载中...">
              <el-table
                 :data="tableData"
                 stripe
+                :height='screenWidth'
                 style="width: 100%">
                 <el-table-column
                 v-for="(item,index) in columnlist"
@@ -36,19 +65,40 @@
                 align="center"
                 >
                 </el-table-column>
-                <el-table-column label="操作" width="180" align="center">
+                 <el-table-column label="状态" align="center">
+                      <template slot-scope="scope">
+                          <span v-if="scope.row.isValid== '1' ">正常</span>
+                          <span v-if="scope.row.isValid== '0' " style="color:red">禁用</span>
+                      </template>
+                    </el-table-column>
+                <el-table-column label="操作" width="210" >
                             <template slot-scope="scope">
+                                <el-button
+                                    type="add"
+                                    v-if="scope.row.isValid ==0 "
+                                    plain
+                                   
+                                    @click="handle(1, scope.row)"
+                                >启用</el-button>
+                                 <el-button
+                                    type="error"
+                                    plain
+                                     v-if="scope.row.isValid ==1 "
+                                   
+                                    @click="handle(0, scope.row)"
+                                >禁用</el-button>
                                 <el-button
                                     type="success"
                                     plain
-                                    icon="el-icon-edit"
+                                     v-if="scope.row.isValid ==1 "
+                                  
                                     @click="handleEdit(scope.$index, scope.row)"
                                 >修改</el-button>
                                
                                 <el-button
                                     type="info"
+                                     v-if="scope.row.isValid ==1 "
                                     plain
-                                    icon="el-icon-delete"
                                     class="red"
                                     @click="handleDelete(scope.$index, scope.row)"
                                 >删除</el-button>
@@ -72,7 +122,7 @@
 </template>
 
 <script>
-import {deptList, userPage ,userDelete,authputUserid} from 'api/index'
+import {deptList, userPage ,userDelete,authputUserid,updateValid} from 'api/index'
 import Modal from './staffmodal'
 export default {
     name: 'staff',
@@ -81,6 +131,11 @@ export default {
     },
     data() {
         return {
+            screenWidth:(document.body.clientHeight-215) + 'px',
+            seachinfo:{
+                userNameOrPhone:'',
+                isValid:''
+            },
             value1:'',
             tit:'',
             dialogFormVisible:false,
@@ -105,7 +160,11 @@ export default {
             },
             totals:0,
             pagesize:1,
-            isedit:false
+            isedit:false,
+            options:[
+                {name:'正常',value:'1'},
+                {name:'禁用',value:'0'}
+            ]
         }
     },
     created(){
@@ -113,8 +172,19 @@ export default {
         this.getuserPage()
     },
     methods: {
+        seachinfo1(){
+            this.getuserPage()
+        },
+        resetting(){
+            this.seachinfo={
+                userNameOrPhone:'',
+                isValid:''
+            }
+            this.page.current =1
+            this.getuserPage()
+        },
         search(){
-            console.log('123')
+           
         },
         handleCurrentChange(val) {
             this.page.current = val
@@ -160,6 +230,16 @@ export default {
             }).catch(() => {});
            
         },
+        // 禁用启用
+        handle(h,m){
+            let obj ={id:m.id,isValid:h}
+            updateValid(obj).then(res=>{
+                if(res.code==='0'){
+                    this.$message.success(res.msg)
+                    this.getuserPage()
+                }
+            })
+        },
         init(){
             this.page ={current:1,size:10}
         },
@@ -168,7 +248,8 @@ export default {
         },
         getuserPage(){
             this.botloading = true
-            userPage(this.page).then(res=>{
+            let obj = {...this.seachinfo,...this.page}
+            userPage(obj).then(res=>{
                 this.botloading = false
                 if(res.code==='0'){
                     this.tableData =res.data.records
@@ -203,8 +284,9 @@ export default {
             box-shadow:0px 1px 4px 2px rgba(0,150,255,0.09);
             border-radius:5px;
             .tit{
-                height: 45px;
-                line-height: 45px;
+                height: 60px;
+                margin-top: 10px;
+                line-height: 60px;
                 border-bottom: 1px solid #64a3d3;
                 margin: 0 9px;
                 margin-bottom: 10px;
@@ -218,20 +300,13 @@ export default {
             border-radius:5px;
             padding: 0 10px;
             .top{
-                height: 45px;
-                line-height: 45px;
-                .mr10{
-                    margin-left: 50%;
-                    width: 10%;
-                }
+                height: 50px;
+                margin-top: 10px;
             }
             .bot{
                 height: calc(100% - 45px);
             }
-            .elinput{
-                width: 20%;
-                margin: 0 2% 0 5px;
-            }
+          
             .page{
                 margin: 10px 0;
                 float: right;

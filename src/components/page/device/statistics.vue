@@ -29,7 +29,6 @@
                     type="daterange"
                     @change='timechange'
                     range-separator="至"
-                   
                     start-placeholder="开始日期"
                     end-placeholder="结束日期">
                 </el-date-picker>
@@ -92,7 +91,8 @@ export default {
            
             devlist:[],
             casarr:[],
-            optiontitle:''
+            optiontitle:'设备产量',
+            optionname:''
         }
     },
     computed:{
@@ -133,50 +133,48 @@ export default {
                     toolbox: {
                         show: true,
                         feature: {
-                            dataView: {
-                                show: true, 
-                                title:'数据视图',
-                                // readOnly: false,
-                                lang: ['数据视图', '关闭', '导出Excel'],
-                                 contentToOption: function (opts) {
-                                     debugger
-                                    $("#tableExcel_Day").table2excel({
-                                        exclude: ".noExl", //过滤位置的 css 类名
-                                        filename: '每日价格走势图' + ".xls", //文件名称
-                                        name: "Excel Document Name.xls",
-                                        exclude_img: true,
-                                        exclude_links: true,
-                                        exclude_inputs: true
-                                    });
-                                },
+                        //     dataView: {
+                        //         show: true, 
+                        //         title:'数据视图',
+                        //         lang: ['数据视图', '关闭', '导出Excel'],
+                        //          contentToOption: function (opts) {
+                        //              debugger
+                        //             $("#tableExcel_Day").table2excel({
+                        //                 exclude: ".noExl", //过滤位置的 css 类名
+                        //                 filename: '每日价格走势图' + ".xls", //文件名称
+                        //                 name: "Excel Document Name.xls",
+                        //                 exclude_img: true,
+                        //                 exclude_links: true,
+                        //                 exclude_inputs: true
+                        //             });
+                        //         },
+                        //         optionToContent: function (opt) {
+                        //             let axisData = opt.xAxis[0].data; //坐标数据
+                        //             let series = opt.series; //折线图数据
+                        //             let tdHeads = '<td  style="padding: 0 10px">时间</td>'; //表头
+                        //             let tdBodys = ''; //数据
+                        //             series.forEach(function (item) {
+                        //                 //组装表头
+                        //                 tdHeads += `<td style="padding: 0 10px">${item.name}</td>`;
+                        //             });
+                        //             let table = `<table id="tableExcel_Day" border="1" style="margin-left:20px;border-collapse:collapse;font-size:14px;text-align:center"><tbody><tr>${tdHeads} </tr>`;
+                        //             for (let i = 0, l = axisData.length; i < l; i++) {
+                        //                 for (let j = 0; j < series.length; j++) {
+                        //                     //组装表数据
 
-                                optionToContent: function (opt) {
-                                    let axisData = opt.xAxis[0].data; //坐标数据
-                                    let series = opt.series; //折线图数据
-                                    let tdHeads = '<td  style="padding: 0 10px">时间</td>'; //表头
-                                    let tdBodys = ''; //数据
-                                    series.forEach(function (item) {
-                                        //组装表头
-                                        tdHeads += `<td style="padding: 0 10px">${item.name}</td>`;
-                                    });
-                                    let table = `<table id="tableExcel_Day" border="1" style="margin-left:20px;border-collapse:collapse;font-size:14px;text-align:center"><tbody><tr>${tdHeads} </tr>`;
-                                    for (let i = 0, l = axisData.length; i < l; i++) {
-                                        for (let j = 0; j < series.length; j++) {
-                                            //组装表数据
+                        //                     tdBodys += `<td>${ series[j].data[i]}</td>`;
+                        //                 }
+                        //                 table += `<tr><td style="padding: 0 10px">${axisData[i]}</td>${tdBodys}</tr>`;
+                        //                 tdBodys = '';
+                        //             }
+                        //             table += '</tbody></table>';
+                        //             return table;
+                        //         }
 
-                                            tdBodys += `<td>${ series[j].data[i]}</td>`;
-                                        }
-                                        table += `<tr><td style="padding: 0 10px">${axisData[i]}</td>${tdBodys}</tr>`;
-                                        tdBodys = '';
-                                    }
-                                    table += '</tbody></table>';
-                                    return table;
-                                }
-
-                            },
+                        //     },
                             magicType: {show: true, type: ['line', 'bar']},
-                            restore: {show: true},
-                            saveAsImage: {show: true}
+                            // restore: {show: true},
+                            // saveAsImage: {show: true}
                         }
                     },
                     xAxis: {
@@ -213,15 +211,19 @@ export default {
             }
        },
        caschange(e){
-           this.casarr = e
-        //    this.formInline.deviceTye=''
-        //    this.formInline.deviceId=''
-            // if(e.length = 1){
-            //     this.formInline.deviceTye=e[0]
-            // }else{
-            //     this.formInline.deviceId=e[1]
-            // }
+            this.casarr = e
+           
+            let obj = {};
+            obj = this.devlist.find((item)=>{  
+                    return item.id === e[0];  
+            });
+            obj.deviceList.map(item=>{
+                if(item.id === e[1]){
+                    this.optiontname = item.title
+                }
+            })
        },
+       
        init(){
            this.formInline ={
                 deviceTye:'',
@@ -231,10 +233,19 @@ export default {
                 beginDate:'',}
             this.casarr = []
             this.value2  = []
+            this.optiontname = ''
+            this.optiontitle = ''
        },
        seachinfo(){
+           if(this.formInline.selectType === 'yield'){
+               this.optiontitle =this.optiontname + '产量'
+           }else{
+               this.optiontitle =this.optiontname + '运行状态'
+           }
+           
            this.getselectDeviceRunData()
        },
+       // 重置
        resetting(){
            this.init()
            this.getselectDeviceRunData()

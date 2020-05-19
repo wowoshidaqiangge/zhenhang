@@ -1,20 +1,54 @@
 <template>
   <div class="assignment">
-      <div class="top">
-           <el-date-picker
-                    v-model="value1"
-                    type="daterange"
-                    range-separator="至"
-                    start-placeholder="开始日期"
-                    class="datetime"
-                    end-placeholder="结束日期">
-                </el-date-picker>
-            <el-select v-model="value"  placeholder="地址" class="handle-select mr10">
-                    
-            </el-select>
-            <el-input  placeholder="用户名" class="elinput"></el-input>
-            <el-button type="add" icon="el-icon-search">搜索</el-button>
-      </div>
+       <div class="top">
+          <el-row>
+              <el-form :model="seachinfo"  ref="seachinfo"  class="demo-ruleForm">
+              <el-col :span="10">
+                   <el-form-item label="" >
+                      
+                   </el-form-item>
+              </el-col>
+              <el-col :span="5">
+                  <el-form-item label="" prop="value1">
+                        <el-date-picker
+                            v-model="value1"
+                            type="daterange"
+                            range-separator="至"
+                            start-placeholder="开始日期"
+                            @change="changedate"
+                            class="datetime"
+                            end-placeholder="结束日期">
+                        </el-date-picker>
+                  </el-form-item>
+                  
+              </el-col>
+              <el-col :span="2" style="margin:0 20px">
+                 <el-form-item label=""  prop="state" >
+                     <el-select v-model="seachinfo.state"  placeholder="状态" >
+                        <el-option
+                            v-for="item in orderlist"
+                            :key="item.enumKey"
+                            :label="item.enumValue"
+                            :value="item.enumKey">
+                        </el-option>
+                    </el-select>
+                 </el-form-item>
+              </el-col>
+              <el-col :span="3" style="margin-right:10px">
+                  <el-form-item label=""  prop="productName" >
+                     <el-input  placeholder="物料名称" v-model="seachinfo.productName"> </el-input>
+                 </el-form-item>
+                  
+              </el-col>
+              <el-col :span="3">
+                  <el-form-item label="" >
+                        <el-button type="add" icon="el-icon-search" @click="seachinfo1">搜索</el-button>
+                        <el-button type="success" icon="el-icon-refresh-right" @click="resetting">重置</el-button>
+                   </el-form-item>
+              </el-col>
+            </el-form>
+          </el-row>
+     </div>
       <div class="bot">
            <el-table
                 :data="tableData"
@@ -120,6 +154,8 @@
 <script>
 import { produceTaskPlanpage} from 'api/index'
 import assingModal from './assignModal'
+import {orderTypeList} from 'api/main'
+import moment from 'moment'
 import recordmodal from './recordmodal'
 import { mapState } from 'vuex'
 export default {
@@ -142,7 +178,7 @@ export default {
     },
     data() {
         return {
-            screenWidth:'520px',
+            screenWidth:(document.body.clientHeight-215) + 'px',
             value:'',
             value1:[],
             page:{
@@ -151,7 +187,7 @@ export default {
             },
             tableData:[],
             columnlist:[{prop:'index',label:'序号',width:'50'},
-                {prop:'taskNumber',label:'工单号'},
+                {prop:'produceTaskPlanId',label:'工单号'},
                 {prop:'deviceTypeName',label:'部门'},
                 {prop:'productName',label:'物料名称'},
                 {prop:'productCode',label:'物料编码'},
@@ -166,16 +202,52 @@ export default {
             dialogFormVisible:false,
             dialogFormVisible1:false,
             tit:'',
+            seachinfo:{
+                beginDate:'',
+                endDate:'',
+                state:'',
+                productName:''
+            },
+            orderlist:[]
             
         }
     },
     created(){
         this.getproduceTaskPlanpage()
+        this.getorderTypeList()
     },
     methods: {
-      
-     getproduceTaskPlanpage(){
-         produceTaskPlanpage(this.page).then(res=>{
+         // 查询状态
+        getorderTypeList(){
+            orderTypeList().then(res=>{
+                if(res.code==='0'){
+                    this.orderlist = res.data
+                }
+            })
+        },
+        changedate(val){
+            this.seachinfo.beginDate = moment(val[0]).format('YYYY-MM-DD')
+            this.seachinfo.endDate = moment(val[1]).format('YYYY-MM-DD')
+        },
+        //搜索
+        seachinfo1(){
+            this.getproduceTaskPlanpage(this.seachinfo)
+        },
+        //重置
+       resetting(){
+           this.seachinfo={
+                beginDate:'',
+                endDate:'',
+                state:'',
+                productName:''
+            }
+            this.value1=[]
+            this.page.current = 1
+            this.getproduceTaskPlanpage()
+       },
+     getproduceTaskPlanpage(info){
+           let  obj = {...this.seachinfo,...this.page}
+         produceTaskPlanpage(obj).then(res=>{
              if(res.code=='0'){
                  res.data.records.map((item,index)=>{
                      item.index= index+1
@@ -240,7 +312,7 @@ export default {
      },
      // 报工记录
      handleUntie(h,m){
-         debugger
+         
          this.$refs.recordmodal.getpageByProduceTaskPlanId(m.produceTaskPlanId)
          this.dialogFormVisible1 = true
      }
@@ -251,24 +323,14 @@ export default {
 
 <style lang='less'>
         .assignment{
-            width: 100%;
-            height: 100%;
              .top{
-                height: 45px;
-                line-height: 45px;
-                .mr10{
-                    margin-left: 5px;
-                    width: 10%;
-                }
+                height: 50px;
+              
+                margin-top: 10px;
                 .datetime{
-                    margin-left: 30%;
-                    width: 20%;
+                    width:100%
                 }
 
-            }
-             .elinput{
-                width: 20%;
-                margin: 0 2% 0 5px;
             }
             .page{
                 margin-top: 10px;

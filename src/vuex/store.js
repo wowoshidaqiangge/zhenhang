@@ -8,7 +8,7 @@ Vue.use(Vuex)
 const store = new Vuex.Store({
   state: {
     userId: '',
-    screenHeight: document.documentElement.clientHeight,
+    screenHeight: window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight,
   },
   mutations: {
     setUserId (state, id) {

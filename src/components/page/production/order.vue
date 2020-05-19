@@ -1,11 +1,11 @@
 <template>
-  <div class="production">
+  <div class="order">
       <div class="top">
           <el-row>
               <el-form :model="seachinfo"  ref="seachinfo"  class="demo-ruleForm">
               <el-col :span="10">
                    <el-form-item label="" >
-                       <el-button type="add" icon='el-icon-circle-plus-outline' @click="add">新增</el-button>
+                      <el-button type="add" icon='el-icon-circle-plus-outline' @click="add">新增</el-button>
                    </el-form-item>
               </el-col>
               <el-col :span="5">
@@ -36,7 +36,7 @@
               </el-col>
               <el-col :span="3" style="margin-right:10px">
                   <el-form-item label=""  prop="productNameOrCode" >
-                     <el-input  placeholder="产品名称或编码" v-model="seachinfo.productNameOrCode" class="elinput"> </el-input>
+                     <el-input  placeholder="产品名称" v-model="seachinfo.productNameOrCode" class="elinput"> </el-input>
                  </el-form-item>
                   
               </el-col>
@@ -71,11 +71,11 @@
                     width="70">
                     <template slot-scope="scope">
                         <div slot="reference" class="name-wrapper">
-                            <span v-if="scope.row.state=='1' " style="color:rgb(40,176,40);font-weight:600">{{ scope.row.produceTaskState }}</span>
-                            <span v-if="scope.row.state=='2' " style="color:rgb(255,153,19);font-weight:600">{{ scope.row.produceTaskState }}</span>
-                            <span v-if="scope.row.state=='3' " style="color:rgb(69,79,201);font-weight:600">{{ scope.row.produceTaskState }}</span>
-                            <span v-if="scope.row.state=='4' " style="color:rgb(231,52,58);font-weight:600">{{ scope.row.produceTaskState }}</span>
-                            <span v-if="scope.row.state=='5' " style="color:rgb(143,143,143);font-weight:600">{{ scope.row.produceTaskState }}</span>
+                            <span v-if="scope.row.state==1 " style="color:rgb(40,176,40);font-weight:600">{{ scope.row.stateName }}</span>
+                            <span v-if="scope.row.state=='2' " style="color:rgb(255,153,19);font-weight:600">{{ scope.row.stateName }}</span>
+                            <span v-if="scope.row.state=='3' " style="color:rgb(69,79,201);font-weight:600">{{ scope.row.stateName }}</span>
+                            <span v-if="scope.row.state=='4' " style="color:rgb(231,52,58);font-weight:600">{{ scope.row.stateName }}</span>
+                            <span v-if="scope.row.state=='5' " style="color:rgb(143,143,143);font-weight:600">{{ scope.row.stateName }}</span>
                         </div>
                     </template>
                 </el-table-column>
@@ -113,10 +113,10 @@
                                 >解锁</el-button>
                                  <el-button
                                     type="info"
-                                     v-if="scope.row.state=='1' || scope.row.state=='2'"
+                                     v-if="scope.row.state=='1'"
                                     plain
                                     @click="handleEdit(scope.$index, scope.row)"
-                                >详情</el-button>
+                                >修改</el-button>
                                 <el-button
                                     type="danger"
                                     plain
@@ -138,22 +138,20 @@
                 </el-pagination>
             </div>
           </div>
-          <Modal :dialogFormVisible='dialogFormVisible' @close='close' :tit='tit' />
-          <editmodal :dialogFormVisibledit='dialogFormVisibledit' @close='close' :tit='tit' ref='promodal'/>
+          <orderModal :dialogFormVisible='dialogFormVisible' @close='close' :tit='tit' ref='ordermodal'/>
   </div>
 </template>
 
 <script>
-import { produceTaskpage,produceTaskdelete,updateProduceTaskLockById } from 'api/index'
-import {orderTypeList} from 'api/main'
-import Modal from './modal'
+import { produceTaskdelete,updateProduceTaskLockById } from 'api/index'
+import {orderpage,orderdelete,orderTypeList} from 'api/main'
 import moment from 'moment'
-import editmodal from './proeditmodal'
+import orderModal from './ordermodal'
 import { mapState } from 'vuex'
 export default {
-    name: 'production',
+    name: 'order',
     components:{
-        Modal,editmodal
+        orderModal
     },
     computed:{
         ...mapState(['screenHeight'])
@@ -162,14 +160,13 @@ export default {
         // 监听高度
         screenHeight (newVal, oldVal) {
             if(newVal){
-                this.screenWidth = (newVal-210) + 'px'
+                this.screenWidth = (newVal-200) + 'px'
             }
         }
     },
     data() {
         return {
             dialogFormVisible:false,
-            dialogFormVisibledit:false,
             value:'',
             value1:'',
             tit:'',
@@ -180,15 +177,16 @@ export default {
             tableData:[],
             columnlist:[
                 {prop:'index',label:'序号',width:'50'},
-                {prop:'taskNumber',label:'任务单'},
-                {prop:'productName',label:'产品名称'},
+                {prop:'orderNumber',label:'订单号'},
                 {prop:'productCode',label:'产品编码'},
-                {prop:'model',label:'规格型号'},
-                {prop:'planYield',label:'计划生产量',width:'95'},
-                {prop:'planStartTime',label:'开始时间',width:'90'},
-                {prop:'planEndTime',label:'结束时间',width:'90'},
+                {prop:'productName',label:'产品名称'},
+               
+                {prop:'',label:'规格型号',width:'70'},
+                {prop:'planYield',label:'订单量'},
+                {prop:'produceCount',label:'实际生产量',width:'95'},
+                {prop:'planFinishTime',label:'交货时间',width:'90'},
                 {prop:'createTime',label:'创建时间',width:'90'},
-                {prop:'createUser',label:'下单人'},
+                {prop:'createUserName',label:'下单人',width:'70'},
             ],
             pagesize:1,
             totals:0,
@@ -204,11 +202,11 @@ export default {
     },
    
     created(){
-        this.getproduceTaskpage()
+        this.getorderpage()
         this.getorderTypeList()
     },
     methods: {
-        // 查询状态
+          // 查询状态
         getorderTypeList(){
             orderTypeList().then(res=>{
                 if(res.code==='0'){
@@ -216,38 +214,32 @@ export default {
                 }
             })
         },
+        changedate(val){
+            this.seachinfo.beginDate = moment(val[0]).format('YYYY-MM-DD')
+            this.seachinfo.endDate = moment(val[1]).format('YYYY-MM-DD')
+        },
+        seachinfo1(){
+            this.getorderpage(this.seachinfo)
+        },
         //重置
         resetting(){
-            this.seachinfo = {
+            this.seachinfo={
                 beginDate:'',
                 endDate:'',
                 state:'',
                 productNameOrCode:''
             }
-            this.page={
-                current:1,
-                size:10
-            }
             this.value1 = ''
-            this.getproduceTaskpage()
+            this.page.current = 1
+            this.getorderpage()
         },
-        changedate(val){
-            this.seachinfo.beginDate = moment(val[0]).format('YYYY-MM-DD')
-            this.seachinfo.endDate = moment(val[1]).format('YYYY-MM-DD')
-        },
-        //搜索
-        seachinfo1(){
-           this.getproduceTaskpage(this.seachinfo)
-        },
-        // 获取列表
-        getproduceTaskpage(){
+        getorderpage(info){
             let  obj = {...this.seachinfo,...this.page}
-            produceTaskpage(obj).then(res=>{
+            orderpage(obj).then(res=>{
                 if(res.code==='0'){
                     res.data.records.map((item,index)=>{
                         item.index = index + 1
-                        item.planStartTime = item.planStartTime.split(' ')[0]
-                        item.planEndTime = item.planEndTime.split(' ')[0]
+                       
                         item.createTime = item.createTime.split(' ')[0]
                     })
                     this.tableData = res.data.records
@@ -258,30 +250,29 @@ export default {
         },
         handleCurrentChange(val){
             this.page.current=val
-            this.getproduceTaskpage()
+            this.getorderpage()
         },
         add(){
-            this.tit = '新增任务'
+            this.tit = '新增订单'
             this.dialogFormVisible = true
         },
         close(num){
             this.dialogFormVisible = false
-            this.dialogFormVisibledit = false
             if(num==='0'){
-                this.getproduceTaskpage()
+                this.getorderpage()
             }
         },
         handleEdit(h,m){
-             this.tit = '编辑任务'
-             this.$refs.promodal.getproduceTaskid(m)
-             this.dialogFormVisibledit = true
+             this.tit = '编辑订单'
+             this.$refs.ordermodal.getorderid(m)
+             this.dialogFormVisible = true
            
         },
         handleDelete(h,m){
-            produceTaskdelete(m).then(res=>{
+            orderdelete(m).then(res=>{
                 if(res.code==='0'){
                     this.$message.success(res.msg)
-                    this.getproduceTaskpage()
+                    this.getorderpage()
                 }
             })
         },
@@ -291,7 +282,7 @@ export default {
             updateProduceTaskLockById(obj).then(res=>{
                 if(res.code==='0'){
                     this.$message.success(res.msg)
-                    this.getproduceTaskpage()
+                    this.getorderpage()
                 }
             })
         }
@@ -300,20 +291,17 @@ export default {
 </script>
 
 <style lang='less'>
-    .production{
+    .order{
          .top{
-                height: 5px;
-            
+                height: 50px;
                 margin-top: 10px;
+              
                 .datetime{
-                    width: 100%;
+                   width: 100%;
                 }
             }
 
-            // .elinput{
-            //     width: 20%;
-            //     margin: 0 2% 0 5px;
-            // }
+            
             .page{
                 margin-top: 10px;
                 float: right;

@@ -1,5 +1,5 @@
 <template>
-  <div class="recordmodal">
+  <div class="matemodal">
     <el-dialog 
     :title="tit" 
     :destroy-on-close='isclose'
@@ -10,8 +10,13 @@
     <el-row>
          <el-form :model="form" :rules="rules" ref="form">
              <el-col :span="11">
-                 <el-form-item label="设备名称" :label-width="formLabelWidth" class="formitem formitem1" prop="name">
-                        <el-input v-model="form.name" ></el-input>
+                 <el-form-item label="物料名称" :label-width="formLabelWidth" class="formitem formitem1" prop="itemName">
+                        <el-input v-model="form.itemName" ></el-input>
+                </el-form-item>
+             </el-col>
+             <el-col :span="11">
+                 <el-form-item label="物料编码" :label-width="formLabelWidth" class="formitem formitem1" prop="itemCode">
+                        <el-input v-model="form.itemCode" ></el-input>
                 </el-form-item>
              </el-col>
              <el-col :span="11">
@@ -19,31 +24,19 @@
                         <el-input v-model="form.model" ></el-input>
                 </el-form-item>
              </el-col>
+               <el-col :span="11">
+                 <el-form-item label="系列" :label-width="formLabelWidth" class="formitem formitem1" prop="series">
+                        <el-input v-model="form.series" ></el-input>
+                </el-form-item>
+             </el-col>
              <el-col :span="11">
-                 <el-form-item label="设备编号" :label-width="formLabelWidth" class="formitem formitem1" prop="number">
-                        <el-input v-model="form.number" ></el-input>
+                 <el-form-item label="材质" :label-width="formLabelWidth" class="formitem formitem1" prop="material">
+                        <el-input v-model="form.material" ></el-input>
                 </el-form-item>
              </el-col>
             <el-col :span="11">
-                <el-form-item label="设备类型" :label-width="formLabelWidth" class="formitem formitem1" prop="toType">
-                    <el-select v-model="form.toType" placeholder="请选择">
-                        <el-option
-                        v-for="item in deptlist"
-                        :key="item.enumKey"
-                        :label="item.enumValue"
-                        :value="item.enumKey">
-                    {{item.enumValue}}
-                        </el-option>
-                    </el-select>
-                    
-                </el-form-item>
-            </el-col>
-            
-           
-            
-            <el-col :span="11">
-                <el-form-item label="所属车间" :label-width="formLabelWidth"  class="formitem formitem1" prop="type">
-                    <el-select v-model="form.type" placeholder="请选择">
+                <el-form-item label="关联部门" :label-width="formLabelWidth"  class="formitem formitem1" prop="deviceType">
+                    <el-select v-model="form.deviceType" placeholder="请选择">
                         <el-option
                             v-for="item in rolelist"
                             :key="item.enumKey"
@@ -55,16 +48,19 @@
                 </el-form-item>
             </el-col>
             <el-col :span="11">
-                 <el-form-item label="生产厂家" :label-width="formLabelWidth" class="formitem formitem1" prop="manufacturers">
-                        <el-input v-model="form.manufacturers" ></el-input>
+                <el-form-item label="基本单位" :label-width="formLabelWidth" class="formitem formitem1" prop="unit">
+                    <el-select v-model="form.unit" placeholder="请选择">
+                        <el-option
+                        v-for="item in deptlist"
+                        :key="item.id"
+                        :label="item.name"
+                        :value="item.id">
+                        {{item.name}}
+                        </el-option>
+                    </el-select>
+                    
                 </el-form-item>
-             </el-col>
-             <el-col :span="11">
-                 <el-form-item label="供应商" :label-width="formLabelWidth" class="formitem formitem1" prop="suppliers">
-                        <el-input v-model="form.suppliers" ></el-input>
-                </el-form-item>
-             </el-col>
-           
+            </el-col>
         </el-form>
     </el-row>
         <div slot="footer" class="dialog-footer">
@@ -77,11 +73,11 @@
 </template>
 
 <script>
-import { deviceToTypeList,devicesave,deviceid,deviceupdate} from 'api/main'
-import { deviceTypeList} from 'api/index'
+import {producetaskadd,producetaskid,producetaskput } from 'api/main'
+import {deviceTypeList } from 'api/index'
 
 export default {
-    name: 'recordmodal',
+    name: 'matemodal',
   
     props:{
         dialogFormVisible:{
@@ -96,16 +92,19 @@ export default {
         return {
             isclose:true,
             sureload:false,
-            deptlist:[],
+            deptlist:[
+                {name:'个',id:'个'},
+                {name:'只',id:'只'},
+                {name:'件',id:'件'},],
             rolelist:[],
             form: {
-              toType:'',
-              number:'',
-              manufacturers:'',
-              suppliers:'',
-              name:'',
+              itemName:'',
+              itemCode:'',
               model:'',
-              type:''
+              series:'',
+              material:'',
+              unit:'',
+              deviceType:''
             },
             formLabelWidth: '90px',
             rules: {
@@ -117,8 +116,7 @@ export default {
         }
     },
     created(){
-      this.getdeviceToTypeList()
-      this.getdeviceTypeList()
+        this.getdeviceTypeList()
     },
     mounted(){
         
@@ -127,15 +125,16 @@ export default {
      
     },
     methods: {
-        // 设备类型
-       getdeviceToTypeList(){
-           deviceToTypeList().then(res=>{
-               if(res.code==='0'){
-                   this.deptlist = res.data
-               }
-           })
-       },
-       //车间
+      //详情
+      getproducetaskid(id){
+          producetaskid(id).then(res=>{
+              if(res.code==='0'){
+                  res.data.deviceType = res.data.deviceType.toString()
+                  this.form = res.data
+              }
+          })
+      },
+      //车间
        getdeviceTypeList(){
            deviceTypeList().then(res=>{
                if(res.code ==='0'){
@@ -143,16 +142,7 @@ export default {
                }
            })
        },
-       //设备详情
-
-       getdeviceid(id){
-           deviceid(id).then(res=>{
-               if(res.code==='0'){
-                   res.data.toType = res.data.toType.toString()
-                   this.form = res.data
-               }
-           })
-       },
+     
        close(num){
            this.init()
            this.$emit('close',num)
@@ -160,35 +150,30 @@ export default {
        //初始化
        init(){
            this.form= {
-              toType:'',
-              number:'',
-              manufacturers:'',
-              suppliers:'',
-              name:'',
+              itemName:'',
+              itemCode:'',
               model:'',
-              type:''
+              series:'',
+              material:'',
+              unit:'',
+              deviceType:''
             }
        },
        marksure(form){
             this.$refs[form].validate((valid) => {
                 if (valid) {
-                   if(this.tit== '新增档案'){
-                       devicesave(this.form).then(res=>{
-                            if(res.code==='0'){
-                                this.$message.success(res.msg)
-                                this.close('0')
-                            }
+                  if(this.tit =='新增'){
+                       producetaskadd(this.form).then(res=>{
+                            this.$message.success(res.msg)
+                            this.close('0')
                         })
-                   }else{
-                       deviceupdate(this.form).then(res=>{
-                            if(res.code==='0'){
-                                this.$message.success(res.msg)
-                                this.close('0')
-                            }
-                       })
-                   }
+                  }else{
+                      producetaskput(this.form).then(res=>{
+                          this.$message.success(res.msg)
+                            this.close('0')
+                      })
+                  }
                   
-                   
                 } else {
                     console.log('error submit!!');
                     return false;
@@ -205,7 +190,7 @@ export default {
 
 
 <style lang='less'>
-    .recordmodal{
+    .matemodal{
         .el-dialog{
             border-radius: 5px;
         }
@@ -213,7 +198,6 @@ export default {
             background-color: #409BAF;
             border-top-left-radius: 5px;
             border-top-right-radius: 5px;
-           
            .el-dialog__title{
                color: #fff;
                  letter-spacing: 2px;

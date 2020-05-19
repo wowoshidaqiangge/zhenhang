@@ -197,3 +197,237 @@ export const getListByToType = query => {
         method: 'get',
     });
   }
+
+
+
+   // 物料管理
+
+// 获取列表
+export const producetaskpage = query => {
+  return request({
+      url: `/api/producetask/item/page`,
+      method: 'get',
+      params:query
+  });
+}
+
+// 新增
+export const producetaskadd = query => {
+  return request({
+      url: `/api/producetask/item`,
+      method: 'post',
+      data:query,
+   
+  });
+}
+
+// 详情
+export const producetaskid = query => {
+  return request({
+      url: `/api/producetask/item/${query.id}`,
+      data:query,
+      method: 'get',
+  });
+}
+// 修改
+export const producetaskput = query => {
+  return request({
+      url: `/api/producetask/item`,
+      method: 'put',
+      data:query,
+   
+  });
+}
+
+// 删除
+
+export const producetaskdelete = query => {
+  return request({
+      url: `/api/producetask/item/${query.id}`,
+      data:query,
+      method: 'delete',
+  });
+}
+
+// 禁用和启用
+export const producetaskupdateState = query => {
+  return request({
+      url: `/api/producetask/item/updateState`,
+      method: 'put',
+      data:query,
+   
+  });
+}
+
+
+// 产品管理
+export const productpage = query => {
+  return request({
+      url: `/api/producetask/product/page`,
+      method: 'get',
+      params:query
+  });
+}
+//产品中物料 列表
+
+export const producetasklist = query => {
+  return request({
+      url: `/api/producetask/item/list`,
+      method: 'get',
+      params:query
+  });
+}
+
+
+
+// 根据物料列表查询
+export const getListByIds = query => {
+  return request({
+      url: `/api/producetask/item/getListByIds`,
+      method: 'get',
+      params:query
+  });
+}
+
+// 新增产品
+export const productadd = query => {
+  return request({
+      url: `/api/producetask/product`,
+      method: 'post',
+      data:query,
+      headers: {'userId': localStorage.getItem('userId')}
+  });
+}
+
+// 获取产品详情
+export const productid = query => {
+  return request({
+      url: `/api/producetask/product/${query.id}`,
+      params:query,
+      method: 'get',
+  });
+}
+// x修改
+export const productput = query => {
+  return request({
+      url: `/api/producetask/product`,
+      method: 'put',
+      data:query,
+      headers: {'userId': localStorage.getItem('userId')}
+  });
+}
+
+// 删除产品
+export const productdelete = query => {
+  return request({
+      url: `/api/producetask/product/${query.id}`,
+      data:query,
+      method: 'delete',
+  });
+}
+
+// 禁用和启用
+export const productupdateState = query => {
+  return request({
+      url: `/api/producetask/product/updateState`,
+      method: 'put',
+      data:query,
+      headers: {'userId': localStorage.getItem('userId')}
+  });
+}
+
+
+
+
+// 订单管理
+export const orderpage = query => {
+  return request({
+      url: `/api/producetask/order/page`,
+      method: 'get',
+      params:query,
+  });
+}
+// 新增订单
+export const orderadd = query => {
+  return request({
+      url: `/api/producetask/order`,
+      method: 'post',
+      data:query,
+      headers: {'userId': localStorage.getItem('userId')}
+  });
+}
+
+// 详情
+export const orderid = query => {
+  return request({
+      url: `/api/producetask/order/${query.id}`,
+      params:query,
+      method: 'get',
+  });
+}
+
+// 修改订单
+export const orderput = query => {
+  return request({
+      url: `/api/producetask/order`,
+      method: 'put',
+      data:query,
+      headers: {'userId': localStorage.getItem('userId')}
+  });
+}
+
+// 删除
+export const orderdelete = query => {
+  return request({
+      url: `/api/producetask/order/${query.id}`,
+      data:query,
+      method: 'delete',
+  });
+}
+// d订单编号列表
+export const orderlist = query => {
+  return request({
+      url: `/api/producetask/order/list`,
+      params:query,
+      method: 'get',
+  });
+}
+
+// 产品编码列表
+export const productlist = query => {
+  return request({
+      url: `api/producetask/product/list`,
+      params:query,
+      method: 'get',
+  });
+}
+
+// 根据产品编码 查询物料列表
+
+export const getItemListByProductId = query => {
+  return request({
+      url: `/api/producetask/product/getItemListByProductId`,
+      params:query,
+      method: 'get',
+  });
+}
+
+// 订单状态列表
+export const orderTypeList = query => {
+  return request({
+      url: `/api/producetask/order/orderTypeList`,
+      params:query,
+      method: 'get',
+  });
+}
+
+
+//采购信息页
+
+export const taskitemBuypage = query => {
+  return request({
+      url: `/api/producetask/taskitemBuy/page`,
+      params:query,
+      method: 'get',
+  });
+}

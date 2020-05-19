@@ -3,7 +3,7 @@ import App from './App.vue';
 import router from './router';
 import store from './vuex/store'
 import ElementUI from 'element-ui';
-import $ from 'jquery'
+// import $ from 'jquery'
 import VueI18n from 'vue-i18n';
 import { messages } from './components/common/i18n';
 import 'element-ui/lib/theme-chalk/index.css'; // 默认主题

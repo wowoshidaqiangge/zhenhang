@@ -112,15 +112,89 @@ export default {
              stateArr: [{label: '未保养', value: '1'}, {label: '已保养', value: '2'}, {
                     label: '未维修',
                     value: '3'
-                }, {label: '已维修', value: '4'}]
+                }, {label: '已维修', value: '4'}],
+            list:[
+                    {date:'03',
+                        devicelist:[{
+                            name:'生产1',
+                            statelist:{state:1,num:4}
+                        }]
+                    },
+                    {date:'04',
+                        devicelist:[{
+                            name:'生产1',
+                            statelist:{state:1,num:4}
+                        },{
+                            name:'生产2',
+                            statelist:{state:3,num:4}
+                        }]
+                    }
+                ]
         }
     },
     created(){
         this.getselectDeviceMaintainData()
         this.getDeviceList()
+        // this.getlist()
     },
     methods: {
-      
+      getlist(){
+          var year = ['01','02','03','04','05','06','07','08','09','10','11','12']
+          var scx = ['生产1','生产2']
+          var arr =[]
+          year.map((item,index)=>{
+            var a =  (this.list.findIndex(v=>v.date===item)!=-1)
+            this.list.map(h=>{
+                if(h.date===item){
+                    h.value = `state${index}`
+                    arr.push(h)
+                }
+            })
+            if(!a){
+               arr.push({date:item,value:`state${index}`})
+            }
+          })
+          console.log(arr)
+          var arr2 = []
+          
+          scx.map((i,index)=>{
+              var arr3 = []
+              var obj = {}
+             arr.map((m,index1)=>{
+                
+                  if(m.devicelist&&Array.isArray(m.devicelist)){
+                       
+                            
+                        var a1 =  (this.list.findIndex(v=>v.date===m.date)!=-1)
+                        m.devicelist.forEach(element => {
+                            if(element.name===i){
+                                 if(!a1){
+                                      obj[`state${index1}`] = ''
+                                 }else{
+                                     obj[`state${index1}`] = element.statelist.state
+                                 }
+                                
+                            }else{
+                               
+                                    obj[`state${index1}`] = ''
+                                
+                               
+                            }
+                        });
+                        
+                       
+                       
+                    }else{
+                        obj[`state${index1}`] = ''
+                    }
+                 
+               arr3.push(obj)
+             })
+             arr2.push(arr3)
+          })
+          console.log(arr2)
+         
+      },
       getselectDeviceMaintainData(){
           this.isload = true
           selectDeviceMaintainData(this.terms).then(res=>{
@@ -137,7 +211,6 @@ export default {
                             this.columnlist.push({label: h.dateTime,prop:`state${j}`})
                         }
                         arr1[`dateTime${j}`] = h.dateTime
-                        // arr1[`dateList${j}`] = h.dateList
                         arr1[`state${j}`] = h.state
                     })
                         arr.push({ ...item,...arr1})
@@ -145,7 +218,7 @@ export default {
                     this.$nextTick(()=>{
                         this.tableData = arr
                     })
-                   console.log(this.columnlist)
+                    // console.log(this.columnlist,arr)
                 }
           })
         },

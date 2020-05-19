@@ -1,14 +1,14 @@
 <template>
   <div class="constrol" >
-      <div class="conlist" v-for='(item,index) in runlist' :key='index'>
-            <div class="crumbs">
-                   {{item.deviceType}}
-            </div>
+    <el-tabs  type="card">
+        <el-tab-pane :label="item.deviceType" v-for="(item,index) in runlist" :key='index' class="conlist">
+            
+           
             <div class="con">
                 <div class='row-bg' v-for='h in item.deviceRunVo' :key='h.id'>
-                    <div class="p1"><span class="icon"></span><span class="tit" >{{h.deviceName}}</span><span class="img"><img src='~@/assets/img/wifi.png'/></span></div>
+                    <div class="p1"><span class="icon"></span><span class="tit" > {{h.deviceName}}</span><span class="img"><img src='~@/assets/img/wifi.png'/></span></div>
                     <div class="p1">
-                        <p><span>开机时长:</span><span>{{h.onLength}}</span></p>
+                        <p><span>开机时长:</span><span> {{h.onLength}}</span></p>
                         <p>
                           <span class="icon1 icon2" v-if="h.state=='1' "></span> 
                           <span class="icon1 icon3" v-if="h.state=='2' "></span> 
@@ -17,16 +17,20 @@
                         </p>
                     </div>
                     <div class="p1">
-                        <p><span>累计运行:</span><span>{{h.runLength}}</span></p>
-                        <p><span>当日产量:</span><span>{{h.dayProduce}}</span></p>
+                        <p><span>累计运行:</span><span> {{h.runLength}}</span></p>
+                        <p><span>当日产量:</span><span> {{h.dayProduce}}</span></p>
                     </div>
                     <div class="p1">
-                        <p><span>使用效率:</span><span style="color:#EB6F43 ">{{h.useRate}}</span></p>
-                        <p><span>累计产量:</span><span>{{h.totalProduce}}</span></p>
+                        <p><span>使用效率:</span><span style="color:#EB6F43 "> {{h.useRate}}</span></p>
+                        <p><span>累计产量:</span><span> {{h.totalProduce}}</span></p>
                     </div>
                 </div>
+           
             </div>
-      </div>
+        </el-tab-pane>
+      
+    </el-tabs>
+      
       
   </div>
 </template>
@@ -58,21 +62,39 @@ export default {
 
 <style lang='less'>
 .constrol{
-    width: 100%;
+    overflow: hidden;
     height: 100%;
-    display: flex;
-    flex-direction: column;
     .top{
         height: 30px;
     };
     .conlist{
         flex: 1;
         flex-direction: column;
+        margin-bottom: 10px;
         display: flex;
         .crumbs{
             color: #2C3E50;
             font-weight: 600;
             padding-left: 1%;
+        }
+    }
+    .el-tabs{
+        width: 100%;
+        height: 100%;
+        .el-tabs__content{
+            height: calc(100% - 40px);
+            overflow: auto;
+        }
+        .el-tabs__header{
+            border-bottom:none
+        }
+        .el-tabs__nav{
+            border-bottom: 1px solid #e4e7ed;
+            border-radius: 0;
+        }
+        .is-active{
+            color:#fff;
+            background-color: #409baF;
         }
     }
     .con{
@@ -81,7 +103,7 @@ export default {
         flex-wrap: wrap;
        .row-bg{
           
-           width: 20%;
+           width: 21%;
            padding: 0 10px;
            margin: 1%;
            flex-wrap: wrap;

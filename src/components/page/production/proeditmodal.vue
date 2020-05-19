@@ -1,86 +1,96 @@
 <template>
   <div class="promoadl">
     
-    <el-dialog :title="tit" width="60%" :visible.sync="dialogFormVisible" :before-close='beforclose' center>
-        <el-row>
-           <el-form :model="form" ref='form' :rules="rules">
-                <el-col :span="11">
-                    <el-form-item label="订单编号" :label-width="formLabelWidth" prop='orderId'>
-                            <el-select v-model="form.orderId" @change='changesel' placeholder="请选择">
-                                <el-option
-                                v-for="item in options"
-                                :key="item.id"
-                                :label="item.orderCode"
-                                :value="item.id">
-                                </el-option>
-                            </el-select>
-                    </el-form-item>
-                </el-col>
-               <el-col :span="11">
-                    <el-form-item label="任务单号" :label-width="formLabelWidth" prop='taskNumber'>
-                            <el-input v-model="form.taskNumber" disabled autocomplete="off"></el-input>
-                    </el-form-item>
-                </el-col>
-               
-              
-                <el-col :span="24">
-                    <el-form-item label="产品编码" :label-width="formLabelWidth" prop='productId'>
-                        <el-select v-model="form.productId" @change='changeselect' placeholder="请选择">
-                            <el-option
-                                v-for="item in prolist"
-                                :key="item.id"
-                                :label="item.productCode"
-                                :value="item.id">
-                            </el-option>
-                        </el-select>
-                    </el-form-item>
-                </el-col>
-                <p>
+    <el-dialog :title="tit" width="60%" :visible.sync="dialogFormVisibledit" :before-close='beforclose' center>
+        <el-tabs v-model="activeName" @tab-click="handleClick">
+            <el-tab-pane label="任务详情" name="first">
+
+            </el-tab-pane>
+            <el-tab-pane label="生产进度" name="second">配置管理</el-tab-pane>
+            <el-tab-pane label="修改任务" name="third">
+                <el-row>
+                <el-form :model="form" ref='form'>
                     <el-col :span="11">
-                        <el-form-item label="产品名称" :label-width="formLabelWidth" prop='productName'>
-                                <el-input v-model="form.productName" disabled autocomplete="off"></el-input>
-                        </el-form-item>
-                    </el-col>
+                            <el-form-item label="订单编号" :label-width="formLabelWidth" prop='orderId'>
+                                    <el-select v-model="form.orderId" @change='changesel' placeholder="请选择">
+                                        <el-option
+                                        v-for="item in options"
+                                        :key="item.id"
+                                        :label="item.orderCode"
+                                        :value="item.id">
+                                        </el-option>
+                                    </el-select>
+                            </el-form-item>
+                        </el-col>
                     <el-col :span="11">
-                        <el-form-item label="规格型号" :label-width="formLabelWidth" prop='model'>
-                                <el-input v-model="form.model" disabled autocomplete="off"></el-input>
-                        </el-form-item>
+                            <el-form-item label="任务单号" :label-width="formLabelWidth" prop='taskNumber'>
+                                    <el-input v-model="form.taskNumber" disabled autocomplete="off"></el-input>
+                            </el-form-item>
                     </el-col>
-                </p>
-                <el-col :span="24" v-if="tableData2.length>0">
-                       <el-table
-                            :data="tableData2"
-                            style="width: 100%">
-                            <el-table-column
-                                v-for="(item,index) in columnList"
-                                :key='index'
-                                :prop="item.prop"
-                                :label="item.label"
-                                align="center"
-                            >
+                    
+                    
+                    <el-col :span="24">
+                            <el-form-item label="产品编码" :label-width="formLabelWidth" prop='productId'>
+                                <el-select v-model="form.productId" @change='changeselect' placeholder="请选择">
+                                    <el-option
+                                        v-for="item in prolist"
+                                        :key="item.id"
+                                        :label="item.productCode"
+                                        :value="item.id">
+                                    </el-option>
+                                </el-select>
+                            </el-form-item>
+                    </el-col>
+                    <p>
+                            <el-col :span="11">
+                                <el-form-item label="产品名称" :label-width="formLabelWidth" prop='productName'>
+                                        <el-input v-model="form.productName" disabled autocomplete="off"></el-input>
+                                </el-form-item>
+                            </el-col>
+                            <el-col :span="11">
+                                <el-form-item label="规格型号" :label-width="formLabelWidth" prop='model'>
+                                        <el-input v-model="form.model" disabled autocomplete="off"></el-input>
+                                </el-form-item>
+                            </el-col>
+                    </p>
+                    <el-col :span="24" >
+                            <el-table
+                                :data="tableData2"
+                                style="width: 100%">
+                                <el-table-column
+                                        v-for="(item,index) in columnList"
+                                        :key='index'
+                                        :prop="item.prop"
+                                        :label="item.label"
+                                        align="center"
+                                >
+                                </el-table-column>
+                                <el-table-column label="操作"  align="center">
+                                <template slot-scope="scope">
+                                    <el-button
+                                            type="info"
+                                            plain
+                                            icon="el-icon-edit"
+                                            @click="handleEdit(scope.$index, scope.row)"
+                                     ></el-button>
+                                    
+                                </template>
                             </el-table-column>
-                            <el-table-column label="操作"  align="center">
-                            <template slot-scope="scope">
-                                 <el-button
-                                    type="info"
-                                    plain
-                                    icon="el-icon-edit"
-                                    @click="handleEdit(scope.$index, scope.row)"
-                                ></el-button>
-                               
-                            </template>
-                    </el-table-column>
                         </el-table> 
-                </el-col> 
-            </el-form> 
-        </el-row>
+                    </el-col> 
+                    </el-form> 
+                </el-row>
+            </el-tab-pane>
+           
+        </el-tabs>
+       
          <el-dialog
             width="50%"
             title="物料修改"
             :visible.sync="innerVisible"
             append-to-body>
                 <el-row>
-                        <el-form :model="form1" :rules="rules1"  ref="form1">
+                        <el-form :model="form1"  ref="form1">
                             <el-col :span="11">
                                 <el-form-item label="物料名称" :label-width="formLabelWidth" class="formitem formitem1" prop="itemName">
                                         <el-input v-model="form1.itemName" disabled></el-input>
@@ -149,13 +159,14 @@
 </template>
 
 <script>
-import { produceTask,produceTaskid } from 'api/index'
+import { produceTaskid,produceTaskput } from 'api/index'
 import moment from 'moment'
 import {orderlist,productlist,getItemListByProductId} from 'api/main'
 export default {
-    name: 'promoadl',
+    name: 'proeditmodal',
+  
     props:{
-        dialogFormVisible:{
+        dialogFormVisibledit:{
             type:Boolean
         },
         tit:{
@@ -164,6 +175,7 @@ export default {
     },
     data() {
         return {
+            activeName:'first',
             form: {
                 productName: '',
                 orderId: '',
@@ -202,55 +214,37 @@ export default {
             ],
             prolist:[],
             yieid:'',
-             rules: {
-                orderId: [
-                    { required: true, message: '请选择', trigger: 'blur' },
-                   
-                ],
-                productId:[
-                    { required: true, message: '请选择', trigger: 'blur' },
-                ]
-            },
-            rules1:{
-               
-              
-            }
-         
+            produceTaskId:''
         }
     },
     created(){
-        this.getorderlist()
-        this.getproductlist()
+       this.getorderlist()
+       this.getproductlist()
     },
     methods: {
+        handleClick(){
+
+        },
         //修改物料
         handleEdit(h,m){
+           
+            this.value2 = [m.planStartTime,m.planEndTime]
             this.form1 = JSON.parse(JSON.stringify(m))
             this.innerVisible = true
         },
         close1(){
-            this.value2 = []
-            this.form1.planEndTime = ''
-            this.form1.planStartTime = ''
             this.innerVisible = false
         },
         marksure1(){
-            if(this.value2.length<1){
-                this.$message.error('请选择时间')
-                return
-            }
             this.tableData2.map((item,index)=>{
                if(item.id ===this.form1.id){
-                 
                   this.tableData2[index].planYield = this.form1.planYield
                   this.tableData2[index].planBuyYield = this.form1.planBuyYield
                   this.tableData2[index].planEndTime = this.form1.planEndTime
                   this.tableData2[index].planStartTime = this.form1.planStartTime
-                  this.value2 = []
-                  this.form1.planEndTime = ''
-                  this.form1.planStartTime = ''
                }
-            })
+           })
+           
             this.$forceUpdate()
             this.innerVisible = false
         },
@@ -260,11 +254,17 @@ export default {
             getItemListByProductId(id).then(res=>{
                 if(res.code==='0'){
                     res.data.map((item,index)=>{
-                        item.planYield = this.yieid
+                        if(!item.planYield){
+                            item.planYield = this.yieid
+                        }
+                        if(!item.planBuyYield){
+                            item.planBuyYield = 0
+                        }
+                        if(!item.planStartTime){
+                            item.planStartTime = ''
+                            item.planEndTime = ''
+                        }
                         item.yieid = this.yieid
-                        item.planBuyYield = 0
-                        item.planStartTime = ''
-                        item.planEndTime = ''
                     })
                     this.tableData2 = res.data
                 }
@@ -278,7 +278,8 @@ export default {
                 });
             this.form.productName = obj.productName 
             this.form.model = obj.model 
-            this.getItemListByProductId({productId:val})
+            
+            this.getItemListByProductId({productId:val,produceTaskId:this.produceTaskId})
         },
         // 产品编号列表
         getproductlist(){
@@ -295,10 +296,9 @@ export default {
                     return item.id === val;  
                 });
             this.form.taskNumber = 'RW_' + obj.orderCode 
-           
             this.yieid = obj.planYield
             this.form.planYield = obj.planYield
-            // 切换订单重置产品编码
+             // 切换订单重置产品编码
             this.form.productId = ''
             this.tableData2 = []
         },
@@ -321,7 +321,12 @@ export default {
        getproduceTaskid(id){
            produceTaskid(id).then(res=>{
                if(res.code==='0'){
-                   this.value1 = [res.data.planStartTime,res.data.planEndTime]
+                   res.data.planList.map((item)=>{
+                       item.yieid = id.planYield
+                   })
+                   this.yieid = id.planYield
+                   this.produceTaskId = id.id
+                   this.tableData2 = res.data.planList
                    this.form = res.data
                }
            })
@@ -338,7 +343,7 @@ export default {
             this.form.taskItemList = arr
             this.$refs[form].validate((valid) => {
                 if (valid) {
-                        produceTask(this.form).then(res=>{
+                        produceTaskput(this.form).then(res=>{
                             if(res.code==='0'){
                                 this.$message.success(res.msg)
                                 this.close('0')
@@ -354,15 +359,15 @@ export default {
        init(){
            this.form= {
                 productName: '',
-                orderId: '',
-                taskNumber: '',
-                productId: '',
-                planYield:'',
-                model: '',
-                taskItemList:[]
+                productCode: '',
+                specificationModel: '',
+                planYield: '',
+                delivery: false,
+                planStartTime: '',
+                planEndTime: '',
                 
             }
-            this.tableData2 = []
+            this.produceTaskId = ''
             this.value2 = []
        }
     }
@@ -371,13 +376,10 @@ export default {
 
 
 <style lang='less' scpoed>
-        .promoadl{
-            .el-col{
-                    margin-bottom: 10px;
-                }
-        }
+    .promoadl{
        
-        .el-dialog{
+    }
+ .el-dialog{
             border-radius: 5px;
         }
         .el-dialog__header{
@@ -396,6 +398,4 @@ export default {
             text-align: end;
         }
         
-    
-
 </style>

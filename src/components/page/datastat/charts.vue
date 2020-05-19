@@ -47,29 +47,29 @@ export default {
                         }
                     },
                     grid: {
-                        left: '5%',
-                        right: '5%',
+                        left: '3%',
+                        right: '3%',
                         bottom: '8%',
-                        top: '10%',
+                        top: '5%',
                         containLabel:true
                     
                     },
                     toolbox: {
                         show: true,
                         feature: {
-                            dataView: {
-                                show: true, 
-                                title:'数据视图',
-                                // readOnly: false,
-                            },
-                            magicType: {show: true, type: ['line', 'bar']},
-                            restore: {show: true},
-                            saveAsImage: {show: true}
+                            // dataView: {
+                            //     show: true, 
+                            //     title:'数据视图',
+                            //     // readOnly: false,
+                            // },
+                            // magicType: {show: true, type: ['line', 'bar']},
+                            // restore: {show: true},
+                            // saveAsImage: {show: true}
                         }
                     },
                     xAxis: {
                         type: 'category',
-                        boundaryGap:false,
+                        boundaryGap:true,
                         data: this.xAxisarr
                     },
                     yAxis: {
@@ -88,7 +88,7 @@ export default {
                            type: item.type,
                            data: item.data,
                             stack:'总量',
-                            barWidth: item.barWidth
+                            barMaxWidth: 30
                        });
                 })
                 

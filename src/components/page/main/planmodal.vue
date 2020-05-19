@@ -109,8 +109,7 @@
 
 <script>
 import { deviceToTypeList,getListByToType,maintenanceadd,maintenanceid,maintenanceput} from 'api/main'
-import {userPage} from 'api/index'
-import { deviceTypeList} from 'api/index'
+import {userPage,deviceTypeList} from 'api/index'
 import moment from 'moment'
 export default {
     name: 'planmodal',

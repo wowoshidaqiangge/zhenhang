@@ -1,13 +1,41 @@
 <template>
   <div class="record">
        <div class="top">
-               <el-button type="add" icon='el-icon-circle-plus-outline' @click="add">新增</el-button>
-                <el-select v-model="value1"  placeholder="地址" class="handle-select mr10">
+            <el-row>
+                <el-form :model="seachinfo"  ref="seachinfo"  class="demo-ruleForm">
+                <el-col :span="15">
+                    <el-form-item label="" >
+                        <el-button type="add" icon='el-icon-circle-plus-outline' @click="add">新增</el-button>
+                    </el-form-item>
+                </el-col>
+                
+                <el-col :span="2" style="margin:0 20px">
+                  <el-form-item label=""  prop="manageState" >
+                      <el-select v-model="seachinfo.manageState"  placeholder="状态" >
+                          <el-option
+                              v-for="item in options"
+                              :key="item.value"
+                              :label="item.label"
+                              :value="item.value">
+                            </el-option>
+                      </el-select>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="3" style="margin-right:10px">
+                    <el-form-item label=""  prop="name" >
+                      <el-input  placeholder="设备名称" v-model="seachinfo.name" class="elinput"> </el-input>
+                  </el-form-item>
                     
-                </el-select>
-                <el-input  placeholder="用户名" class="elinput" v-model="value1" @keyup.enter.native="search()"></el-input>
-                <el-button type="add" icon="el-icon-search" @click="search">搜索</el-button>
-        </div>
+                </el-col>
+                <el-col :span="3">
+                    <el-form-item label="" >
+                          <el-button type="add" icon="el-icon-search" @click="seachinfo1">搜索</el-button>
+                          <el-button type="success" icon="el-icon-refresh-right" @click="resetting">重置</el-button>
+                    </el-form-item>
+                </el-col>
+              </el-form>
+            </el-row>
+      </div>
         <div class="bot">
             <el-table
                 :data="tableData"
@@ -90,6 +118,10 @@ export default {
     data() {
         return {
             value1:'',
+            seachinfo:{
+                manageState:'',
+                name:''
+            },
             columnlist:[
                 {prop:'index',label:'序号'},
                 {prop:'name',label:'设备名称'},
@@ -110,7 +142,11 @@ export default {
             tit:'',
             pagesize:1,
             totals:0,
-            screenWidth:'520px'
+            screenWidth:(document.body.clientHeight-215) + 'px',
+            options:[
+              {value:'2',label:'报废'},
+              {value:'1',label:'正常'},
+            ]
         }
     },
     computed:{
@@ -130,7 +166,8 @@ export default {
     methods: {
         //获取数据列表
         getdevicepage(){
-            devicepage(this.page).then(res=>{
+            let obj ={...this.seachinfo,...this.page}
+            devicepage(obj).then(res=>{
                 if(res.code==='0'){
                     res.data.records.map((item,index)=>{
                         item.index = index+1
@@ -146,8 +183,13 @@ export default {
             this.tit = '新增档案'
             this.dialogFormVisible = true
         },
-        search(){
-
+        resetting(){
+            this.seachinfo={manageState:'',name:''}
+            this.page.current =1
+            this.getdevicepage()
+        },
+        seachinfo1(){
+            this.getdevicepage()
         },
         close(num){
             this.dialogFormVisible = false
@@ -207,25 +249,17 @@ export default {
        width: 100%;
        height: 100%;
         .top{
-                height: 45px;
-                line-height: 45px;
-            .mr10{
-                margin-left: 50%;
-                width: 10%;
-            }
+            height: 50px;
+            margin-top: 10px;
+            
         }
-          
-        .elinput{
-             width: 20%;
-            margin: 0 2% 0 5px;
-        }
-          .page{
+        .page{
                 margin-top: 10px;
                 float: right;
-            }
-            .el-pager li.active{
+        }
+        .el-pager li.active{
                 background-color: #409baF !important;
                 color: #fff;
-            }
+        }
    }
 </style>
