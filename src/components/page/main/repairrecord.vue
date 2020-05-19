@@ -35,8 +35,8 @@
                     </el-form-item>
                 </el-col>
                 <el-col :span="3" style="margin-right:10px">
-                    <el-form-item label=""  prop="productNameOrCode" >
-                        <el-input  placeholder="设备名称或编码" v-model="seachinfo.productNameOrCode" class="elinput"> </el-input>
+                    <el-form-item label=""  prop="deviceNameOrCode" >
+                        <el-input  placeholder="设备名称或编码" v-model="seachinfo.deviceNameOrCode" class="elinput"> </el-input>
                     </el-form-item>
                     
                 </el-col>

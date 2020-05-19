@@ -3,12 +3,12 @@
        <div class="top">
           <el-row>
               <el-form :model="seachinfo"  ref="seachinfo"  class="demo-ruleForm">
-              <el-col :span="10">
+              <el-col :span="6">
                    <el-form-item label="" >
                        
                    </el-form-item>
               </el-col>
-              <el-col :span="5">
+              <el-col :span="6">
                   <el-form-item label="" prop="value1">
                          <el-date-picker
                             v-model="maintime"
@@ -22,8 +22,8 @@
                   </el-form-item>
                   
               </el-col>
-              <el-col :span="2" style="margin:0 20px">
-                 <el-form-item label=""   >
+              <el-col :span="5" style="margin:0 20px">
+                 <el-form-item label="设备状态"  >
                       <el-select v-model="state" placeholder="请选择">
                           <el-option
                             v-for="item in options"
@@ -121,10 +121,10 @@ export default {
               value: ''
             }, {
               label: '未保养',
-              value: 0
+              value: '0'
             }, {
               label: '已保养',
-              value: 1
+              value: '1'
             }],
             tableData: [],
              page:{
@@ -172,12 +172,13 @@ export default {
           this.getmainrecordpage()
       },
       searchmain () {
-        var patrn = /^[0-9]{1,20}$/
-        if (patrn.exec(this.deviceSearch)) {
-          this.page.deviceNumber = this.deviceSearch
-        } else {
-          this.page.deviceName = this.deviceSearch
-        }
+        // var patrn = /^[0-9]{1,20}$/
+        // if (patrn.exec(this.deviceSearch)) {
+        //   this.page.deviceNumber = this.deviceSearch
+        // } else {
+        //   this.page.deviceName = this.deviceSearch
+        // }
+        this.page.deviceNameOrCode = this.deviceSearch
         this.page.state = this.state
         console.log(this.maintime)
         if(this.maintime !== null) {
