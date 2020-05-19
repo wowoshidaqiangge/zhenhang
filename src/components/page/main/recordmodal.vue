@@ -10,62 +10,64 @@
     <el-row>
          <el-form :model="form" :rules="rules" ref="form">
              <el-col :span="24" class="dialogTitle">保养设备信息</el-col>
-             <el-col :span="11">
-                 <el-form-item label="设备名称" :label-width="formLabelWidth" class="formitem formitem1" prop="category">
-                    <el-input
-                        placeholder="请输入内容"
-                        v-model="form.deviceName"
-                        :disabled="true">
-                    </el-input>
-                </el-form-item>
-             </el-col>
-             <el-col :span="11">
-                 <el-form-item label="设备编号" :label-width="formLabelWidth" class="formitem formitem1" prop="id">
-                    <el-input
-                        placeholder="请输入内容"
-                        v-model="form.id"
-                        :disabled="true">
-                    </el-input>
-                </el-form-item>
-             </el-col>
-             <el-col :span="11">
-                 <el-form-item label="规格型号" :label-width="formLabelWidth" class="formitem formitem1" prop="period">
-                        <el-input
-                        placeholder="请输入内容"
-                        v-model="form.deviceNumer"
-                        :disabled="true">
-                    </el-input>
-                </el-form-item>
-             </el-col>
-              <el-col :span="11">
-                 <el-form-item label="设备类型" v-if="ifEdt" :label-width="formLabelWidth" class="formitem formitem1" prop="toType">
-                    <el-input
-                        placeholder="请输入内容"
-                        v-model="form.toType"
-                        :disabled="true">
-                    </el-input>
-                </el-form-item>
-                 <el-form-item label="保养月份" v-else :label-width="formLabelWidth" class="formitem formitem1" prop="toType">
-                    <el-input
-                        placeholder="请输入内容"
-                        v-model="form.monthTime"
-                        :disabled="true">
-                    </el-input>
-                </el-form-item>
-             </el-col>
-             <el-col :span="11">
-                 <el-form-item label="保养时间" v-if="ifEdt" :label-width="formLabelWidth" class="formitem formitem1" prop="dateTime">
-                    <el-input
-                        placeholder="请输入内容"
-                        v-model="form.dateTime"
-                        :disabled="true">
-                    </el-input>
-                </el-form-item>
-             </el-col>
+             <div style="border:1px dashed #ccc;padding:20px 0 5px 0;margin-bottom:20px">
+                  <el-col :span="11">
+                        <el-form-item label="设备名称" :label-width="formLabelWidth" class="formitem formitem1" prop="category">
+                            <el-input
+                                placeholder="请输入内容"
+                                v-model="form.deviceName"
+                                :disabled="true">
+                            </el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="11">
+                        <el-form-item label="设备编号" :label-width="formLabelWidth" class="formitem formitem1" prop="id">
+                            <el-input
+                                placeholder="请输入内容"
+                                v-model="form.id"
+                                :disabled="true">
+                            </el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="11">
+                        <el-form-item label="规格型号" :label-width="formLabelWidth" class="formitem formitem1" prop="period">
+                                <el-input
+                                placeholder="请输入内容"
+                                v-model="form.deviceNumer"
+                                :disabled="true">
+                            </el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="11">
+                        <el-form-item label="设备类型" v-if="ifEdt" :label-width="formLabelWidth" class="formitem formitem1" prop="toType">
+                            <el-input
+                                placeholder="请输入内容"
+                                v-model="form.toType"
+                                :disabled="true">
+                            </el-input>
+                        </el-form-item>
+                        <el-form-item label="保养月份" v-else :label-width="formLabelWidth" class="formitem formitem1" prop="toType">
+                            <el-input
+                                placeholder="请输入内容"
+                                v-model="form.monthTime"
+                                :disabled="true">
+                            </el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="11">
+                        <el-form-item label="保养时间" v-if="ifEdt" :label-width="formLabelWidth" class="formitem formitem1" prop="dateTime">
+                            <el-input
+                                placeholder="请输入内容"
+                                v-model="form.dateTime"
+                                :disabled="true">
+                            </el-input>
+                        </el-form-item>
+                    </el-col>
+             </div>
              <el-col :span="24" class="dialogTitle">保养内容</el-col>
              <el-col :span="24">
                  <el-form-item  class="formitem formitem1" prop="remark">
-                        <el-input  :disabled="!ifEdt" v-model="form.remark" ></el-input>
+                        <el-input type="textarea" :rows="3"  :disabled="!ifEdt" v-model="form.remark" ></el-input>
                 </el-form-item>
              </el-col>
            
@@ -203,6 +205,8 @@ export default {
         }
         .dialogTitle {
             margin-left: 20px;
+            font-size: 15px;
+            font-weight: 600;
             // color: #409BAF
         }
         .dialog-footer{

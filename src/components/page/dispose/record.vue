@@ -22,8 +22,8 @@
                   </el-form-item>
                 </el-col>
                 <el-col :span="3" style="margin-right:10px">
-                    <el-form-item label=""  prop="name" >
-                      <el-input  placeholder="设备名称" v-model="seachinfo.name" class="elinput"> </el-input>
+                    <el-form-item label=""  prop="nameOrCode" >
+                      <el-input  placeholder="设备名称" v-model="seachinfo.nameOrCode" class="elinput"> </el-input>
                   </el-form-item>
                     
                 </el-col>
@@ -120,7 +120,7 @@ export default {
             value1:'',
             seachinfo:{
                 manageState:'',
-                name:''
+                nameOrCode:''
             },
             columnlist:[
                 {prop:'index',label:'序号'},
@@ -184,7 +184,7 @@ export default {
             this.dialogFormVisible = true
         },
         resetting(){
-            this.seachinfo={manageState:'',name:''}
+            this.seachinfo={manageState:'',nameOrCode:''}
             this.page.current =1
             this.getdevicepage()
         },

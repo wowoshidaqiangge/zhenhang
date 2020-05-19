@@ -1,8 +1,55 @@
 <template>
   <div class="repairrecord">
         <div class="top">
-            <el-button type="add" icon="el-icon-circle-plus-outline" @click="recordAdd()">新增</el-button>
+            <el-row>
+                <el-form :model="seachinfo"  ref="seachinfo"  class="demo-ruleForm">
+                <el-col :span="10">
+                    <el-form-item label="" >
+                        <el-button type="add" icon="el-icon-circle-plus-outline" @click="recordAdd()">新增</el-button>
+                    </el-form-item>
+                </el-col>
+                <el-col :span="5">
+                    <el-form-item label="" prop="value1">
+                            <el-date-picker
+                                v-model="value1"
+                                type="daterange"
+                                range-separator="至"
+                                start-placeholder="开始日期"
+                                @change="changedate"
+                                class="datetime"
+                                end-placeholder="结束日期">
+                            </el-date-picker>
+                    </el-form-item>
+                    
+                </el-col>
+                <el-col :span="2" style="margin:0 20px">
+                    <el-form-item label=""  prop="state" >
+                        <el-select v-model="seachinfo.state"  placeholder="状态" >
+                            <el-option
+                                v-for="item in orderlist"
+                                :key="item.value"
+                                :label="item.name"
+                                :value="item.value">
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
+                </el-col>
+                <el-col :span="3" style="margin-right:10px">
+                    <el-form-item label=""  prop="productNameOrCode" >
+                        <el-input  placeholder="设备名称或编码" v-model="seachinfo.productNameOrCode" class="elinput"> </el-input>
+                    </el-form-item>
+                    
+                </el-col>
+                <el-col :span="3">
+                    <el-form-item label="" >
+                            <el-button type="add" icon="el-icon-search" @click="seachinfo1">搜索</el-button>
+                            <el-button type="success" icon="el-icon-refresh-right" @click="resetting">重置</el-button>
+                    </el-form-item>
+                </el-col>
+                </el-form>
+            </el-row>
         </div>
+        
         <div class="bot">
             <el-table :data="tableData" stripe :height="screenWidth" style="width: 100%">
                 <el-table-column
@@ -75,6 +122,16 @@ export default {
     },
     data() {
         return {
+            orderlist:[
+                {name:'待检修',value:'0'},
+                {name:'已完成',value:'1'}
+            ],
+            seachinfo:{
+                beginDate:'',
+                endDate:'',
+                state:'',
+            },
+            value1:'',
             tableData: [],
              page:{
               current:1,
@@ -86,7 +143,7 @@ export default {
             tit: '',
             ifEdt: false,
             pagesize:1,
-            screenWidth:'520px',
+            screenWidth:(document.body.clientHeight-215) + 'px',
             columnlist:[
               {prop:'index',label:'序号'},
               {prop:'deviceName',label:'设备名称'},
@@ -109,9 +166,21 @@ export default {
       this.getrepairrecordpage()
     },
     methods: {
-      getrepairrecordpage() {
-          repairrecordpage(this.page).then(res => {
-            console.log(res)
+        resetting(){
+            this.seachinfo= { beginDate:'',endDate:'',state:'',}
+            this.page.current = 1
+            this.getrepairrecordpage()
+        },
+        seachinfo1(){
+            this.getrepairrecordpage()
+        },
+        changedate(){
+
+        },
+        getrepairrecordpage() {
+          let obj = {...this.seachinfo,...this.page}
+          repairrecordpage(obj).then(res => {
+           
               if (res.code === '0') {
                   res.data.records.map((item, index) => {
                       item.states = item.state? '已完成' : '待检修';
@@ -170,20 +239,13 @@ export default {
 
 <style lang='less'>
 .repairrecord {
-    width: 100%;
-    height: 100%;
+  
     .top {
-        height: 45px;
-        line-height: 45px;
-        .mr10 {
-            margin-left: 50%;
-            width: 10%;
-        }
+        height: 50px;
+        margin-top: 10px;
+       
     }
-    .elinput {
-        width: 20%;
-        margin: 0 2% 0 5px;
-    }
+ 
     .page {
         margin-top: 10px;
         float: right;

@@ -1,30 +1,59 @@
 <template>
     <div class="mainrecord">
-        <div class="top">
-          <el-date-picker
-            v-model="maintime"
-            type="daterange"
-            format="yyyy-MM-dd"
-            value-format="yyyy-MM-dd"
-            range-separator="至"
-            start-placeholder="开始日期"
-            end-placeholder="结束日期">
-          </el-date-picker>
-            <el-input
-              placeholder="请输入设备名称或设备编号"
-              prefix-icon="el-icon-search"
-              v-model="deviceSearch">
-            </el-input>
-             <el-select v-model="state" placeholder="请选择">
-              <el-option
-                v-for="item in options"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value">
-              </el-option>
-            </el-select>
-            <el-button class="searchBtn" size="mini" type="add" @click="searchmain()">查询</el-button>
-        </div>
+       <div class="top">
+          <el-row>
+              <el-form :model="seachinfo"  ref="seachinfo"  class="demo-ruleForm">
+              <el-col :span="10">
+                   <el-form-item label="" >
+                       
+                   </el-form-item>
+              </el-col>
+              <el-col :span="5">
+                  <el-form-item label="" prop="value1">
+                         <el-date-picker
+                            v-model="maintime"
+                            type="daterange"
+                            format="yyyy-MM-dd"
+                            value-format="yyyy-MM-dd"
+                            range-separator="至"
+                            start-placeholder="开始日期"
+                            end-placeholder="结束日期">
+                          </el-date-picker>
+                  </el-form-item>
+                  
+              </el-col>
+              <el-col :span="2" style="margin:0 20px">
+                 <el-form-item label=""   >
+                      <el-select v-model="state" placeholder="请选择">
+                          <el-option
+                            v-for="item in options"
+                            :key="item.value"
+                            :label="item.label"
+                            :value="item.value">
+                          </el-option>
+                      </el-select>
+                 </el-form-item>
+              </el-col>
+              <el-col :span="3" style="margin-right:10px">
+                  <el-form-item label=""  prop="productNameOrCode" >
+                      <el-input
+                          placeholder="请输入设备名称或设备编号"
+                          prefix-icon="el-icon-search"
+                          v-model="deviceSearch">
+                        </el-input>
+                 </el-form-item>
+                  
+              </el-col>
+              <el-col :span="3">
+                  <el-form-item label="" >
+                        <el-button class="searchBtn" size="mini" type="add" @click="searchmain()">查询</el-button>
+                        <el-button type="success" icon="el-icon-refresh-right" @click="resetting">重置</el-button>
+                   </el-form-item>
+              </el-col>
+            </el-form>
+          </el-row>
+       </div>
+      
         <div class="bot">
             <el-table :data="tableData" stripe :height="screenWidth" style="width: 100%">
                 <el-table-column
@@ -35,7 +64,7 @@
                     align="center"
                 ></el-table-column>
 
-                <el-table-column label="操作" width="180" align="center">
+                <el-table-column label="操作"  align="center">
                     <template slot-scope="scope">
                         <el-button
                           v-if="scope.row.state"
@@ -44,7 +73,7 @@
                             @click="examine(scope.$index, scope.row)"
                         >查看</el-button>
                         <el-button
-                            type="success"
+                            type="info"
                             plain
                             v-else
                             class="red"
@@ -102,11 +131,12 @@ export default {
               current:1,
               size:10,
             },
+            seachinfo:{},
             tit:'',
             ifEdt: false,
             totals:0,
             pagesize:1,
-            screenWidth:'520px',
+            screenWidth:(document.body.clientHeight-215) + 'px',
             dialogFormVisible: false,
             columnlist:[
               {prop:'index',label:'序号'},
@@ -130,6 +160,17 @@ export default {
       this.getmainrecordpage()
     },
     methods: {
+      //重置
+      resetting(){
+          this.state = ''
+          this.maintime = ''
+          this.deviceSearch =''
+          this.page = {
+            current:1,
+            size:10
+          }
+          this.getmainrecordpage()
+      },
       searchmain () {
         var patrn = /^[0-9]{1,20}$/
         if (patrn.exec(this.deviceSearch)) {
@@ -152,6 +193,7 @@ export default {
           mainrecordpage(this.page).then(res => {
               if (res.code === '0') {
                   res.data.records.map((item, index) => {
+                      item.createTime = item.createTime.split(' ')[0]
                       item.states = item.state? '已保养' : '未保养';
                       item.index = index + 1;
                   });
@@ -195,36 +237,25 @@ export default {
 
 <style lang='less'>
 .mainrecord {
-    width: 100%;
-    height: 100%;
+ 
     .top {
-        height: 45px;
-        line-height: 45px;
-        display: flex;
-        justify-content: flex-end;
-        margin: 0 70px;
-        .mr10 {
-          margin-left: 50%;
-          width: 10%;
-        }
-        .searchBtn {
-          height: 33px;
-          margin-top: 5px;
-          margin-left: 20px;
-        }
-        .el-range-editor--small.el-input__inner {
-          height: 32px;
-          margin-top: 7px;
-        }
-        .el-input--small {
-          width: 220px;
-          margin-left: 20px;
-        }
+       height: 50px;
+       margin-top: 10px;
+        // .searchBtn {
+        //   height: 33px;
+        //   margin-top: 5px;
+        //   margin-left: 20px;
+        // }
+        // .el-range-editor--small.el-input__inner {
+        //   height: 32px;
+        //   margin-top: 7px;
+        // }
+        // .el-input--small {
+        //   width: 220px;
+        //   margin-left: 20px;
+        // }
     }
-    .elinput {
-        width: 20%;
-        margin: 0 2% 0 5px;
-    }
+  
     .page {
         margin-top: 10px;
         float: right;

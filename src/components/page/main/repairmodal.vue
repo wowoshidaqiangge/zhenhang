@@ -9,7 +9,7 @@
     center>
     <el-row>
          <el-form :model="form" :rules="rules" ref="form">
-             <el-col :span="24">
+             <el-col :span="22">
                  <el-form-item label="故障设备" :label-width="formLabelWidth" class="formitem formitem1" prop="deviceId">
                     <el-select v-model="form.deviceId" filterable  placeholder="请选择" @change='changeselect'>
                         <el-option
@@ -58,7 +58,7 @@
                     </el-input>
                 </el-form-item>
              </el-col>
-             <el-col :span="24">
+             <el-col :span="22">
                  <el-form-item label="故障时间" :label-width="formLabelWidth" class="formitem formitem1" prop="dateTime">
                         <el-date-picker
                             v-model="form.dateTime"
@@ -68,14 +68,14 @@
                         </el-date-picker>
                 </el-form-item>
              </el-col>
-            <el-col :span="24">
+            <el-col :span="22">
                  <el-form-item label="故障原因" :label-width="formLabelWidth" class="formitem formitem1" prop="fault">
-                        <el-input  v-model="form.fault" ></el-input>
+                        <el-input type="textarea" :rows="2" v-model="form.fault" ></el-input>
                 </el-form-item>
              </el-col>
-            <el-col :span="24">
+            <el-col :span="22">
                  <el-form-item label="解决办法" :label-width="formLabelWidth" class="formitem formitem1" prop="solution">
-                        <el-input   v-model="form.solution" ></el-input>
+                        <el-input type="textarea" :rows="2"  v-model="form.solution" ></el-input>
                 </el-form-item>
              </el-col>
             
