@@ -2,12 +2,50 @@
   <div class="recordmodal">
     
     <el-dialog title="报工记录" :visible.sync="dialogFormVisible1" :before-close='beforclose' center>
-       
+        <p class="modaltit1">工单信息：</p>
+        <el-row>
+           <el-form :model="form" ref='form'>
+               <div class="modalcont">
+                   <el-col :span="11">
+                        <el-form-item label="工单号" :label-width="formLabelWidth" prop='taskNumber'>
+                                <el-input v-model="form.taskNumber" disabled autocomplete="off"></el-input>
+                        </el-form-item>
+                    </el-col>
+                   <el-col :span="11">
+                        <el-form-item label="部门" :label-width="formLabelWidth" prop='deptName'>
+                                <el-input v-model="form.deptName" disabled autocomplete="off"></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="11">
+                        <el-form-item label="物料名称" :label-width="formLabelWidth" prop='itemName'>
+                                <el-input v-model="form.itemName" disabled autocomplete="off"></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="11">
+                        <el-form-item label="物料编码" :label-width="formLabelWidth" prop='itemCode'>
+                                <el-input v-model="form.itemCode" disabled autocomplete="off"></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="11">
+                        <el-form-item label="规格型号" :label-width="formLabelWidth" prop='model'>
+                                <el-input v-model="form.model" disabled autocomplete="off"></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="11">
+                        <el-form-item label="计划产量" :label-width="formLabelWidth" prop='planYield'>
+                                <el-input v-model="form.planYield" disabled autocomplete="off"></el-input>
+                        </el-form-item>
+                    </el-col>
+               </div>
+           </el-form>
+        </el-row>
+
         <el-table
             :data="tableData1"
             style="width: 100%">
             <el-table-column
                 v-for='item in columlist'
+                :width='item.width'
                 :key='item.index'
                 :prop="item.prop"
                 :label="item.label"
@@ -47,25 +85,30 @@ export default {
                 current:1,
                 size:10
             },
-            columlist:[{prop:'index',label:'序号'},
+            columlist:[{prop:'index',label:'序号',width:80},
             {prop:'produceTaskId',label:'报工流水号'},
             {prop:'reportUser',label:'生产员工'},
-            {prop:'index',label:'生产设备'},
             {prop:'produceCount',label:'生产数量'},
-            {prop:'createTime',label:'报工时间'},]
+            {prop:'totalCount',label:'累计产量'},
+            {prop:'createTime',label:'报工时间'},],
+            form:{
+
+            }
         }
     },
     created(){
        
     },
     methods: {
-       getpageByProduceTaskPlanId(id){
+       getpageByProduceTaskPlanId(id,m){
            var obj ={produceTaskPlanId:id,...this.page}
            pageByProduceTaskPlanId(obj).then(res=>{
                if(res.code==='0'){
                    res.data.records.map((item,index)=>{
                        item.index = index+1
+                       item.produceTaskId = m.taskNumber
                    })
+                   this.form = m
                    this.tableData1 = res.data.records
                }
            })
@@ -106,6 +149,18 @@ export default {
         }
         .dialog-footer{
             text-align: end;
+        }
+         .modalcont{
+          padding: 25px 0;
+          border: 1px dashed #aaa;
+          margin-bottom: 25px;
+          height: 140px;
+
+        }
+        .modaltit1{
+            padding: 10px 0;
+            font-size: 18px;
+            color: #324170;
         }
         
     }

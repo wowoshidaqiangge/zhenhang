@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import {login } from '@/api/index'
-
+import { Message } from 'element-ui';
 
 Vue.use(Vuex)
 
@@ -23,11 +23,14 @@ const store = new Vuex.Store({
     handleLogin ({ commit }, {username, password,icCard}) {
       return new Promise((resolve, reject) => {
         login({username, password,icCard}).then(res => {
+  
           if(res.code==='0'){
             const data = res.data
             localStorage.setItem('userId',data.id)
             commit('setUserId', data.id)
             resolve(data)
+          }else{
+            Message.error(res.msg)
           }
         }).catch(err => {
           reject(err)

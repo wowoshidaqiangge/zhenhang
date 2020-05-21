@@ -35,14 +35,14 @@
                 </el-form-item>
              </el-col>
             <el-col :span="11">
-                <el-form-item label="关联部门" :label-width="formLabelWidth"  class="formitem formitem1" prop="deviceType">
-                    <el-select v-model="form.deviceType" placeholder="请选择">
+                <el-form-item label="关联部门" :label-width="formLabelWidth"  class="formitem formitem1" prop="deptName">
+                    <el-select v-model="form.deptName" placeholder="请选择">
                         <el-option
                             v-for="item in rolelist"
-                            :key="item.enumKey"
-                            :label="item.enumValue"
-                            :value="item.enumKey">
-                        {{item.enumValue}}
+                            :key="item.deptId"
+                            :label="item.deptName"
+                            :value="item.deptId">
+                        {{item.deptName}}
                         </el-option>
                     </el-select>
                 </el-form-item>
@@ -73,8 +73,8 @@
 </template>
 
 <script>
-import {producetaskadd,producetaskid,producetaskput } from 'api/main'
-import {deviceTypeList } from 'api/index'
+import {producetaskadd,producetaskid,producetaskput,getProduceDeptList } from 'api/main'
+
 
 export default {
     name: 'matemodal',
@@ -116,7 +116,7 @@ export default {
         }
     },
     created(){
-        this.getdeviceTypeList()
+        this.getProduceDeptList()
     },
     mounted(){
         
@@ -129,14 +129,14 @@ export default {
       getproducetaskid(id){
           producetaskid(id).then(res=>{
               if(res.code==='0'){
-                  res.data.deviceType = res.data.deviceType.toString()
+                //   res.data.deviceType = res.data.deviceType.toString()
                   this.form = res.data
               }
           })
       },
       //车间
-       getdeviceTypeList(){
-           deviceTypeList().then(res=>{
+       getProduceDeptList(){
+           getProduceDeptList().then(res=>{
                if(res.code ==='0'){
                    this.rolelist = res.data
                }

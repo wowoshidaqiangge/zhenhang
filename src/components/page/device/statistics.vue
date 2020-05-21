@@ -14,7 +14,7 @@
              </el-form-item>
             
              <el-form-item label="统计:" class="handle-select mr10" :label-width="formLabelWidth" prop='selectType'>
-                 <el-select v-model="formInline.selectType"  placeholder="统计" >
+                 <el-select v-model="formInline.selectType" @change="changesel" placeholder="统计" >
                      <el-option
                         v-for="item in censuelist"
                         :key="item.value"
@@ -45,7 +45,7 @@
          
           <div class="bot"> 
               <div class="optiontit">{{optiontitle}}</div>
-                <v-chart ref='chart' :options="option" :auto-resize="true" class="chart"/>
+                <v-chart ref='chart' :options="option" :auto-resize="true" class="chart" id='chart'/>
           </div>
   </div>
 </template>
@@ -53,6 +53,7 @@
 <script>
 import {selectDeviceRunData,deviceTypeList,deviceList,deviceListByType} from 'api/index'
 import moment from 'moment'
+import Echarts from 'echarts';
 export default {
     name: 'statistics',
     components:{
@@ -92,7 +93,8 @@ export default {
             devlist:[],
             casarr:[],
             optiontitle:'设备产量',
-            optionname:''
+            optionname:'',
+            ismore:false
         }
     },
     computed:{
@@ -212,7 +214,6 @@ export default {
        },
        caschange(e){
             this.casarr = e
-           
             let obj = {};
             obj = this.devlist.find((item)=>{  
                     return item.id === e[0];  
@@ -223,7 +224,9 @@ export default {
                 }
             })
        },
-       
+       changesel(val){
+          
+       },
        init(){
            this.formInline ={
                 deviceTye:'',
@@ -233,6 +236,8 @@ export default {
                 beginDate:'',}
             this.casarr = []
             this.value2  = []
+            this.value1 = []
+            this.ismore = false
             this.optiontname = ''
             this.optiontitle = ''
        },
@@ -251,8 +256,14 @@ export default {
            this.getselectDeviceRunData()
        },
        timechange(e){
+
            this.formInline.beginDate = moment(e[0]).format('YYYY-MM-DD')
            this.formInline.endDate = moment(e[1]).format('YYYY-MM-DD')
+           if(this.formInline.beginDate !==  this.formInline.endDate){
+               this.ismore = true
+           }else{
+               this.ismore = false
+           }
        },
        //获取图表数据
        getselectDeviceRunData(){
@@ -284,38 +295,169 @@ export default {
                         this.option.series[0].name = '产量';
                    }else{
                        //选择运行状态
-                       res.data[0].deviceRunTimeList.map(item=>{
-                           if(item.dateTime.split(' ')[1]){
-                               nowtime.push(item.dateTime.split(' ')[1])
-                           }else{
-                               nowtime.push(item.dateTime)
-                           }
-                       })
-                       res.data[0].deviceRunList.map(item=>{
-                           //关机时长
-                           num.push(item.offLength.toString())
-                           //开机时长
-                           num1.push(item.onLength.toString())
-                           //运行时长
-                           num2.push(item.runLength.toString())
-                       })
-                        this.getoption()
-                        var hour;
-                        if(res.data[0].dateList.length>0){
-                             hour = res.data[0].dateList
-                        }else{
-                            // 不传日期时 默认为小时
-                             hour = ['0', '01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23'];
-                        }
-                        this.option.xAxis.data =  hour ;
-                        this.option.series[0].name = '关机时长';
-                        this.option.series[0].data = this.hanld2(hour ,nowtime,num);
-                        this.option.series[1].data =this.hanld2(hour ,nowtime,num1);
-                        this.option.series[2].data =this.hanld2(hour ,nowtime,num2);
+                       // 多日
+                       if(this.ismore){
+                           res.data[0].deviceRunTimeList.map(item=>{
+                            if(item.dateTime.split(' ')[1]){
+                                nowtime.push(item.dateTime.split(' ')[1])
+                            }else{
+                                nowtime.push(item.dateTime)
+                            }
+                        })
+                        res.data[0].deviceRunList.map(item=>{
+                            //关机时长
+                            num.push(item.offLength.toString())
+                            //开机时长
+                            num1.push(item.onLength.toString())
+                            //运行时长
+                            num2.push(item.runLength.toString())
+                        })
+                            this.getoption()
+                            let hour;
+                            if(res.data[0].dateList.length>0){
+                                hour = res.data[0].dateList
+                            }else{
+                                // 不传日期时 默认为小时
+                                 hour = ['0', '01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23'];
+                            }
+                            this.option.xAxis.data =  hour ;
+                            this.option.series[0].name = '关机时长';
+                            this.option.series[0].data = this.hanld2(hour ,nowtime,num);
+                            this.option.series[1].data =this.hanld2(hour ,nowtime,num1);
+                            this.option.series[2].data =this.hanld2(hour ,nowtime,num2);
+                       }else{
+                           let state = [];
+                           let hour = [];
+                           res.data[0].deviceRunList.map(item => {
+                                state.push(item.state);
+                            });
+                            if (res.data[0].dateList.length > 0) {
+                                hour = res.data[0].dateList;
+                                } else {
+                                    // 不传日期时 默认为小时
+                                     hour = ['0', '01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23'];
+                                   
+                                }
+                            this.drawStateChart(hour, state);    
+                       }
+                       
                    }
                }
            })
        },
+        // 绘制阶梯状态图（柱状图模拟，无法切换折线/柱状）
+
+        drawStateChart(hour, state) {
+            debugger
+            let myChart = Echarts.init(document.getElementById('chart'));
+            // 使用 aidState做填充，fakeState显示小线条
+            var aidState = [];
+            var fakeState = [];
+            let yax = []
+            for (let i = 0; i < state.length; i++) {
+                fakeState[i] = state[i] * 0.01;
+                aidState[i] = state[i] - fakeState[i];
+                yax[i] = 0.01
+               
+            }
+            let option1 = {
+                title: {
+                    show: Object.keys(state).length === 0,
+                    extStyle: {
+                        color: 'grey',
+                        fontSize: 20
+                    },
+                    text: '暂无数据',
+                    left: 'center',
+                    top: 'center'
+                },
+                tooltip: {
+                    // trigger: 'axis'
+                    show: false
+                },
+                toolbox: {
+                    show: true,
+                    feature: {
+                        magicType: {
+                            show: true,
+                            type: ['line', 'bar']
+                        }
+                    }
+                },
+                grid: {
+                    bottom: '10%',
+                    top: '10%',
+                  
+                    containLabel: true
+                },
+                xAxis: {
+                    type: 'category',
+                    data: hour,
+                    boundaryGap: false,
+                    axisTick: {
+                        show: false
+                    },
+                    axisLabel: {
+                        interval: 0,
+                        align: 'left'
+                    }
+                },
+                yAxis: {
+                    type: 'value',
+                    // scale: false,
+                    interval: 1,
+                    axisTick: {
+                        show: false
+                    },
+                    axisLine: {
+                        show: false
+                    },
+                    axisLabel: {
+                        show: true,
+                        interval: 0,
+                        margin: 36,
+                        align: 'left',
+                        formatter: function(value) {
+                            let stateMsg = ['关机', '开机', '运行'];
+                            return (value = stateMsg[value]);
+                        }
+                    },
+                    splitLine: {
+                        interval: 0
+                    }
+                },
+                series: [
+                    {
+                        name: '辅助',
+                        type: 'bar',
+                        data: aidState,
+                        stack: '设备状态值',
+                        barWidth: '100%',
+                        itemStyle: {
+                            color: 'rgba(0,0,0,0)',
+                            barBorderColor: 'rgba(0,0,0,0.2)',
+                            borderType: 'dashed'
+                        }
+                    },
+                    {
+                        type: 'bar',
+                        name: '状态',
+                        data: fakeState,
+                        stack: '设备状态值',
+                        barWidth: '100%',
+                        itemStyle: {
+                            color: function(params) {
+                                // build a color map as your need.
+                                var colors = ['#737172', '#0096ff', '#259B24'];
+                                return colors[params.value * 100];
+                            }
+                        }
+                    }
+                ]
+            };
+
+            myChart.setOption(option1, (window.onresize = myChart.resize));
+        },
        // 处理图表数据格式
        hanld2(hour ,time, data){
            if(!(Array.isArray(time) && Array.isArray(data) && time.length === data.length)){

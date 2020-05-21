@@ -24,8 +24,8 @@
               </el-col>
              
               <el-col :span="3" style="margin:0 20px">
-                  <el-form-item label=""  prop="itemName" >
-                     <el-input  placeholder="物料名称" v-model="seachinfo.itemName" class="elinput"> </el-input>
+                  <el-form-item label=""  prop="itemNameOrCode" >
+                     <el-input  placeholder="物料名称或编码" v-model="seachinfo.itemNameOrCode" class="elinput"> </el-input>
                  </el-form-item>
                   
               </el-col>
@@ -81,7 +81,7 @@ export default {
           seachinfo:{
             beginDate:'',
             endDate:'',
-            itemName:''
+            itemNameOrCode:''
           },
           value1:'',
             page:{
@@ -91,12 +91,12 @@ export default {
             tableData:[],
             columnlist:[
               {prop:'index',label:'序号'},
-              {prop:'deviceType',label:'生产部门'},
+              {prop:'deptName',label:'生产部门'},
               {prop:'taskNumber',label:'工单号'},
               {prop:'itemName',label:'物料名称'},
               {prop:'itemCode',label:'物料编码'},
               {prop:'model',label:'规格型号'},
-              {prop:'buyCount',label:'计划采购量'},
+              {prop:'planBuyYield',label:'计划采购量'},
               {prop:'planStartTime',label:'计划开始时间'},
                {prop:'planEndTime',label:'计划结束时间'},
             ],
@@ -125,7 +125,7 @@ export default {
           this.seachinfo={
             beginDate:'',
             endDate:'',
-            itemName:''
+            itemNameOrCode:''
           }
           this.value1 =''
           this.page.current =1

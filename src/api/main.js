@@ -356,6 +356,15 @@ export const orderadd = query => {
       headers: {'userId': localStorage.getItem('userId')}
   });
 }
+// 订单锁定
+export const orderupdateState = query => {
+  return request({
+      url: `/api/producetask/order/updateState`,
+      method: 'put',
+      data:query,
+     
+  });
+}
 
 // 详情
 export const orderid = query => {
@@ -431,3 +440,15 @@ export const taskitemBuypage = query => {
       method: 'get',
   });
 }
+
+
+
+// 生产部门、车间列表
+export const getProduceDeptList = query => {
+  return request({
+      url: `/api/auth/dept/getProduceDeptList`,
+      params:query,
+      method: 'get',
+  });
+}
+

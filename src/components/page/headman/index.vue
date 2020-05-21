@@ -11,14 +11,16 @@
          </div>
          <div class="p2 p0">{{item.productName}} <span v-if="item.productCode">( {{item.productCode}} )</span> </div>
          <div class="p0"><p>规格型号:</p> <p> {{item.specificationModel}}</p></div>
-         <div class="p0"><p>计划产量:</p> <p> {{item.planManhourAvgyield}}</p></div>
-         <div class="p0"><p>生产车间:</p> <p> {{item.deviceTypeName}}</p></div>
+         <div class="p0"><p>计划产量:</p> <p> {{item.planYield}}</p></div>
+         <div class="p0"><p>生产车间:</p> <p> {{item.deptName}}</p></div>
          <div class="p0"><p>已生产数:</p><p>{{item.nowCount}}</p></div>
          <div class="progre">
              <el-progress type="circle" :percentage="percenage1(item.produceProgress)" :width=60></el-progress>
          </div>
          <div class="sub">
-             <el-button type="primary" size='mini' v-if="item.state==='2' " @click="goToPay(item)">领单</el-button>
+              
+              <el-button type="info" size='mini' v-if="item.technologyName " @click="technology(item)">查看工艺</el-button>
+              <el-button type="primary" size='mini' v-if="item.state==='2' " @click="goToPay(item)">领单</el-button>
               <el-button type="add" size='mini' v-if="item.state==='3' " @click="job(item)">报工</el-button>
         </div>
      </div>    
@@ -123,6 +125,11 @@ export default {
             if(num==='0'){
                 this.getlistByUserId()
             }
+        },
+        technology(item){
+            // debugger
+            window.open(item.technology)
+           
         }
     }
 }

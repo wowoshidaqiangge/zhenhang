@@ -130,6 +130,7 @@
 <script>
 import { selectDeviceRepairData,deviceTypeList,selectDeviceRepairList } from 'api/index'
 import {getListByToType} from 'api/main'
+import { export2Excel } from './../../../utils/util'
 import moment from 'moment'
 export default {
     name: 'devicerepair',
@@ -177,6 +178,10 @@ export default {
         this.getselectDeviceRepairList()
     },
     methods: {
+        test(){
+            
+            export2Excel(this.maincolumnlist,this.mainlist,'设备年度维修情况列表')
+        },
       getselectDeviceRepairData(){
           this.isload = true
           selectDeviceRepairData(this.terms).then(res=>{

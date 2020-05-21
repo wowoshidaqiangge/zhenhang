@@ -13,9 +13,9 @@
                         <el-select v-model="seachinfo.state" @change='changesel'  placeholder="请选择车间" >
                             <el-option
                                 v-for="item in options"
-                                :key="item.enumKey"
-                                :label="item.enumValue"
-                                :value="item.enumKey">
+                                :key="item.deptId"
+                                :label="item.deptName"
+                                :value="item.deptId">
                             </el-option>
                         </el-select>
                     </el-form-item>
@@ -84,6 +84,7 @@
 
 <script>
 import {selectProduceWorkRate,deviceTypeList} from 'api/index'
+import {getProduceDeptList} from 'api/main'
 import moment from 'moment'
 import Charts from './charts'
 export default {
@@ -110,7 +111,7 @@ export default {
     },
     created(){
         this.getselectProduceWorkRate()
-        this.getdeviceTypeList()
+        this.getProduceDeptList()
     },
     methods: {
         changesel(val){
@@ -121,8 +122,8 @@ export default {
             this.echarttitlename = obj.enumValue 
         },
         //获取车间列表
-        getdeviceTypeList(){
-            deviceTypeList().then(res=>{
+        getProduceDeptList(){
+            getProduceDeptList().then(res=>{
                 if(res.code==='0'){
                     this.options = res.data
                 }

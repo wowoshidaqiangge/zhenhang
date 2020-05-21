@@ -71,7 +71,7 @@
                           <span v-if="scope.row.isValid== '0' " style="color:red">禁用</span>
                       </template>
                     </el-table-column>
-                <el-table-column label="操作" width="210" >
+                <el-table-column label="操作" width="220" >
                             <template slot-scope="scope">
                                 <el-button
                                     type="add"
@@ -146,7 +146,7 @@ export default {
             value:'',
             tableData:[],
             columnlist:[
-                { prop:'id',label:'序号'},
+                { prop:'index',label:'序号'},
                 { prop:'name',label:'员工姓名'},
                 { prop:'phone',label:'手机号'},
                 { prop:'deptName',label:'部门'},
@@ -252,6 +252,9 @@ export default {
             userPage(obj).then(res=>{
                 this.botloading = false
                 if(res.code==='0'){
+                    res.data.records.map((item,index)=>{
+                        item.index = index+1
+                    })
                     this.tableData =res.data.records
                     this.pagesize =parseInt(res.data.current) 
                     this.totals = parseInt(res.data.total)

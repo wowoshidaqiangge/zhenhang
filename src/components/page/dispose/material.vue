@@ -1,14 +1,17 @@
 <template>
   <div class="material">
+       
         <div class="top">
+            
             <el-row>
                 <el-form :model="seachinfo"  ref="seachinfo"  class="demo-ruleForm">
                 <el-col :span="15">
                     <el-form-item label="" >
                         <el-button type="add" icon='el-icon-circle-plus-outline' @click="add">新增</el-button>
+                        <el-button type="add"  @click="addexcel">EXCEL导入</el-button>
                     </el-form-item>
                 </el-col>
-                
+              
                 <el-col :span="2" style="margin:0 20px">
                   <el-form-item label=""  prop="state" >
                       <el-select v-model="seachinfo.state"  placeholder="状态" >
@@ -99,16 +102,19 @@
         </div>
         </div>
         <mateModal :dialogFormVisible='dialogFormVisible' @close='close' :tit='tit' ref='matemodal'/>
+        <mateExcel :dialogFormVisible1='dialogFormVisible1' @close='close' :tit='tit'/>
   </div>
 </template>
 
 <script>
 import {producetaskpage,producetaskdelete,producetaskupdateState} from 'api/main'
+
 import mateModal from './matemodal'
+import mateExcel from './meateralexcel'
 export default {
     name: 'material',
     components:{
-      mateModal
+      mateModal,mateExcel
     },
     data() {
         return {
@@ -131,32 +137,43 @@ export default {
                 {prop:'series',label:'系列'},
                 {prop:'material',label:'材质'},
                 {prop:'unit',label:'基本单位'},
-                {prop:'deviceTypeName',label:'关联部门'},
+                {prop:'deptName',label:'关联部门'},
                 {prop:'createTime',label:'新增时间'}
             ],
             tableData:[],
             pagesize:1,
             totals:0,
             dialogFormVisible:false,
+            dialogFormVisible1:false,
             tit:'',
             options:[
               {value:'0',label:'禁用'},
               {value:'1',label:'正常'},
-            ]
+            ],
+            persons:[]
         }
     },
      computed: {
        
     },
+    mounted(){
+      
+    },
     created(){
         this.getproducetaskpage()
     },
     methods: {
+      addexcel(){
+        this.tit = "导入物料"
+        this.dialogFormVisible1 = true
+      },
+     
       // 获取列表
         getproducetaskpage(){
           let obj = {...this.seachinfo,...this.page}
           producetaskpage(obj).then(res=>{
-            res.data.records.map((item,index)=>{
+           if(res.code==='0'){
+              res.data.records.map((item,index)=>{
                item.index =index+1
                if(item.createTime){
                   item.createTime = item.createTime.split(' ')[0]
@@ -165,6 +182,9 @@ export default {
             this.pagesize = parseInt(res.data.current)
             this.totals = parseInt(res.data.total)
             this.tableData = res.data.records
+           }else{
+             this.$message.error(res.msg)
+           }
           })
         },
         add(){
@@ -189,11 +209,13 @@ export default {
         // 关闭弹窗
         close(num){
           this.dialogFormVisible = false
+          this.dialogFormVisible1 = false
           if(num==='0'){
               this.getproducetaskpage()
               
           }
         },
+        
         // 修改
         handleEdit(h,m){
           this.tit= '修改'

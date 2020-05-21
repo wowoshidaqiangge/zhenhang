@@ -8,6 +8,7 @@
                        <el-button type="add" icon='el-icon-circle-plus-outline' @click="add">新增</el-button>
                    </el-form-item>
               </el-col>
+              
               <el-col :span="5">
                   <el-form-item label="" prop="value1">
                         <el-date-picker
@@ -113,7 +114,7 @@
                                 >解锁</el-button>
                                  <el-button
                                     type="info"
-                                     v-if="scope.row.state=='1' || scope.row.state=='2'"
+                                     v-if="scope.row.state=='1' || scope.row.state=='2' ||scope.row.state=='3'"
                                     plain
                                     @click="handleEdit(scope.$index, scope.row)"
                                 >详情</el-button>
@@ -144,8 +145,7 @@
 </template>
 
 <script>
-import { produceTaskpage,produceTaskdelete,updateProduceTaskLockById } from 'api/index'
-import {orderTypeList} from 'api/main'
+import { produceTaskpage,produceTaskdelete,updateProduceTaskLockById,produceTaskStateList } from 'api/index'
 import Modal from './modal'
 import moment from 'moment'
 import editmodal from './proeditmodal'
@@ -205,12 +205,12 @@ export default {
    
     created(){
         this.getproduceTaskpage()
-        this.getorderTypeList()
+        this.getproduceTaskStateList()
     },
     methods: {
         // 查询状态
-        getorderTypeList(){
-            orderTypeList().then(res=>{
+        getproduceTaskStateList(){
+            produceTaskStateList().then(res=>{
                 if(res.code==='0'){
                     this.orderlist = res.data
                 }
@@ -272,18 +272,25 @@ export default {
             }
         },
         handleEdit(h,m){
-             this.tit = '编辑任务'
+             this.tit = '详情'
              this.$refs.promodal.getproduceTaskid(m)
              this.dialogFormVisibledit = true
            
         },
         handleDelete(h,m){
-            produceTaskdelete(m).then(res=>{
-                if(res.code==='0'){
-                    this.$message.success(res.msg)
-                    this.getproduceTaskpage()
-                }
+             this.$confirm('确定要删除吗？', '提示', {
+                type: 'warning'
             })
+            .then(() => {
+                    produceTaskdelete(m).then(res=>{
+                        if(res.code==='0'){
+                            this.$message.success(res.msg)
+                            this.getproduceTaskpage()
+                        }
+                    })
+            })
+            .catch(() => {});
+           
         },
         // 锁定解锁
         handleUntie(h,m){

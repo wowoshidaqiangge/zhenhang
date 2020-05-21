@@ -35,8 +35,8 @@
                  </el-form-item>
               </el-col>
               <el-col :span="3" style="margin-right:10px">
-                  <el-form-item label=""  prop="productName" >
-                     <el-input  placeholder="物料名称" v-model="seachinfo.productName"> </el-input>
+                  <el-form-item label=""  prop="itemNameOrCode" >
+                     <el-input  placeholder="物料名称或编码" v-model="seachinfo.itemNameOrCode"> </el-input>
                  </el-form-item>
                   
               </el-col>
@@ -152,9 +152,9 @@
 </template>
 
 <script>
-import { produceTaskPlanpage} from 'api/index'
+import { produceTaskPlanpage,produceTaskStateList} from 'api/index'
 import assingModal from './assignModal'
-import {orderTypeList} from 'api/main'
+
 import moment from 'moment'
 import recordmodal from './recordmodal'
 import { mapState } from 'vuex'
@@ -187,11 +187,11 @@ export default {
             },
             tableData:[],
             columnlist:[{prop:'index',label:'序号',width:'50'},
-                {prop:'produceTaskPlanId',label:'工单号'},
-                {prop:'deviceTypeName',label:'部门'},
-                {prop:'productName',label:'物料名称'},
-                {prop:'productCode',label:'物料编码'},
-                {prop:'specificationModel',label:'规格型号',width:'70'},
+                {prop:'taskNumber',label:'工单号'},
+                {prop:'deptName',label:'部门'},
+                {prop:'itemName',label:'物料名称'},
+                {prop:'itemCode',label:'物料编码'},
+                {prop:'model',label:'规格型号',},
                 {prop:'planYield',label:'计划生产量',width:'95'},
                 {prop:'planStartTime',label:'开始时间',width:'90'},
                 {prop:'planEndTime',label:'结束时间',width:'90'},
@@ -206,7 +206,7 @@ export default {
                 beginDate:'',
                 endDate:'',
                 state:'',
-                productName:''
+                itemNameOrCode:''
             },
             orderlist:[]
             
@@ -214,12 +214,12 @@ export default {
     },
     created(){
         this.getproduceTaskPlanpage()
-        this.getorderTypeList()
+        this.getproduceTaskStateList()
     },
     methods: {
          // 查询状态
-        getorderTypeList(){
-            orderTypeList().then(res=>{
+        getproduceTaskStateList(){
+            produceTaskStateList().then(res=>{
                 if(res.code==='0'){
                     this.orderlist = res.data
                 }
@@ -239,7 +239,7 @@ export default {
                 beginDate:'',
                 endDate:'',
                 state:'',
-                productName:''
+                itemNameOrCode:''
             }
             this.value1=[]
             this.page.current = 1
@@ -313,7 +313,7 @@ export default {
      // 报工记录
      handleUntie(h,m){
          
-         this.$refs.recordmodal.getpageByProduceTaskPlanId(m.produceTaskPlanId)
+         this.$refs.recordmodal.getpageByProduceTaskPlanId(m.produceTaskPlanId,m)
          this.dialogFormVisible1 = true
      }
     }

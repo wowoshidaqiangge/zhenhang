@@ -25,7 +25,7 @@
               
                 <el-col :span="24">
                     <el-form-item label="产品编码" :label-width="formLabelWidth" prop='productId'>
-                        <el-select v-model="form.productId" @change='changeselect' placeholder="请选择">
+                        <el-select v-model="form.productId" filterable  @change='changeselect' placeholder="请选择">
                             <el-option
                                 v-for="item in prolist"
                                 :key="item.id"
@@ -213,7 +213,6 @@ export default {
             },
             rules1:{
                
-              
             }
          
         }
@@ -266,6 +265,7 @@ export default {
                         item.planStartTime = ''
                         item.planEndTime = ''
                     })
+                    res.data.push({itemCode:'包装',planYield:this.yieid,yieid:this.yieid,planBuyYield:0,planStartTime:'',planEndTime:''})
                     this.tableData2 = res.data
                 }
             })
@@ -327,28 +327,33 @@ export default {
            })
        },
        marksure(form){
-           let arr =[]
+            let arr =[]
             this.tableData2.map(item=>{
                 arr.push({itemId:item.id,
                 planYield:item.planYield,
+                itemCode:item.itemCode,
                 planBuyYield:item.planBuyYield,
                 planStartTime:item.planStartTime,
                 planEndTime:item.planEndTime})
             })
+         
             this.form.taskItemList = arr
             this.$refs[form].validate((valid) => {
                 if (valid) {
                         produceTask(this.form).then(res=>{
                             if(res.code==='0'){
                                 this.$message.success(res.msg)
+                                this.getorderlist()
                                 this.close('0')
                             }
                         })
+                }else{
+
                 }
           })
        },
        beforclose(){
-           this.init()
+          this.init()
           this.$emit('close',false)
        },
        init(){

@@ -10,8 +10,8 @@
     <el-row>
          <el-form :model="form" :rules="rules" ref="form">
              <el-col :span="24">
-                 <el-form-item label="设备类型" :label-width="formLabelWidth" class="formitem formitem1" prop="category">
-                    <el-select v-model="form.category" placeholder="请选择" @change='changeselect'>
+                 <el-form-item label="设备类型" :label-width="formLabelWidth" class="formitem formitem1" prop="">
+                    <el-select placeholder="请选择" @change='changeselect'>
                         <el-option
                         v-for="item in deptlist"
                         :key="item.enumKey"
@@ -36,16 +36,16 @@
                 </el-form-item>
              </el-col>
              <el-col :span="24">
-                 <el-form-item label="所属类别" :label-width="formLabelWidth" class="formitem formitem1" prop="period">
-                        <el-radio-group v-model="form.period">
+                 <el-form-item label="所属类别" :label-width="formLabelWidth" class="formitem formitem1" prop="category">
+                        <el-radio-group v-model="form.category">
                             <el-radio label="A型"></el-radio>
                             <el-radio label="B型"></el-radio>
                         </el-radio-group>
                 </el-form-item>
              </el-col>
               <el-col :span="11">
-                 <el-form-item label="保养周期" :label-width="formLabelWidth" class="formitem formitem1" prop="toType">
-                    <el-select v-model="form.toType" placeholder="请选择">
+                 <el-form-item label="保养周期" :label-width="formLabelWidth" class="formitem formitem1" prop="period">
+                    <el-select v-model="form.period" placeholder="请选择">
                        <el-option
                             v-for="item in timelist"
                             :key="item.value"

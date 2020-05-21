@@ -3,7 +3,7 @@ import App from './App.vue';
 import router from './router';
 import store from './vuex/store'
 import ElementUI from 'element-ui';
-// import $ from 'jquery'
+
 import VueI18n from 'vue-i18n';
 import { messages } from './components/common/i18n';
 import 'element-ui/lib/theme-chalk/index.css'; // 默认主题
@@ -33,7 +33,9 @@ router.beforeEach((to, from, next) => {
     document.title = `${to.meta.title}`;
     const role = localStorage.getItem('ms_username');
     if (!role && to.path !== '/login') {
+
         next('/login');
+        document.title = '登录'
     } else if (to.meta.permission) {
         // 如果是管理员权限则可进入，这里只是简单的模拟管理员权限而已
         role === 'admin' ? next() : next('/403');

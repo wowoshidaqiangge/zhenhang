@@ -11,27 +11,23 @@
                                 <el-input v-model="form.taskNumber" disabled autocomplete="off"></el-input>
                         </el-form-item>
                     </el-col>
-                    <el-col :span="12">
-                        <el-form-item label="部门" :label-width="formLabelWidth" prop='deviceType'>
-                                <el-input v-model="form.deviceType" disabled autocomplete="off"></el-input>
+                  
+                    <el-col :span="11">
+                        <el-form-item label="物料名称" :label-width="formLabelWidth" prop='itemName'>
+                                <el-input v-model="form.itemName" disabled autocomplete="off"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="11">
-                        <el-form-item label="物料名称" :label-width="formLabelWidth" prop='productName'>
-                                <el-input v-model="form.productName" disabled autocomplete="off"></el-input>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="12">
-                        <el-form-item label="物料编码" :label-width="formLabelWidth" prop='productCode'>
-                                <el-input v-model="form.productCode" disabled autocomplete="off"></el-input>
+                        <el-form-item label="物料编码" :label-width="formLabelWidth" prop='itemCode'>
+                                <el-input v-model="form.itemCode" disabled autocomplete="off"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="11">
-                        <el-form-item label="规格型号" :label-width="formLabelWidth" prop='specificationModel'>
-                                <el-input v-model="form.specificationModel" disabled autocomplete="off"></el-input>
+                        <el-form-item label="规格型号" :label-width="formLabelWidth" prop='model'>
+                                <el-input v-model="form.model" disabled autocomplete="off"></el-input>
                         </el-form-item>
                     </el-col>
-                    <el-col :span="12">
+                    <el-col :span="11">
                         <el-form-item label="计划产量" :label-width="formLabelWidth" prop='planYield'>
                                 <el-input v-model="form.planYield" disabled autocomplete="off"></el-input>
                         </el-form-item>
@@ -171,8 +167,13 @@ export default {
         this.getdeviceList()
         this.getuserListByDept()
     },
+    watch: {
+           
+    },
+   
     methods: {
         handleSuccess (res, file) {
+         
                 var a  = this.host + '/' + this.ossParams.key
                 this.form.technologyName = file.name
                 this.form.technology = a
@@ -192,6 +193,7 @@ export default {
         },
         // 获取oss签名数据
         backOssInfo: function (file) {
+           let fileName=file.name.substring(file.name.lastIndexOf('.')+1);
             return new Promise(function (resolve, reject) {
                 onenet.ossInfo().then(function (response) {
                 if (response === undefined) {
@@ -201,7 +203,7 @@ export default {
                     this.ossParams.OSSAccessKeyId = response.accessid
                     this.ossParams.policy = response.policy
                     this.ossParams.signature = response.signature
-                    this.ossParams.key = localStorage.getItem('userId') + this.randomWord(true, 9, 12)
+                    this.ossParams.key = localStorage.getItem('userId') + this.randomWord(true, 9, 12)+ '.'+fileName
                     resolve()
                 }
                 }.bind(this))
@@ -239,7 +241,7 @@ export default {
            this[`value${index}`] = value.toString()
         },
         // 获取详情
-       getproduceTaskPlanid(id){
+       getproduceTaskPlanid(id,m){
            var obj = {id:id.produceTaskPlanId}
            produceTaskPlanid(obj).then(res=>{
                res.data.userId = res.data.executeUserId
@@ -250,12 +252,24 @@ export default {
            })
        },
        handleChange(val){
+           this.getmath(this.form.planYield,val)
            this.num = val
            let arr = []
            for(let a= 0;a<val;a++){
                arr.push({value:this[`value${a}`]})
            }
            this.numlist = arr
+       },
+       //平分工单
+       getmath(value,num){
+           for(let a= 0;a<num;a++){
+                   if(a == num-1){
+                        this[`value${a}`] = (value-value%num)/num + value%num
+                   }else{
+                        this[`value${a}`] = (value-value%num)/num
+                   }
+           }
+        
        },
        close(num){
            this.init()
@@ -282,6 +296,7 @@ export default {
                         })
                    }else if(this.tit==='派单' || this.tit==='修改'){
                        this.form.userId = this.form.userId[1]
+                       this.form.deptId = this.form.userId[0]
                        produceTaskAssign(this.form).then(res=>{
                            this.$message.success(res.msg)
                            this.close('0')
@@ -313,7 +328,6 @@ export default {
             this.value5=''
             this.num=0
             this.numlist=[]
-            
        }
     }
 }

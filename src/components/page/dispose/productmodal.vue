@@ -9,9 +9,12 @@
     center>
     <el-row>
          <el-form :model="form"  ref="form">
+            
             <el-col :span="11">
+                
                  <el-form-item label="产品编码" :label-width="formLabelWidth" class="formitem formitem1" prop="productCode">
                         <el-input v-model="form.productCode" ></el-input>
+                        
                 </el-form-item>
             </el-col>
             <el-col :span="11">
@@ -28,15 +31,15 @@
            
             <el-col :span="11">
                 <el-form-item label="物料选择" :label-width="formLabelWidth"  class="formitem formitem1" >
-                    <el-select v-model="itemIds" @change='changesel' @remove-tag='removetag' multiple  placeholder="请选择">
+                    <el-cascader :props="casprops" v-model="infolist" :show-all-levels="false" multiple @change='changesel' @remove-tag='removetag'></el-cascader>
+                    <!-- <el-select v-model="itemIds" @change='changesel' @remove-tag='removetag' multiple  placeholder="请选择">
                         <el-option
                             v-for="item in rolelist"
                             :key="item.id"
                             :label="item.itemName"
                             :value="item.id">
-                      
                         </el-option>
-                    </el-select>
+                    </el-select> -->
                 </el-form-item>
             </el-col>
             <el-col :span="11">
@@ -114,6 +117,8 @@
                     </el-col>
                 </el-form>
              </el-row>
+            
+             
         <div slot="footer" class="dialog-footer">
                 <el-button @click="close1">取 消</el-button>
                 <el-button type="primary" @click="marksure1">确 定</el-button>
@@ -145,6 +150,7 @@ export default {
        
     },
     data() {
+        
         return {
             isclose:true,
             sureload:false,
@@ -181,13 +187,68 @@ export default {
                 {prop:'unit',label:'单位'},
               
             ],
+            caslist1:[],
+            caslist2:[],
+            caslist0:[],
             innerVisible:false,
             itemIds:[],
+            infolist:[],
             productId:'',//修改时根据id 查询数量
+            
         }
     },
     created(){
         this.getproducetasklist()
+        let that = this
+        this.casprops={
+                multiple: true,
+                lazy:true,
+                lazyLoad (node, resolve) {
+                    if(node.level == 0){
+                        producetasklist().then(res=>{
+                            if(res.code==='0'){
+                                const cities = res.data.itemList.map((value, i) => (value.dataIsEmpty=="true"?{
+                                                value: value.id,
+                                                label: value.itemName,
+                                                leaf: node.level >= 2
+                                }:{ value: value.id,
+                                                label: value.itemName,
+                                                leaf: node.level >= 0}));
+                                resolve(cities);
+                            }
+                        })
+                    }else if(node.level == 1){
+                       
+                        producetasklist({itemName:node.label}).then(res=>{
+                            if(res.code==='0'){
+                              
+                                const cities = res.data.itemList.map((value, i) =>  (value.dataIsEmpty=="true"?{
+                                                value: value.id,
+                                                label: value.material,
+                                                leaf: node.level >= 2
+                                }:{
+                                                value: value.id,
+                                                label: value.material,
+                                                leaf: node.level >= 1
+                                }));
+                                resolve(cities);
+                            }
+                        })
+                    }else if(node.level == 2){
+                        producetasklist({material:node.label}).then(res=>{
+                            if(res.code==='0'){
+                                const cities = res.data.itemList.map((value, i) => ({
+                                                value: value.id,
+                                                label: value.model,
+                                                leaf: node.level >= 2
+                                }));
+                                resolve(cities);
+                            }
+                        })
+                    }
+                    
+                }
+            }
     },
     mounted(){
         
@@ -197,18 +258,24 @@ export default {
     },
     methods: {
         changesel(val){
-            this.itemIds = val
-            // this.$forceUpdate()
+            let arr = []
+            val.map((item)=>{
+                let a = item.length -1
+                arr.push(item[a])
+            })
+            this.itemIds = arr
         },  
         removetag(val){
-           let arr = this.tableData1
-            this.tableData1.map((item,index)=>{
-                if(item.id ===val){
+            let len = val.length -1
+            let arr = this.itemIds
+            arr.map((item,index)=>{
+                if(item ===val[len]){
                     arr.splice(index,1)
                 }
             })
-            this.tableData1 = arr
-          
+            // console.log(this[`caslist${len}`])
+             this.itemIds = arr
+           
         },
         //产品详情
         getproductid(id){
@@ -229,7 +296,7 @@ export default {
        getproducetasklist(){
            producetasklist().then(res=>{
                if(res.code==='0'){
-                   this.rolelist = res.data
+                   this.rolelist = res.data.itemList
                }
            })
        },
@@ -245,6 +312,7 @@ export default {
        getListByIds(ids){
            getListByIds(ids).then(res=>{
                 if(res.code==='0'){
+                   
                     res.data.map(item=>{
                         if(!item.itemCount){
                             item.itemCount = 1
@@ -327,15 +395,24 @@ export default {
        //删除
        handledistribute(m){
             let arr = this.tableData1
-            let arr1 = this.itemIds
+            let arr1 = this.infolist
             this.tableData1.map((item,index)=>{
                 if(item.id ===m){
                     arr.splice(index,1)
-                    arr1.splice(index,1)
+                   
                 }
             })
             this.tableData1 = arr
-            this.itemIds= arr1
+            
+           arr1.map((item,index)=>{
+              let a =item.length-1
+              if(item[a]===m){
+                    arr1.splice(index,1)
+              }
+           })
+           this.infolist = arr1
+           this.$forceUpdate()
+           console.log(arr1)
        }
     }
 }

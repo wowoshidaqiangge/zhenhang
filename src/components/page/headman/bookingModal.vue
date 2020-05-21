@@ -39,8 +39,8 @@
                     </el-form-item>
                 </el-col>
                 <el-col :span="11">
-                    <el-form-item label="所属部门" :label-width="formLabelWidth" class="formitem formitem1" prop="deviceType">
-                            <el-input v-model="form.deviceType" disabled></el-input>
+                    <el-form-item label="所属部门" :label-width="formLabelWidth" class="formitem formitem1" prop="deptName">
+                            <el-input v-model="form.deptName" disabled></el-input>
                     </el-form-item>
                 </el-col>
                 </div>

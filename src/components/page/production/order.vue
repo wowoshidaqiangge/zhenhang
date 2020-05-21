@@ -71,6 +71,7 @@
                     width="70">
                     <template slot-scope="scope">
                         <div slot="reference" class="name-wrapper">
+                            <span v-if="scope.row.state==0 " style="color:rgb(40,176,40);font-weight:600">{{ scope.row.stateName }}</span>
                             <span v-if="scope.row.state==1 " style="color:rgb(40,176,40);font-weight:600">{{ scope.row.stateName }}</span>
                             <span v-if="scope.row.state=='2' " style="color:rgb(255,153,19);font-weight:600">{{ scope.row.stateName }}</span>
                             <span v-if="scope.row.state=='3' " style="color:rgb(69,79,201);font-weight:600">{{ scope.row.stateName }}</span>
@@ -101,7 +102,7 @@
                             <template slot-scope="scope">
                                 <el-button
                                     type="success"
-                                    v-if="scope.row.state=='3' || scope.row.state=='2' ||scope.row.state=='1' "
+                                    v-if="scope.row.state=='3' || scope.row.state=='2' ||scope.row.state=='1' || scope.row.state=='0' "
                                     plain
                                     @click="handleUntie(5, scope.row.id)"
                                 >锁定</el-button>
@@ -113,14 +114,14 @@
                                 >解锁</el-button>
                                  <el-button
                                     type="info"
-                                     v-if="scope.row.state=='1'"
+                                     v-if="scope.row.state=='1' || scope.row.state=='0' "
                                     plain
                                     @click="handleEdit(scope.$index, scope.row)"
                                 >修改</el-button>
                                 <el-button
                                     type="danger"
                                     plain
-                                     v-if="scope.row.state=='1' || scope.row.state=='2'"
+                                     v-if="scope.row.state=='1' || scope.row.state=='2' || scope.row.state=='0' "
                                     class="red"
                                     @click="handleDelete(scope.$index, scope.row)"
                                 >删除</el-button>
@@ -143,8 +144,8 @@
 </template>
 
 <script>
-import { produceTaskdelete,updateProduceTaskLockById } from 'api/index'
-import {orderpage,orderdelete,orderTypeList} from 'api/main'
+import { produceTaskdelete } from 'api/index'
+import {orderpage,orderdelete,orderTypeList,orderupdateState} from 'api/main'
 import moment from 'moment'
 import orderModal from './ordermodal'
 import { mapState } from 'vuex'
@@ -177,11 +178,10 @@ export default {
             tableData:[],
             columnlist:[
                 {prop:'index',label:'序号',width:'50'},
-                {prop:'orderNumber',label:'订单号'},
+                {prop:'orderCode',label:'订单号'},
                 {prop:'productCode',label:'产品编码'},
                 {prop:'productName',label:'产品名称'},
-               
-                {prop:'',label:'规格型号',width:'70'},
+                {prop:'model',label:'规格型号'},
                 {prop:'planYield',label:'订单量'},
                 {prop:'produceCount',label:'实际生产量',width:'95'},
                 {prop:'planFinishTime',label:'交货时间',width:'90'},
@@ -269,17 +269,24 @@ export default {
            
         },
         handleDelete(h,m){
-            orderdelete(m).then(res=>{
-                if(res.code==='0'){
-                    this.$message.success(res.msg)
-                    this.getorderpage()
-                }
+            this.$confirm('确定要删除吗？', '提示', {
+                type: 'warning'
             })
+            .then(() => {
+                     orderdelete(m).then(res=>{
+                            if(res.code==='0'){
+                                this.$message.success(res.msg)
+                                this.getorderpage()
+                            }
+                        })
+            })
+            .catch(() => {});
+           
         },
         // 锁定解锁
         handleUntie(h,m){
             var obj = {id:m,state:h}
-            updateProduceTaskLockById(obj).then(res=>{
+            orderupdateState(obj).then(res=>{
                 if(res.code==='0'){
                     this.$message.success(res.msg)
                     this.getorderpage()

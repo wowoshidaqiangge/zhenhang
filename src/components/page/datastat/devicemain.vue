@@ -87,7 +87,7 @@
                             <template slot-scope="scope">
                                 <img  v-if="scope.row.deviceMaintainList[scope.column.index]&&(scope.row.deviceMaintainList[scope.column.index].state.split(',').findIndex(v=> v=='1')!==-1)" src="~@/assets/img/suc.png"/>
                                 <img  v-if="scope.row.deviceMaintainList[scope.column.index]&&(scope.row.deviceMaintainList[scope.column.index].state.split(',').findIndex(v=> v=='0')!==-1)" src="~@/assets/img/error.png"/>
-                                <img  v-if="scope.row.deviceMaintainList[scope.column.index]&&(scope.row.deviceMaintainList[scope.column.index].state.split(',').findIndex(v=> v=='')!==-1)" src="~@/assets/img/repair.png"/> 
+                                <!-- <img  v-if="scope.row.deviceMaintainList[scope.column.index]&&(scope.row.deviceMaintainList[scope.column.index].state.split(',').findIndex(v=> v=='')!==-1)" src="~@/assets/img/repair.png"/>  -->
                                 <span v-if="scope.row.deviceMaintainList[scope.column.index].maintainCount > 1"> X {{scope.row.deviceMaintainList[scope.column.index].maintainCount}}</span>
                             </template>
                         </el-table-column>

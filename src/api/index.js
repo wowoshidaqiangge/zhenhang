@@ -351,6 +351,17 @@ export const produceTaskPlanid = query => {
   });
 }
 
+
+//工单状态查询
+
+export const produceTaskStateList = query => {
+  return request({
+      url: `/api/producetask/produceTask/produceTaskStateList`,
+      method: 'get',
+      params:query
+  });
+}
+
 // 工单分解
 export const saveProduceTaskPlan = query => {
   return request({

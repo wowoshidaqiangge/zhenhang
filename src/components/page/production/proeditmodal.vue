@@ -4,15 +4,137 @@
     <el-dialog :title="tit" width="60%" :visible.sync="dialogFormVisibledit" :before-close='beforclose' center>
         <el-tabs v-model="activeName" @tab-click="handleClick">
             <el-tab-pane label="任务详情" name="first">
-
+                 <el-row>
+                <el-form :model="form" ref='form'>
+                    <el-col :span="11">
+                            <el-form-item label="订单编号" :label-width="formLabelWidth" prop='orderId'>
+                                    <el-select v-model="form.orderId" disabled @change='changesel' placeholder="请选择">
+                                        <el-option
+                                        v-for="item in options"
+                                        :key="item.id"
+                                        :label="item.orderCode"
+                                        :value="item.id">
+                                        </el-option>
+                                    </el-select>
+                            </el-form-item>
+                        </el-col>
+                    <el-col :span="11">
+                            <el-form-item label="任务单号" :label-width="formLabelWidth" prop='taskNumber'>
+                                    <el-input v-model="form.taskNumber"  disabled autocomplete="off"></el-input>
+                            </el-form-item>
+                    </el-col>
+                    
+                    <el-col :span="24">
+                            <el-form-item label="产品编码" :label-width="formLabelWidth" prop='productId'>
+                                <el-select v-model="form.productId" disabled @change='changeselect' placeholder="请选择">
+                                    <el-option
+                                        v-for="item in prolist"
+                                        :key="item.id"
+                                        :label="item.productCode"
+                                        :value="item.id">
+                                    </el-option>
+                                </el-select>
+                            </el-form-item>
+                    </el-col>
+                    <p>
+                            <el-col :span="11">
+                                <el-form-item label="产品名称" :label-width="formLabelWidth" prop='productName'>
+                                        <el-input v-model="form.productName" disabled autocomplete="off"></el-input>
+                                </el-form-item>
+                            </el-col>
+                            <el-col :span="11">
+                                <el-form-item label="规格型号" :label-width="formLabelWidth" prop='model'>
+                                        <el-input v-model="form.model" disabled autocomplete="off"></el-input>
+                                </el-form-item>
+                            </el-col>
+                    </p>
+                    <el-col :span="24" >
+                            <el-table
+                                :data="tableData2"
+                                style="width: 100%">
+                                <el-table-column
+                                        v-for="(item,index) in columnList"
+                                        :key='index'
+                                        :prop="item.prop"
+                                        :label="item.label"
+                                        align="center"
+                                >
+                                </el-table-column>
+                              
+                        </el-table> 
+                    </el-col> 
+                    </el-form> 
+                </el-row>
             </el-tab-pane>
-            <el-tab-pane label="生产进度" name="second">配置管理</el-tab-pane>
+            <el-tab-pane label="生产进度" name="second">
+                  <el-row>
+                <el-form :model="form" ref='form'>
+                    <el-col :span="11">
+                            <el-form-item label="订单编号" :label-width="formLabelWidth" prop='orderId'>
+                                    <el-select v-model="form.orderId" disabled @change='changesel' placeholder="请选择">
+                                        <el-option
+                                        v-for="item in options"
+                                        :key="item.id"
+                                        :label="item.orderCode"
+                                        :value="item.id">
+                                        </el-option>
+                                    </el-select>
+                            </el-form-item>
+                        </el-col>
+                    <el-col :span="11">
+                            <el-form-item label="任务单号" :label-width="formLabelWidth" prop='taskNumber'>
+                                    <el-input v-model="form.taskNumber"  disabled autocomplete="off"></el-input>
+                            </el-form-item>
+                    </el-col>
+                    
+                    <el-col :span="24">
+                            <el-form-item label="产品编码" :label-width="formLabelWidth" prop='productId'>
+                                <el-select v-model="form.productId" disabled @change='changeselect' placeholder="请选择">
+                                    <el-option
+                                        v-for="item in prolist"
+                                        :key="item.id"
+                                        :label="item.productCode"
+                                        :value="item.id">
+                                    </el-option>
+                                </el-select>
+                            </el-form-item>
+                    </el-col>
+                    <p>
+                            <el-col :span="11">
+                                <el-form-item label="产品名称" :label-width="formLabelWidth" prop='productName'>
+                                        <el-input v-model="form.productName" disabled autocomplete="off"></el-input>
+                                </el-form-item>
+                            </el-col>
+                            <el-col :span="11">
+                                <el-form-item label="规格型号" :label-width="formLabelWidth" prop='model'>
+                                        <el-input v-model="form.model" disabled autocomplete="off"></el-input>
+                                </el-form-item>
+                            </el-col>
+                    </p>
+                    <el-col :span="24" >
+                            <el-table
+                                :data="tableData2"
+                                style="width: 100%">
+                                <el-table-column
+                                        v-for="(item,index) in columnList1"
+                                        :key='index'
+                                        :prop="item.prop"
+                                        :label="item.label"
+                                        align="center"
+                                >
+                                </el-table-column>
+                              
+                        </el-table> 
+                    </el-col> 
+                    </el-form> 
+                </el-row>
+            </el-tab-pane>
             <el-tab-pane label="修改任务" name="third">
                 <el-row>
                 <el-form :model="form" ref='form'>
                     <el-col :span="11">
                             <el-form-item label="订单编号" :label-width="formLabelWidth" prop='orderId'>
-                                    <el-select v-model="form.orderId" @change='changesel' placeholder="请选择">
+                                    <el-select v-model="form.orderId" disabled @change='changesel' placeholder="请选择">
                                         <el-option
                                         v-for="item in options"
                                         :key="item.id"
@@ -31,7 +153,7 @@
                     
                     <el-col :span="24">
                             <el-form-item label="产品编码" :label-width="formLabelWidth" prop='productId'>
-                                <el-select v-model="form.productId" @change='changeselect' placeholder="请选择">
+                                <el-select v-model="form.productId" disabled @change='changeselect' placeholder="请选择">
                                     <el-option
                                         v-for="item in prolist"
                                         :key="item.id"
@@ -212,6 +334,17 @@ export default {
                 {prop:'planStartTime',label:'开始时间'},
                 {prop:'planEndTime',label:'结束时间'},
             ],
+            columnList1:[
+                {prop:'itemCode',label:'物料编码'},
+                {prop:'itemName',label:'物料名称'},
+                {prop:'model',label:'规格型号'},
+                {prop:'material',label:'材质'},
+                {prop:'yieid',label:'订单量'},
+                {prop:'planYield',label:'计划生产量'},
+                {prop:'produceCount',label:'实际生产量'},
+                {prop:"produceProgress",label:'进度'},
+                {prop:'createTime',label:'报工时间'},
+            ],
             prolist:[],
             yieid:'',
             produceTaskId:''
@@ -323,6 +456,7 @@ export default {
                if(res.code==='0'){
                    res.data.planList.map((item)=>{
                        item.yieid = id.planYield
+                       item.createTime = item.createTime.split(' ')[0]
                    })
                    this.yieid = id.planYield
                    this.produceTaskId = id.id

@@ -17,7 +17,7 @@
         stripe
         style="width: 100%">
         <el-table-column
-        prop="id"
+        prop="index"
         label="序号"
         align="center"
        >
@@ -120,6 +120,9 @@ export default {
         getroleList(){
             roleList().then(res=>{
                 if(res.code==='0'){
+                    res.data.map((item,index)=>{
+                        item.index = index+1
+                    })
                     this.tableData = res.data
                 }
             })
