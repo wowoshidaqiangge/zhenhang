@@ -123,13 +123,12 @@
                                         align="center"
                                 >
                                 </el-table-column>
-                              
                         </el-table> 
                     </el-col> 
                     </el-form> 
                 </el-row>
             </el-tab-pane>
-            <el-tab-pane label="修改任务" name="third">
+            <el-tab-pane label="修改任务" name="third" v-if='!isnow'>
                 <el-row>
                 <el-form :model="form" ref='form'>
                     <el-col :span="11">
@@ -271,7 +270,7 @@
                         <el-button type="primary" @click="marksure1">确 定</el-button>
                 </div>
         </el-dialog>
-        <div slot="footer" class="dialog-footer">
+        <div slot="footer" class="dialog-footer" v-if='!isnow'>
             <el-button @click="close">取 消</el-button>
             <el-button type="primary" @click="marksure('form')">确 定</el-button>
         </div>
@@ -347,7 +346,8 @@ export default {
             ],
             prolist:[],
             yieid:'',
-            produceTaskId:''
+            produceTaskId:'',
+            isnow:false
         }
     },
     created(){
@@ -452,6 +452,12 @@ export default {
            this.$emit('close',num)
        },
        getproduceTaskid(id){
+           //判断是不是生产zhong
+           if(id.state=='3'){
+               this.isnow = true
+           }else{
+               this.isnow = false
+           }
            produceTaskid(id).then(res=>{
                if(res.code==='0'){
                    res.data.planList.map((item)=>{
@@ -470,6 +476,7 @@ export default {
             this.tableData2.map(item=>{
                 arr.push({itemId:item.id,
                 planYield:item.planYield,
+                itemCode:item.itemCode,
                 planBuyYield:item.planBuyYield,
                 planStartTime:item.planStartTime,
                 planEndTime:item.planEndTime})

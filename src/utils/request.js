@@ -3,7 +3,7 @@ import { Message } from 'element-ui';
 const service = axios.create({
     // process.env.NODE_ENV === 'development' 来判断是否开发环境
     
-    // baseURL: 'http://172.16.1.105:7002', //请求路径
+    // baseURL: 'http://172.12.1.103:7002', //请求路径
     baseURL: 'http://139.9.7.204:7000',
     // baseURL: 'http://zh.thingcom.com',
     // baseURL:  'http://139.9.7.204.61:7002',

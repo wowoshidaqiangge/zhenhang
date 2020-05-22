@@ -336,7 +336,6 @@ export default {
                 planStartTime:item.planStartTime,
                 planEndTime:item.planEndTime})
             })
-         
             this.form.taskItemList = arr
             this.$refs[form].validate((valid) => {
                 if (valid) {
@@ -345,6 +344,8 @@ export default {
                                 this.$message.success(res.msg)
                                 this.getorderlist()
                                 this.close('0')
+                            }else{
+                                this.$message.error(res.msg)
                             }
                         })
                 }else{

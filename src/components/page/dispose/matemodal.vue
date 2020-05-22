@@ -35,8 +35,8 @@
                 </el-form-item>
              </el-col>
             <el-col :span="11">
-                <el-form-item label="关联部门" :label-width="formLabelWidth"  class="formitem formitem1" prop="deptName">
-                    <el-select v-model="form.deptName" placeholder="请选择">
+                <el-form-item label="关联部门" :label-width="formLabelWidth"  class="formitem formitem1" prop="deptId">
+                    <el-select v-model="form.deptId" placeholder="请选择">
                         <el-option
                             v-for="item in rolelist"
                             :key="item.deptId"
@@ -58,7 +58,6 @@
                         {{item.name}}
                         </el-option>
                     </el-select>
-                    
                 </el-form-item>
             </el-col>
         </el-form>
@@ -68,7 +67,6 @@
             <el-button type="primary" @click="marksure('form')" :loading="sureload">确 定</el-button>
         </div>
     </el-dialog>
-
   </div>
 </template>
 
@@ -104,7 +102,7 @@ export default {
               series:'',
               material:'',
               unit:'',
-              deviceType:''
+              deptId:''
             },
             formLabelWidth: '90px',
             rules: {
@@ -156,7 +154,7 @@ export default {
               series:'',
               material:'',
               unit:'',
-              deviceType:''
+              deptId:''
             }
        },
        marksure(form){

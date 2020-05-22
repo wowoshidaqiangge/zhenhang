@@ -19,23 +19,23 @@
                     </el-form-item>
                 </el-col>
                 <el-col :span="11">
-                    <el-form-item label="物料名称" :label-width="formLabelWidth" class="formitem formitem1" prop="productName">
-                            <el-input v-model="form.productName" disabled></el-input>
+                    <el-form-item label="物料名称" :label-width="formLabelWidth" class="formitem formitem1" prop="itemName">
+                            <el-input v-model="form.itemName" disabled></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="11">
-                    <el-form-item label="物料编码" :label-width="formLabelWidth" class="formitem formitem1" prop="productCode">
-                            <el-input v-model="form.productCode" disabled></el-input>
+                    <el-form-item label="物料编码" :label-width="formLabelWidth" class="formitem formitem1" prop="itemCode">
+                            <el-input v-model="form.itemCode" disabled></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="11">
-                    <el-form-item label="规则型号" :label-width="formLabelWidth" class="formitem formitem1" prop="specificationModel">
-                            <el-input v-model="form.specificationModel" disabled></el-input>
+                    <el-form-item label="规则型号" :label-width="formLabelWidth" class="formitem formitem1" prop="model">
+                            <el-input v-model="form.model" disabled></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="11">
-                    <el-form-item label="计划产量" :label-width="formLabelWidth" class="formitem formitem1" prop="planManhourAvgyield">
-                            <el-input v-model="form.planManhourAvgyield" disabled></el-input>
+                    <el-form-item label="计划产量" :label-width="formLabelWidth" class="formitem formitem1" prop="planYield">
+                            <el-input v-model="form.planYield" disabled></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="11">

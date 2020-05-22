@@ -38,6 +38,7 @@
                         <el-upload
                             :action="host"
                             :data="ossParams"
+                            ref='updata'
                             :on-success="handleSuccess"
                             :before-upload="beforeUpload"
                             :limit='limit'
@@ -249,6 +250,7 @@ export default {
                    this.fileList.push({name:res.data.technologyName,url:res.data.technology})
                }
                this.form = res.data
+               console.log(this.form)
            })
        },
        handleChange(val){
@@ -295,8 +297,10 @@ export default {
                             }
                         })
                    }else if(this.tit==='派单' || this.tit==='修改'){
-                       this.form.userId = this.form.userId[1]
-                       this.form.deptId = this.form.userId[0]
+                        if(Array.isArray(this.form.userId)){
+                            this.form.deptId = this.form.userId[0]
+                            this.form.userId = this.form.userId[1]
+                        }
                        produceTaskAssign(this.form).then(res=>{
                            this.$message.success(res.msg)
                            this.close('0')
@@ -306,7 +310,7 @@ export default {
           })
        },
        beforclose(){
-           this.init()
+        this.init()
           this.$emit('close',false)
        },
        init(){
@@ -328,6 +332,11 @@ export default {
             this.value5=''
             this.num=0
             this.numlist=[]
+            this.fileList = []
+            if(this.$refs.updata){
+                this.$refs.updata.clearFiles()
+            }
+            
        }
     }
 }
