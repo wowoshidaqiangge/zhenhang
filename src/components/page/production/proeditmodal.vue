@@ -461,10 +461,10 @@ export default {
            produceTaskid(id).then(res=>{
                if(res.code==='0'){
                    res.data.planList.map((item)=>{
-                       item.yieid = id.planYield
+                       item.yieid = id.orderYield
                        item.createTime = item.createTime.split(' ')[0]
                    })
-                   this.yieid = id.planYield
+                   this.yieid = id.orderYield
                    this.produceTaskId = id.id
                    this.tableData2 = res.data.planList
                    this.form = res.data
