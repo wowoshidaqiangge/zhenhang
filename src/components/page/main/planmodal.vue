@@ -10,8 +10,8 @@
     <el-row>
          <el-form :model="form" :rules="rules" ref="form">
              <el-col :span="24">
-                 <el-form-item label="设备类型" :label-width="formLabelWidth" class="formitem formitem1" prop="">
-                    <el-select placeholder="请选择" @change='changeselect'>
+                 <el-form-item label="设备类型" :label-width="formLabelWidth" class="formitem formitem1" prop="toType">
+                    <el-select placeholder="请选择" @change='changeselect' v-model="form.toType">
                         <el-option
                         v-for="item in deptlist"
                         :key="item.enumKey"
@@ -165,6 +165,8 @@ export default {
         getmaintenanceid(id){
             maintenanceid(id).then(res=>{
                 if(res.code==='0'){
+                    res.data.toType = res.data.toType.toString()
+                    this.getListByToType({toTypeId:res.data.toType})
                     this.form = res.data
                 }
             })

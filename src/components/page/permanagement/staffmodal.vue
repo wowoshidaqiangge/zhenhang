@@ -183,6 +183,7 @@ export default {
                             if(res.code === '0'){
                                 this.$message.success(res.msg);   
                                 this.sureload = false
+                                this.init()
                                 this.$emit('close','0') 
                             }
                         })

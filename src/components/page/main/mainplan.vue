@@ -63,7 +63,7 @@ export default {
               {prop:'deviceName',label:'设备名称'},
               {prop:'deviceNumer',label:'设备编号'},
               {prop:'deviceModel',label:'规格型号'},
-              {prop:'toType',label:'设备类型'},
+              {prop:'toTypeName',label:'设备类型'},
               {prop:'category',label:'保养类别'},
               {prop:'period',label:'保养周期'},
               {prop:'dataTime',label:'保养时间'},
@@ -99,6 +99,7 @@ export default {
           maintenancepage(this.page).then(res=>{
              if(res.code==='0'){
                res.data.records.map((item,index)=>{
+               item.period  =  (item.period =='month' ? "月":'年' )
                  item.createTime = item.createTime.split(' ')[0]
                  item.index = index+1
                })
