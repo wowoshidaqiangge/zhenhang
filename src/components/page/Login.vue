@@ -1,18 +1,25 @@
 <template>
     <div class="login-wrap">
         <div class="ms-login">
-            <div class="ms-title">后台管理系统</div>
-            <el-form :model="param"  ref="login" label-width="0px" class="ms-content">
+            <div class="ms-title">臻航生产管理系统</div>
+            <el-form :model="param" ref="login" label-width="0px" class="ms-content">
                 <el-form-item prop="username">
-                    <el-input type="text" v-if='isshow' v-model="param.username" areadonly  placeholder="请输入账号" ref="getFocus" @keyup.enter.native="submitForm('0')">
-                        <el-button slot="prepend" icon="el-icon-lx-people" ></el-button>
+                    <el-input
+                        type="text"
+                        v-if="isshow"
+                        v-model="param.username"
+                        areadonly
+                        placeholder="请输入账号"
+                        ref="getFocus"
+                        @keyup.enter.native="submitForm('0')"
+                    >
+                        <el-button slot="prepend" icon="el-icon-lx-people"></el-button>
                     </el-input>
                 </el-form-item>
                 <el-form-item prop="password">
                     <el-input
                         type="password"
-                        v-if='isshow'
-                       
+                        v-if="isshow"
                         auto-complete="new-password"
                         placeholder="请输入密码"
                         v-model="param.password"
@@ -24,80 +31,76 @@
                 <div class="login-btn">
                     <el-button type="primary" @click="submitForm()">登录</el-button>
                 </div>
-                
             </el-form>
         </div>
     </div>
 </template>
 
-
 <script>
-import {login} from 'api/index'
-import { mapActions ,mapState} from 'vuex'
+import { login } from 'api/index';
+import { mapActions, mapState } from 'vuex';
 export default {
     data: function() {
         return {
             param: {
                 username: '',
-                password: '',
+                password: ''
             },
             rules: {
                 username: [{ required: true, message: '请输入用户名', trigger: 'blur' }],
-                password: [{ required: true, message: '请输入密码', trigger: 'blur' }],
+                password: [{ required: true, message: '请输入密码', trigger: 'blur' }]
             },
-            isshow:false,
+            isshow: false
         };
     },
-    mounted(){
-        setTimeout(()=>{
-            this.isshow =true
-        },1)
-         if (this.timer) {
-                clearTimeout(this.timer);
-                }
-                this.timer = setTimeout(() => {// 100毫秒延迟解决第二次打开弹框，输入框不自动获取焦点的bug
-                    this.$refs.getFocus.focus();
-                }, 100);
+    mounted() {
+        setTimeout(() => {
+            this.isshow = true;
+        }, 1);
+        if (this.timer) {
+            clearTimeout(this.timer);
+        }
+        this.timer = setTimeout(() => {
+            // 100毫秒延迟解决第二次打开弹框，输入框不自动获取焦点的bug
+            this.$refs.getFocus.focus();
+        }, 100);
     },
     methods: {
-        ...mapActions([
-            'handleLogin',
-        ]),
-        
+        ...mapActions(['handleLogin']),
+
         submitForm(id) {
-            var that = this
+            var that = this;
             this.$refs.login.validate(valid => {
                 if (valid) {
-                 
-                    var obj = {}
-                    if(id==='0'){
-                        obj ={icCard:that.param.username}
-                    }else{
-                        obj = {...that.param}
+                    var obj = {};
+                    if (id === '0') {
+                        obj = { icCard: that.param.username };
+                    } else {
+                        obj = { ...that.param };
                     }
-                     this.handleLogin(obj).then(res=>{
+                    this.handleLogin(obj).then(res => {
                         this.$message.success('登录成功');
                         localStorage.setItem('ms_username', res.username);
-                        localStorage.setItem('TagsList','')
-                          
-                        if(res.roleId ==='1000'){
-                            this.$router.push('/headman')  
-                        }else{
-                            this.$router.push('/')  
+                        localStorage.setItem('TagsList', '');
+
+                        if (res.roleId === '1000') {
+                            this.$router.push('/headman');
+                        } else {
+                            this.$router.push('/');
                         }
-                     })
-                  
+                    });
+
                     // login(this.param).then(res=>{
                     //  if(res.code==='0'){
                     //       this.$message.success('登录成功');
                     //      localStorage.setItem('userId', res.data.id);
                     //      localStorage.setItem('ms_username', res.data.username);
-                    //      this.$router.push('/')   
+                    //      this.$router.push('/')
                     //  }
                     // })
                     // this.$message.success('登录成功');
                     // localStorage.setItem('ms_username', this.param.username);
-                    // this.$router.push('/')   
+                    // this.$router.push('/')
                 } else {
                     this.$message.error('请输入账号和密码');
                     console.log('error submit!!');
@@ -105,8 +108,7 @@ export default {
                 }
             });
         }
-       
-    },
+    }
 };
 </script>
 

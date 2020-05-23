@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import App from './App.vue';
 import router from './router';
-import store from './vuex/store'
+import store from './vuex/store';
 import ElementUI from 'element-ui';
 
 import VueI18n from 'vue-i18n';
@@ -14,9 +14,9 @@ import './components/common/directives';
 
 // import 'jquery-table2excel'
 import 'babel-polyfill';
-import '@/components/common/otherRender.js'
-import '@/components/common/vue-echarts.js'
-import '@/components/common/table2excel.js'
+import '@/components/common/otherRender.js';
+import '@/components/common/vue-echarts.js';
+import '@/components/common/table2excel.js';
 
 Vue.config.productionTip = false;
 Vue.use(VueI18n);
@@ -33,9 +33,8 @@ router.beforeEach((to, from, next) => {
     document.title = `${to.meta.title}`;
     const role = localStorage.getItem('ms_username');
     if (!role && to.path !== '/login') {
-
         next('/login');
-        document.title = '登录'
+        // document.title = '臻航生产管理系统';
     } else if (to.meta.permission) {
         // 如果是管理员权限则可进入，这里只是简单的模拟管理员权限而已
         role === 'admin' ? next() : next('/403');
@@ -50,7 +49,6 @@ router.beforeEach((to, from, next) => {
         }
     }
 });
-
 
 new Vue({
     router,

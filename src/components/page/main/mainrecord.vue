@@ -1,84 +1,62 @@
 <template>
     <div class="mainrecord">
-       <div class="top">
-          <el-row>
-              <el-form :model="seachinfo"  ref="seachinfo"  class="demo-ruleForm">
-              <el-col :span="6">
-                   <el-form-item label="" >
-                       
-                   </el-form-item>
-              </el-col>
-              <el-col :span="6">
-                  <el-form-item label="" prop="value1">
-                         <el-date-picker
-                            v-model="maintime"
-                            type="daterange"
-                            format="yyyy-MM-dd"
-                            value-format="yyyy-MM-dd"
-                            range-separator="至"
-                            start-placeholder="开始日期"
-                            end-placeholder="结束日期">
-                          </el-date-picker>
-                  </el-form-item>
-                  
-              </el-col>
-              <el-col :span="5" style="margin:0 20px">
-                 <el-form-item label="设备状态"  >
-                      <el-select v-model="state" placeholder="请选择">
-                          <el-option
-                            v-for="item in options"
-                            :key="item.value"
-                            :label="item.label"
-                            :value="item.value">
-                          </el-option>
-                      </el-select>
-                 </el-form-item>
-              </el-col>
-              <el-col :span="3" style="margin-right:10px">
-                  <el-form-item label=""  prop="productNameOrCode" >
-                      <el-input
-                          placeholder="请输入设备名称或设备编号"
-                          prefix-icon="el-icon-search"
-                          v-model="deviceSearch">
-                        </el-input>
-                 </el-form-item>
-                  
-              </el-col>
-              <el-col :span="3">
-                  <el-form-item label="" >
-                        <el-button class="searchBtn" size="mini" type="add" @click="searchmain()">查询</el-button>
-                        <el-button type="success" icon="el-icon-refresh-right" @click="resetting">重置</el-button>
-                   </el-form-item>
-              </el-col>
-            </el-form>
-          </el-row>
-       </div>
-      
+        <div class="top">
+            <el-row>
+                <el-form :model="seachinfo" ref="seachinfo" class="demo-ruleForm">
+                    <el-col :span="6">
+                        <el-form-item label=""> </el-form-item>
+                    </el-col>
+                    <el-col :span="6">
+                        <el-form-item label="" prop="value1">
+                            <el-date-picker
+                                v-model="maintime"
+                                type="daterange"
+                                format="yyyy-MM-dd"
+                                value-format="yyyy-MM-dd"
+                                range-separator="至"
+                                start-placeholder="开始日期"
+                                end-placeholder="结束日期"
+                            >
+                            </el-date-picker>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="5" style="margin:0 20px">
+                        <el-form-item label="设备状态">
+                            <el-select v-model="state" placeholder="请选择">
+                                <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"> </el-option>
+                            </el-select>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="3" style="margin-right:10px">
+                        <el-form-item label="" prop="productNameOrCode">
+                            <el-input placeholder="请输入设备名称或设备编号" prefix-icon="el-icon-search" v-model="deviceSearch">
+                            </el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="3">
+                        <el-form-item label="">
+                            <el-button class="searchBtn" size="mini" type="add" @click="searchmain()">查询</el-button>
+                            <el-button type="success" icon="el-icon-refresh-right" @click="resetting">重置</el-button>
+                        </el-form-item>
+                    </el-col>
+                </el-form>
+            </el-row>
+        </div>
+
         <div class="bot">
             <el-table :data="tableData" stripe :height="screenWidth" style="width: 100%">
                 <el-table-column
-                    v-for="(item,index) in columnlist"
+                    v-for="(item, index) in columnlist"
                     :key="index"
                     :prop="item.prop"
                     :label="item.label"
                     align="center"
                 ></el-table-column>
 
-                <el-table-column label="操作"  align="center">
+                <el-table-column label="操作" align="center">
                     <template slot-scope="scope">
-                        <el-button
-                          v-if="scope.row.state"
-                            type="success"
-                            plain
-                            @click="examine(scope.$index, scope.row)"
-                        >查看</el-button>
-                        <el-button
-                            type="info"
-                            plain
-                            v-else
-                            class="red"
-                            @click="handledistribute(scope.$index, scope.row)"
-                        >填报</el-button>
+                        <el-button v-if="scope.row.state" type="success" plain @click="examine(scope.$index, scope.row)">查看</el-button>
+                        <el-button type="info" plain v-else class="red" @click="handledistribute(scope.$index, scope.row)">填报</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -92,156 +70,168 @@
                 :total="totals"
             ></el-pagination>
         </div>
-        <recordmodal
-            :dialogFormVisible="dialogFormVisible"
-            @close="close"
-            :tit="tit"
-            :ifEdt="ifEdt"
-            ref="recordmodal"
-        />
+        <recordmodal :dialogFormVisible="dialogFormVisible" @close="close" :tit="tit" :ifEdt="ifEdt" ref="recordmodal" />
     </div>
 </template>
 
 <script>
-import {mainrecordpage} from 'api/main';
-import recordmodal from './recordmodal'
+import { mainrecordpage } from 'api/main';
+import { mainrecordid } from 'api/main';
+import sessionGetStore from '@/utils/util.js';
+
+import recordmodal from './recordmodal';
 
 export default {
     name: 'mainrecord',
     components: {
-      recordmodal
+        recordmodal
     },
     data() {
         return {
             deviceSearch: '',
             maintime: [],
             state: '',
-            options: [{
-              label: '全部',
-              value: ''
-            }, {
-              label: '未保养',
-              value: '0'
-            }, {
-              label: '已保养',
-              value: '1'
-            }],
-            tableData: [],
-             page:{
-              current:1,
-              size:10,
-            },
-            seachinfo:{},
-            tit:'',
-            ifEdt: false,
-            totals:0,
-            pagesize:1,
-            screenWidth:(document.body.clientHeight-215) + 'px',
-            dialogFormVisible: false,
-            columnlist:[
-              {prop:'index',label:'序号'},
-              {prop:'deviceName',label:'设备名称'},
-              {prop:'deviceNumer',label:'设备编号'},
-              {prop:'deviceModel',label:'规格型号'},
-              {prop:'toType',label:'设备类型'},
-              {prop:'category',label:'保养类别'},
-              {prop:'period',label:'保养周期'},
-              {prop:'dateTime',label:'保养时间'},
-              {prop:'assumeUserName',label:'担当人'},
-              {prop:'dutyUserName',label:'责任人'},
-              {prop:'createTime',label:'新增时间'},
-              {prop:'remark',label:'备注'},
-              {prop:'states',label:'状态'},
+            options: [
+                {
+                    label: '全部',
+                    value: ''
+                },
+                {
+                    label: '未保养',
+                    value: '0'
+                },
+                {
+                    label: '已保养',
+                    value: '1'
+                }
             ],
+            tableData: [],
+            page: {
+                current: 1,
+                size: 10
+            },
+            seachinfo: {},
+            tit: '',
+            ifEdt: false,
+            totals: 0,
+            pagesize: 1,
+            screenWidth: document.body.clientHeight - 215 + 'px',
+            dialogFormVisible: false,
+            columnlist: [
+                { prop: 'index', label: '序号' },
+                { prop: 'deviceName', label: '设备名称' },
+                { prop: 'deviceNumer', label: '设备编号' },
+                { prop: 'deviceModel', label: '规格型号' },
+                { prop: 'toType', label: '设备类型' },
+                { prop: 'category', label: '保养类别' },
+                { prop: 'period', label: '保养周期' },
+                { prop: 'dateTime', label: '保养时间' },
+                { prop: 'assumeUserName', label: '担当人' },
+                { prop: 'dutyUserName', label: '责任人' },
+                { prop: 'createTime', label: '新增时间' },
+                { prop: 'remark', label: '备注' },
+                { prop: 'states', label: '状态' }
+            ],
+            init: {
+                id: ''
+            }
         };
     },
     computed: {},
     created() {
-      this.getmainrecordpage()
+        this.getmainrecordpage();
+        this.init.id = sessionGetStore(id);
+        if (this.$route.query.id) {
+            this.init.id = this.$route.query.id;
+        }
+    },
+    mounted() {
+        if (this.init.id !== '') {
+            this.handledistribute(0, this.init);
+            this.init.id = '';
+        }
     },
     methods: {
-      //重置
-      resetting(){
-          this.state = ''
-          this.maintime = ''
-          this.deviceSearch =''
-          this.page = {
-            current:1,
-            size:10
-          }
-          this.getmainrecordpage()
-      },
-      searchmain () {
-        // var patrn = /^[0-9]{1,20}$/
-        // if (patrn.exec(this.deviceSearch)) {
-        //   this.page.deviceNumber = this.deviceSearch
-        // } else {
-        //   this.page.deviceName = this.deviceSearch
-        // }
-        this.page.deviceNameOrCode = this.deviceSearch
-        this.page.state = this.state
-        console.log(this.maintime)
-        if(this.maintime !== null) {
-          this.page.beginDate = this.maintime[0]
-          this.page.endDate = this.maintime[1]
-        } else {
-          this.page.beginDate = ''
-          this.page.endDate = ''
+        //重置
+        resetting() {
+            this.state = '';
+            this.maintime = '';
+            this.deviceSearch = '';
+            this.page = {
+                current: 1,
+                size: 10
+            };
+            this.getmainrecordpage();
+        },
+        searchmain() {
+            // var patrn = /^[0-9]{1,20}$/
+            // if (patrn.exec(this.deviceSearch)) {
+            //   this.page.deviceNumber = this.deviceSearch
+            // } else {
+            //   this.page.deviceName = this.deviceSearch
+            // }
+            this.page.deviceNameOrCode = this.deviceSearch;
+            this.page.state = this.state;
+            console.log(this.maintime);
+            if (this.maintime !== null) {
+                this.page.beginDate = this.maintime[0];
+                this.page.endDate = this.maintime[1];
+            } else {
+                this.page.beginDate = '';
+                this.page.endDate = '';
+            }
+            this.getmainrecordpage();
+        },
+        getmainrecordpage() {
+            mainrecordpage(this.page).then(res => {
+                if (res.code === '0') {
+                    res.data.records.map((item, index) => {
+                        item.createTime = item.createTime.split(' ')[0];
+                        item.states = item.state ? '已保养' : '未保养';
+                        item.index = index + 1;
+                    });
+                    this.pagesize = parseInt(res.data.current);
+                    this.totals = parseInt(res.data.total);
+                    this.tableData = res.data.records;
+                    console.log(this.tableData);
+                }
+            });
+        },
+        // 查看
+        examine(h, m) {
+            console.log(h);
+            this.tit = '查看';
+            this.ifEdt = false;
+            this.$refs.recordmodal.getmainrecordid({ id: m.id });
+            this.dialogFormVisible = true;
+        },
+        // 填报
+        handledistribute(h, m) {
+            console.log(h);
+            this.tit = '填报';
+            this.ifEdt = true;
+            this.$refs.recordmodal.getmainrecordid({ id: m.id });
+            this.dialogFormVisible = true;
+        },
+        handleCurrentChange(val) {
+            this.page.current = val;
+            this.getmainrecordpage();
+        },
+        close(num) {
+            this.dialogFormVisible = false;
+            if (num === '0') {
+                this.getmainrecordpage();
+            }
         }
-        this.getmainrecordpage()
-      },
-      getmainrecordpage() {
-          mainrecordpage(this.page).then(res => {
-              if (res.code === '0') {
-                  res.data.records.map((item, index) => {
-                      item.createTime = item.createTime.split(' ')[0]
-                      item.states = item.state? '已保养' : '未保养';
-                      item.index = index + 1;
-                  });
-                  this.pagesize = parseInt(res.data.current);
-                  this.totals = parseInt(res.data.total);
-                  this.tableData = res.data.records;
-                  console.log(this.tableData)
-              }
-          });
-      },
-      // 查看
-      examine(h,m){
-        console.log(h)
-        this.tit= '查看'
-        this.ifEdt = false
-        this.$refs.recordmodal.getmainrecordid({id:m.id})
-        this.dialogFormVisible = true
-      },
-      // 填报
-      handledistribute(h,m){
-        console.log(h)
-        this.tit= '填报'
-        this.ifEdt = true
-        this.$refs.recordmodal.getmainrecordid({id:m.id})
-        this.dialogFormVisible = true
-      },
-      handleCurrentChange(val){
-        this.page.current = val
-        this.getmainrecordpage()
-      },
-      close(num){
-        this.dialogFormVisible = false
-        if(num==='0'){
-          this.getmainrecordpage()
-        }
-      },
     }
 };
 </script>
 
-
-<style lang='less'>
+<style lang="less">
 .mainrecord {
- 
     .top {
-       height: 50px;
-       margin-top: 10px;
+        height: 50px;
+        margin-top: 10px;
         // .searchBtn {
         //   height: 33px;
         //   margin-top: 5px;
@@ -256,7 +246,7 @@ export default {
         //   margin-left: 20px;
         // }
     }
-  
+
     .page {
         margin-top: 10px;
         float: right;
