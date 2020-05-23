@@ -28,3 +28,8 @@ export function sessionGetStore(name) {
     if (!name) return;
     return window.sessionStorage.getItem(name);
 }
+
+export function sessionRemoveStore(name) {
+    if (!name) return;
+    window.sessionStorage.removeItem(name);
+}

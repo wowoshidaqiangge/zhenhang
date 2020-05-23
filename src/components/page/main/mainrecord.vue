@@ -77,7 +77,7 @@
 <script>
 import { mainrecordpage } from 'api/main';
 import { mainrecordid } from 'api/main';
-import sessionGetStore from '@/utils/util.js';
+import { sessionGetStore, sessionRemoveStore } from '@/utils/util.js';
 
 import recordmodal from './recordmodal';
 
@@ -140,15 +140,14 @@ export default {
     computed: {},
     created() {
         this.getmainrecordpage();
-        this.init.id = sessionGetStore(id);
-        if (this.$route.query.id) {
-            this.init.id = this.$route.query.id;
+        if (sessionGetStore('initId')) {
+            this.init.id = sessionGetStore('initId');
         }
     },
     mounted() {
-        if (this.init.id !== '') {
+        if (this.init.id) {
             this.handledistribute(0, this.init);
-            this.init.id = '';
+            sessionRemoveStore('initId'); // 用完删除，避免刷新时重复进入保养提醒的查看表单
         }
     },
     methods: {

@@ -26,7 +26,7 @@
                     <span class="btn-bell-badge" v-if="message"></span>
                 </div>
                 <!-- 用户头像 -->
-                <div class="user-avator">
+                <div class="user-avator" @click="gotoRecords(1)">
                     <img src="../../assets/logo.png" />
                 </div>
                 <!-- 用户名下拉菜单 -->
@@ -61,7 +61,7 @@
 <script>
 import bus from '../common/bus';
 import { mainrecordpage } from 'api/main';
-import sessionSetStore from '@/utils/util.js';
+import { sessionSetStore } from '@/utils/util.js';
 
 export default {
     // components: { MainMsg },
@@ -83,28 +83,6 @@ export default {
                 endDate: ''
             },
             dialogTableVisible: false,
-            gridData: [
-                {
-                    date: '2016-05-02',
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1518 弄'
-                },
-                {
-                    date: '2016-05-04',
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1518 弄'
-                },
-                {
-                    date: '2016-05-01',
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1518 弄'
-                },
-                {
-                    date: '2016-05-03',
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1518 弄'
-                }
-            ],
             tableData: []
         };
     },
@@ -218,10 +196,11 @@ export default {
         // 跳转到保养记录页面，并携带id，直接触发查看事件
         gotoRecords(e) {
             this.dialogTableVisible = false;
+            sessionSetStore('initId', e);
             if (this.$route.fullPath !== '/mainrecord') {
-                this.$router.push({ path: '/mainrecord', query: { id: e } });
+                // this.$router.push({ path: '/mainrecord', query: { id: e } });  // 不用路由传参了，这样无法处理当前页面的跳转
+                this.$router.push('/mainrecord');
             } else {
-                sessionSetStore(id, e);
                 this.$router.go(0); // 这样会强制刷新，不太好
             }
         },
