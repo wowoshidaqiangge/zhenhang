@@ -26,7 +26,7 @@
                     <span class="btn-bell-badge" v-if="message"></span>
                 </div>
                 <!-- 用户头像 -->
-                <div class="user-avator" @click="gotoRecords(1)">
+                <div class="user-avator">
                     <img src="../../assets/logo.png" />
                 </div>
                 <!-- 用户名下拉菜单 -->
