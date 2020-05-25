@@ -40,19 +40,19 @@ export default {
     },
     data() {
         return {
-            columnlist: [
-                { prop: 'index', label: '序号' },
-                { prop: 'deviceName', label: '设备名称' },
-                { prop: 'deviceNumer', label: '设备编号' },
-                { prop: 'deviceModel', label: '规格型号' },
-                { prop: 'toTypeName', label: '设备类型' },
-                { prop: 'category', label: '保养类别' },
-                { prop: 'period', label: '保养周期' },
-                { prop: 'dateTime', label: '保养时间' },
-                { prop: 'assumeUserName', label: '担当人' },
-                { prop: 'dutyUserName', label: '责任人' },
-                { prop: 'createTime', label: '新增时间' },
-                { prop: 'remark', label: '备注' }
+            columnlist:[
+              {prop:'index',label:'序号'},
+              {prop:'deviceName',label:'设备名称'},
+              {prop:'deviceNumer',label:'设备编号'},
+              {prop:'deviceModel',label:'规格型号'},
+              {prop:'toTypeName',label:'设备类型'},
+              {prop:'category',label:'保养类别'},
+              {prop:'period',label:'保养周期'},
+              {prop:'dateTime',label:'保养时间'},
+              {prop:'assumeUserName',label:'担当人'},
+              {prop:'dutyUserName',label:'责任人'},
+              {prop:'createTime',label:'新增时间'},
+              {prop:'remark',label:'备注'},
             ],
             tableData: [],
             screenWidth: document.body.clientHeight - 215 + 'px',
