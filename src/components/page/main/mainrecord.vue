@@ -75,18 +75,14 @@
 </template>
 
 <script>
-import { mainrecordpage } from 'api/main';
-import { mainrecordid } from 'api/main';
-import { sessionGetStore, sessionRemoveStore } from '@/utils/util.js';
+import { mainrecordpage, mainrecordid } from 'api/main';
 import recordmodal from './recordmodal';
 import bus from '@/components/common/bus';
-import MainRecord from '@/components/page/main/mainrecord';
 
 export default {
     name: 'mainrecord',
     components: {
-        recordmodal,
-        MainRecord
+        recordmodal
     },
     data() {
         return {
@@ -142,15 +138,12 @@ export default {
     computed: {},
     created() {
         this.getmainrecordpage();
-        if (sessionGetStore('initId')) {
-            this.init.id = sessionGetStore('initId');
-        }
     },
     mounted() {
-        if (this.init.id) {
+        bus.$on('gotoRecords', e => {
+            this.init.id = e;
             this.handledistribute(0, this.init);
-            sessionRemoveStore('initId'); // 用完删除，避免刷新时重复进入保养提醒的查看表单
-        }
+        });
     },
     methods: {
         //重置
@@ -208,7 +201,6 @@ export default {
         },
         // 填报
         handledistribute(h, m) {
-            // bus.$emit()  // TODO:事件传递
             console.log(h);
             this.tit = '填报';
             this.ifEdt = true;
@@ -225,6 +217,9 @@ export default {
                 this.getmainrecordpage();
             }
         }
+    },
+    beforeDestroy() {
+        bus.$off('gotoRecords');
     }
 };
 </script>

@@ -16,10 +16,10 @@
                     </el-tooltip>
                 </div>
                 <!-- 消息中心 -->
-                <el-popover placement="bottom" width="500" trigger="click">
+                <el-popover placement="bottom" width="400" trigger="click">
                     <!-- <el-divider></el-divider> -->
                     <el-table :data="tableData">
-                        <el-table-column property="deviceName" label="设备名称" width="150"></el-table-column>
+                        <el-table-column property="deviceName" label="设备名称"></el-table-column>
                         <el-table-column property="deviceNumer" label="设备编号"></el-table-column>
                         <el-table-column property="dateTime" label="保养时间"></el-table-column>
                         <el-table-column label="操作">
@@ -50,30 +50,14 @@
             </div>
         </div>
         <div class="nowtime">{{ currentTime }} &nbsp;{{ nowWeek }}</div>
-        <!-- // 保养提醒弹窗 -->
-        <el-dialog id="main-msg" title="保养提醒" top="60px" width="50%" :visible.sync="dialogTableVisible">
-            <el-divider></el-divider>
-            <el-table :data="tableData">
-                <el-table-column property="deviceName" label="设备名称" width="150"></el-table-column>
-                <el-table-column property="deviceNumer" label="设备编号"></el-table-column>
-                <el-table-column property="dateTime" label="保养时间"></el-table-column>
-                <el-table-column label="操作">
-                    <template slot-scope="scope">
-                        <el-button type="primary" @click="gotoRecords(scope.row.id)">查看</el-button>
-                    </template>
-                </el-table-column>
-            </el-table>
-        </el-dialog>
     </div>
 </template>
 <script>
-import bus from '../common/bus';
-import MainRecord from '@/components/page/main/mainrecord';
 import { mainrecordpage } from 'api/main';
-import { sessionSetStore } from '@/utils/util.js';
+import bus from '../common/bus';
 
 export default {
-    components: { MainRecord },
+    // components: { MainRecord },
     data() {
         return {
             collapse: false,
@@ -91,7 +75,6 @@ export default {
                 beginDate: '',
                 endDate: ''
             },
-            dialogTableVisible: false,
             tableData: [],
             totals: 0
         };
@@ -201,14 +184,14 @@ export default {
         },
         // 跳转到保养记录页面，并携带id，直接触发查看事件
         gotoRecords(e) {
-            this.dialogTableVisible = false;
-            sessionSetStore('initId', e);
+            // sessionSetStore('initId', e);
             if (this.$route.fullPath !== '/mainrecord') {
-                // this.$router.push({ path: '/mainrecord', query: { id: e } });  // 不用路由传参了，这样无法处理当前页面的跳转
                 this.$router.push('/mainrecord');
-            } else {
-                this.$router.go(0); // 这样会强制刷新，不太好
             }
+            // FIXME
+            this.$nextTick(function() {
+                bus.$emit('gotoRecords', e);
+            });
         },
         getToday() {
             var date = new Date();
@@ -313,14 +296,5 @@ export default {
 }
 .el-dropdown-menu__item {
     text-align: center;
-}
-#main-msg >>> .el-dialog {
-    margin-right: 40px;
-}
-#main-msg >>> .el-dialog__header {
-    padding: 20px 20px 0px;
-}
-#main-msg >>> .el-dialog__body {
-    padding: 0px 20px 30px;
 }
 </style>
