@@ -1,28 +1,19 @@
 <template>
   <div class="excelupdate">
         <div>
-             <!-- <span class="el-button el-button--add fileinput-button">
-                <span>点击选择模板</span>
-                
-            </span> -->
-            <!-- <input type="file" id="excel-file" value="file"/> -->
             <el-upload
                 class="upload-demo"
                 drag
                 id="excel-file"
+                :on-change='change'
                 ref="upload"
                 action=""
                 :auto-upload="false"
                 >
                 <i class="el-icon-upload"></i>
                 <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
-               
             </el-upload>
-          
         </div>
-     
-       
-
   </div>
 </template>
 
@@ -32,10 +23,8 @@ import $ from 'jquery'
 import xlsx from 'xlsx'
 export default {
     name: 'excelupdate',
-   
     data() {
         return {
-           
             persons:[],
             fileList:[]
         }
@@ -44,20 +33,25 @@ export default {
        
     },
     mounted(){
-        let that = this
-        $('#excel-file').change(function(e) {
-                var files = e.target.files;
-                var fileName=files[0].name.substring(files[0].name.lastIndexOf('.')+1);
-                if(fileName!='xls' && fileName!='xlsx'){
-                    that.$refs.upload.clearFiles()
-                        that.$message({
+      
+    },
+    created(){
+        
+    },
+    methods: {
+        change(file){
+            let fileName=file.name.substring(file.name.lastIndexOf('.')+1);
+            let that = this
+             if(fileName!='xls' && fileName!='xlsx'){
+                    this.$refs.upload.clearFiles()
+                        this.$message({
                             type:'error',
                             showClose:true,
                             duration:3000,
                             message:'不是excel文件'
                         });
                 }else{
-                     var fileReader = new FileReader();
+                    var fileReader = new FileReader();
                         fileReader.onload = function(ev) {
                             console.log(ev,'ev')
                             try {
@@ -82,21 +76,12 @@ export default {
                                 }
                             }
                             console.log(persons);
-                          that.deliver(persons)
+                           that.deliver(persons)
                         };
                         // 以二进制方式打开文件
-                        fileReader.readAsBinaryString(files[0]);
+                        fileReader.readAsBinaryString(file.raw);
                 }
-               
-            });
-    },
-    created(){
-        
-    },
-    methods: {
-      
-        handleExceed(){
-
+             
         },
         deliver(val){
             this.$emit('childByValue', val)

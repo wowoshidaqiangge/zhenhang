@@ -66,7 +66,7 @@ export default {
               {prop:'toTypeName',label:'设备类型'},
               {prop:'category',label:'保养类别'},
               {prop:'period',label:'保养周期'},
-              {prop:'dataTime',label:'保养时间'},
+              {prop:'dateTime',label:'保养时间'},
               {prop:'assumeUserName',label:'担当人'},
               {prop:'dutyUserName',label:'责任人'},
               {prop:'createTime',label:'新增时间'},

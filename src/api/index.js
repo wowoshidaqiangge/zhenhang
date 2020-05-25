@@ -306,6 +306,16 @@ export const produceTaskid = query => {
       method: 'get',
   });
 }
+
+// 查看进度
+export const getProduceProgress = query => {
+  return request({
+      url: `/api/producetask/produceTask/getProduceProgress/${query.id}`,
+      method: 'get',
+    
+  });
+}
+
 // 生产任务修改
 export const produceTaskput = query => {
   return request({

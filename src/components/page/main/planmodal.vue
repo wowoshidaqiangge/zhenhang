@@ -45,7 +45,7 @@
              </el-col>
               <el-col :span="11">
                  <el-form-item label="保养周期" :label-width="formLabelWidth" class="formitem formitem1" prop="period">
-                    <el-select v-model="form.period" placeholder="请选择">
+                    <el-select v-model="form.period" @change="changesel" placeholder="请选择">
                        <el-option
                             v-for="item in timelist"
                             :key="item.value"
@@ -56,18 +56,19 @@
                 </el-form-item>
              </el-col>
              <el-col :span="11">
-                 <el-form-item label="保养时间" :label-width="formLabelWidth" class="formitem formitem1" prop="dateTime">
+                 <el-form-item label="保养时间" :label-width="formLabelWidth" class="formitem formitem1" prop="dateTime1">
                         <el-date-picker
-                            v-model="form.dateTime"
+                            v-model="form.dateTime1"
                             @change='changetime'
-                            type="date"
+                            :format="formatime"
+                             type="datetime"
                             placeholder="选择日期">
                         </el-date-picker>
                 </el-form-item>
              </el-col>
             <el-col :span="11">
                  <el-form-item label="担当人" :label-width="formLabelWidth" class="formitem formitem1" prop="assumeUserId">
-                        <el-select v-model="form.assumeUserId" placeholder="请选择">
+                        <el-select v-model="form.assumeUserId"  placeholder="请选择">
                             <el-option
                                     v-for="item in userlist"
                                     :key="item.id"
@@ -131,14 +132,15 @@ export default {
             rolelist:[],
             devicelist:[],
             form: {
-              category:'',
+              category:'A型',
               deviceId:'',
-              period:'A型',
+              period:'year',
               dateTime:'',
               assumeUserId:'',
               dutyUserId:'',
               remark:''
             },
+            formatime:'MM-dd HH',
             formLabelWidth: '90px',
             rules: {
                 name: [
@@ -153,6 +155,7 @@ export default {
     created(){
       this.getdeviceToTypeList()
       this.getuserPage()
+      console.log(this.getday(false))
     },
     mounted(){
         
@@ -165,11 +168,30 @@ export default {
         getmaintenanceid(id){
             maintenanceid(id).then(res=>{
                 if(res.code==='0'){
+                     if(res.data.period==='year'){
+                         this.formatime = "MM-dd HH"
+                         res.data.dateTime1 = this.getday(true) + res.data.dateTime + ':00:00'
+                     }else{
+                         this.formatime = "dd HH"
+                          res.data.dateTime1 = this.getday(false) + res.data.dateTime+ ':00:00'
+                     }
+                      
                     res.data.toType = res.data.toType.toString()
                     this.getListByToType({toTypeId:res.data.toType})
+                    console.log(res.data)
                     this.form = res.data
                 }
             })
+        },
+        getday(isyear){
+            let nowtime = new Date()
+            let a
+            if(isyear){
+                a =moment(nowtime).format('YYYY-')
+            }else{
+                a= moment(nowtime).format('YYYY-MM-')
+            }
+            return a
         },
         // 获取用户列表
         getuserPage(){
@@ -187,6 +209,15 @@ export default {
                }
            })
        },
+       //选择年 月
+       changesel(val){
+        
+            if(val==='month'){
+                this.formatime = "dd HH"
+            }else{
+                this.formatime = "MM-dd HH"
+            }
+       },
       // 修改设备
       changeselect(val){
           this.devicelist = []
@@ -203,7 +234,13 @@ export default {
       },
       // 修改时间
       changetime(val){
-          this.form.dateTime = moment(val).format('YYYY-MM-DD')
+      
+          if(this.form.period==='year'){
+              this.form.dateTime = moment(val).format('MM-DD HH')
+          }else{
+              this.form.dateTime = moment(val).format('DD HH')
+          }
+          
       },
        close(num){
            this.init()
@@ -212,9 +249,9 @@ export default {
        //初始化
        init(){
            this.form= {
-              category:'',
+              category:'A型',
               deviceId:'',
-              period:'A型',
+              period:'year',
               dateTime:'',
               assumeUserId:'',
               dutyUserId:'',
@@ -224,6 +261,7 @@ export default {
        marksure(form){
             this.$refs[form].validate((valid) => {
                 if (valid) {
+
                     if(this.tit==='新增'){
                         maintenanceadd(this.form).then(res=>{
                             if(res.code==='0'){

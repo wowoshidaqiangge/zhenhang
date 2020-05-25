@@ -101,7 +101,6 @@
                                
                                 <el-button
                                     type="success"
-                                    
                                     v-if="scope.row.state=='3'  "
                                     plain
                                     @click="handleagin(scope.$index, scope.row)"

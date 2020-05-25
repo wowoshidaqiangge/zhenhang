@@ -21,6 +21,11 @@
                                     <el-input v-model="form.productCode" autocomplete="off"></el-input>
                             </el-form-item>
                         </el-col>
+                        <el-col :span="11">
+                            <el-form-item label="客户名称" :label-width="formLabelWidth" prop='customer'>
+                                    <el-input v-model="form.customer" autocomplete="off"></el-input>
+                            </el-form-item>
+                        </el-col>
                     </el-col>
                 <p>
                     <el-col :span="11">
@@ -30,7 +35,7 @@
                     </el-col>
                     <el-col :span="11">
                         <el-form-item label="生产量" :label-width="formLabelWidth" prop='planYield'>
-                            <el-input v-model="form.planYield" autocomplete="off"></el-input>
+                            <el-input v-model="form.planYield" type="number" autocomplete="off"></el-input>
                         </el-form-item>
                     </el-col>
                     

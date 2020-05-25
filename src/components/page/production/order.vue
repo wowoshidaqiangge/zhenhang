@@ -186,6 +186,7 @@ export default {
                 {prop:'produceCount',label:'实际生产量',width:'95'},
                 {prop:'planFinishTime',label:'交货时间',width:'90'},
                 {prop:'createTime',label:'创建时间',width:'90'},
+                {prop:'customer',label:'客户名',width:'80'},
                 {prop:'createUserName',label:'下单人',width:'90'},
             ],
             pagesize:1,
