@@ -264,7 +264,6 @@ export default {
             }
             this.page.current =1
             this.stateArr = []
-            this.deviceList = []
             this.getselectDeviceRepairData()
             this.getselectDeviceRepairList()
         },

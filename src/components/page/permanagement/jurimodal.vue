@@ -27,7 +27,6 @@
                     ref='tree'
                     :default-checked-keys="checklist"
                  >
-
                 </el-tree>
             </el-form-item>
         </el-form>

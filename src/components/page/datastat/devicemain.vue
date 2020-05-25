@@ -209,6 +209,8 @@ export default {
                     this.$nextTick(()=>{
                         this.tableData = arr
                     })
+                }else{
+                    this.$message.error('系统异常')
                 }
           })
         },
@@ -268,7 +270,6 @@ export default {
                     state: ''
                 }
             this.page.current =1
-            this.deviceList =[]
             this.stateArr= []
             this.getselectDeviceMaintainList()
             this.getselectDeviceMaintainData()

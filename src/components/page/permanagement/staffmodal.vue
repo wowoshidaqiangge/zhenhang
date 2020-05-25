@@ -31,7 +31,7 @@
                    {{item.name}}
                     </el-option>
                 </el-select>
-                  
+               
             </el-form-item>
             <el-form-item label="IC卡号" :label-width="formLabelWidth" class="formitem" prop="icCard">
                     <el-input v-model="form.icCard" autocomplete="off"></el-input>

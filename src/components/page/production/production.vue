@@ -274,6 +274,8 @@ export default {
         handleEdit(h,m){
              this.tit = '详情'
              this.$refs.promodal.getproduceTaskid(m)
+              this.$refs.promodal.getProduceProgress(m)
+             
              this.dialogFormVisibledit = true
            
         },
