@@ -16,15 +16,23 @@
                     </el-tooltip>
                 </div>
                 <!-- 消息中心 -->
-                <div class="btn-bell">
-                    <!-- <el-tooltip effect="dark" :content="message ? `有${message}条未读消息` : `消息中心`" placement="bottom">
-                        <router-link to="/tabs">
-                            <i class="el-icon-bell"></i>
-                        </router-link>
-                    </el-tooltip> -->
-                    <i class="el-icon-bell" @mouseover="handleMsg()"></i>
-                    <span class="btn-bell-badge" v-if="message"></span>
-                </div>
+                <el-popover placement="bottom" width="500" trigger="click">
+                    <!-- <el-divider></el-divider> -->
+                    <el-table :data="tableData">
+                        <el-table-column property="deviceName" label="设备名称" width="150"></el-table-column>
+                        <el-table-column property="deviceNumer" label="设备编号"></el-table-column>
+                        <el-table-column property="dateTime" label="保养时间"></el-table-column>
+                        <el-table-column label="操作">
+                            <template slot-scope="scope">
+                                <el-button type="primary" @click="gotoRecords(scope.row.id)">查看</el-button>
+                            </template>
+                        </el-table-column>
+                    </el-table>
+                    <div class="btn-bell" slot="reference">
+                        <i class="el-icon-bell"></i>
+                        <span class="btn-bell-badge" v-if="totals > 0"></span>
+                    </div>
+                </el-popover>
                 <!-- 用户头像 -->
                 <div class="user-avator">
                     <img src="../../assets/logo.png" />
@@ -43,7 +51,7 @@
         </div>
         <div class="nowtime">{{ currentTime }} &nbsp;{{ nowWeek }}</div>
         <!-- // 保养提醒弹窗 -->
-        <el-dialog id="main-msg" title="保养提醒" top="60px" :visible.sync="dialogTableVisible">
+        <el-dialog id="main-msg" title="保养提醒" top="60px" width="50%" :visible.sync="dialogTableVisible">
             <el-divider></el-divider>
             <el-table :data="tableData">
                 <el-table-column property="deviceName" label="设备名称" width="150"></el-table-column>
@@ -60,11 +68,12 @@
 </template>
 <script>
 import bus from '../common/bus';
+import MainRecord from '@/components/page/main/mainrecord';
 import { mainrecordpage } from 'api/main';
 import { sessionSetStore } from '@/utils/util.js';
 
 export default {
-    // components: { MainMsg },
+    components: { MainRecord },
     data() {
         return {
             collapse: false,
@@ -83,7 +92,8 @@ export default {
                 endDate: ''
             },
             dialogTableVisible: false,
-            tableData: []
+            tableData: [],
+            totals: 0
         };
     },
     computed: {
@@ -98,8 +108,12 @@ export default {
             _this.setnowtime();
         }, 1000);
     },
+    created() {
+        this.page.beginDate = this.getToday();
+        this.page.endDate = this.page.beginDate;
+        this.getmainrecordpage();
+    },
     mounted() {},
-    created() {},
     beforeDestroy() {
         if (this.timer) {
             clearInterval(this.timer); // 在Vue实例销毁前，清除我们的定时器
@@ -169,13 +183,6 @@ export default {
             }
             this.fullscreen = !this.fullscreen;
         },
-        // 消息
-        handleMsg() {
-            this.page.beginDate = this.getToday();
-            this.page.endDate = this.page.beginDate;
-            this.getmainrecordpage();
-            this.dialogTableVisible = true;
-        },
         // 获得维保提醒（当日保养记录）
         getmainrecordpage() {
             mainrecordpage(this.page).then(res => {
@@ -192,7 +199,6 @@ export default {
                 }
             });
         },
-
         // 跳转到保养记录页面，并携带id，直接触发查看事件
         gotoRecords(e) {
             this.dialogTableVisible = false;

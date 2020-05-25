@@ -78,13 +78,15 @@
 import { mainrecordpage } from 'api/main';
 import { mainrecordid } from 'api/main';
 import { sessionGetStore, sessionRemoveStore } from '@/utils/util.js';
-
 import recordmodal from './recordmodal';
+import bus from '@/components/common/bus';
+import MainRecord from '@/components/page/main/mainrecord';
 
 export default {
     name: 'mainrecord',
     components: {
-        recordmodal
+        recordmodal,
+        MainRecord
     },
     data() {
         return {
@@ -206,6 +208,7 @@ export default {
         },
         // 填报
         handledistribute(h, m) {
+            // bus.$emit()  // TODO:事件传递
             console.log(h);
             this.tit = '填报';
             this.ifEdt = true;
