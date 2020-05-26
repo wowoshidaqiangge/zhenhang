@@ -78,6 +78,7 @@
 import { mainrecordpage, mainrecordid } from 'api/main';
 import recordmodal from './recordmodal';
 import bus from '@/components/common/bus';
+// import { sessionGetStore, sessionRemoveStore } from '@/utils/util';
 
 export default {
     name: 'mainrecord',
@@ -138,10 +139,17 @@ export default {
     computed: {},
     created() {
         this.getmainrecordpage();
+        if (this.$route.params.id) {
+            this.init.id = this.$route.params.id;
+        }
     },
     mounted() {
+        if (this.init.id) {
+            this.handledistribute(0, this.init);
+        }
         bus.$on('gotoRecords', e => {
             this.init.id = e;
+            console.log('on', this.init.id);
             this.handledistribute(0, this.init);
         });
     },

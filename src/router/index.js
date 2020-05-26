@@ -106,6 +106,7 @@ const router = new Router({
                 },
                 {
                     path: '/mainrecord',
+                    name: 'mainrecord',
                     component: () => import(/* webpackChunkName: "table" */ '../components/page/main/mainrecord.vue'),
                     meta: { title: '保养记录', keepAlive: true }
                 },

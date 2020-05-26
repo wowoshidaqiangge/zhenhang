@@ -57,7 +57,6 @@ import { mainrecordpage } from 'api/main';
 import bus from '../common/bus';
 
 export default {
-    // components: { MainRecord },
     data() {
         return {
             collapse: false,
@@ -96,7 +95,11 @@ export default {
         this.page.endDate = this.page.beginDate;
         this.getmainrecordpage();
     },
-    mounted() {},
+    mounted() {
+        if (document.body.clientWidth < 1500) {
+            this.collapseChage();
+        }
+    },
     beforeDestroy() {
         if (this.timer) {
             clearInterval(this.timer); // 在Vue实例销毁前，清除我们的定时器
@@ -184,20 +187,16 @@ export default {
         },
         // 跳转到保养记录页面，并携带id，直接触发查看事件
         gotoRecords(e) {
-            // sessionSetStore('initId', e);
             if (this.$route.fullPath !== '/mainrecord') {
-                this.$router.push('/mainrecord');
+                this.$router.push({ name: 'mainrecord', params: { id: e } });
             }
-            // FIXME
-            this.$nextTick(function() {
-                bus.$emit('gotoRecords', e);
-            });
+            bus.$emit('gotoRecords', e);
         },
         getToday() {
             var date = new Date();
             var year = date.getFullYear();
             var month = date.getMonth() + 1;
-            var day = date.getDate();
+            var day = date.getDate() - 1;
             if (month < 10) {
                 month = '0' + month;
             }
@@ -206,11 +205,6 @@ export default {
             }
             var nowData = year + '-' + month + '-' + day;
             return nowData;
-        }
-    },
-    mounted() {
-        if (document.body.clientWidth < 1500) {
-            this.collapseChage();
         }
     }
 };
