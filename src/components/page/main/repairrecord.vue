@@ -2,17 +2,19 @@
     <div class="repairrecord">
         <div class="top">
             <el-row>
-                <el-form :model="seachinfo" ref="seachinfo" class="demo-ruleForm">
-                    <el-col :span="10">
-                        <el-form-item label="">
-                            <el-button type="add" icon="el-icon-circle-plus-outline" @click="recordAdd()">新增</el-button>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="5">
-                        <el-form-item label="" prop="value1">
+                <el-form :model="seachinfo"  ref="seachinfo"  class="demo-ruleForm">
+                <el-col :span="10">
+                    <el-form-item label="" >
+                        <el-button type="add" icon="el-icon-circle-plus-outline" @click="recordAdd()">新增</el-button>
+                    </el-form-item>
+                </el-col>
+                <el-col :span="5">
+                    <el-form-item label="" prop="chosedTime">
                             <el-date-picker
-                                v-model="value1"
+                                v-model="chosedTime"
                                 type="daterange"
+                                format="yyyy-MM-dd"
+                                value-format="yyyy-MM-dd"
                                 range-separator="至"
                                 start-placeholder="开始日期"
                                 @change="changedate"
@@ -101,7 +103,8 @@ export default {
                 endDate: '',
                 state: ''
             },
-            value1: '',
+            chosedTime: [],
+            value1:'',
             tableData: [],
             page: {
                 current: 1,
@@ -134,77 +137,91 @@ export default {
         this.getrepairrecordpage();
     },
     methods: {
-        resetting() {
-            this.seachinfo = { beginDate: '', endDate: '', state: '' };
-            this.page.current = 1;
-            this.getrepairrecordpage();
+        resetting(){
+            this.seachinfo= { beginDate:'',endDate:'',state:'',}
+            this.page.current = 1
+            this.getrepairrecordpage()
+        },
+        seachinfo1(){
+            this.seachinfo.beginDate = this.chosedTime[0]
+            this.seachinfo.endDate = this.chosedTime[1]
+            this.page.current = 1
+            this.getrepairrecordpage()
         },
         seachinfo1() {
             this.getrepairrecordpage();
         },
         changedate() {},
         getrepairrecordpage() {
-            let obj = { ...this.seachinfo, ...this.page };
-            repairrecordpage(obj).then(res => {
-                if (res.code === '0') {
-                    res.data.records.map((item, index) => {
-                        item.states = item.state ? '已完成' : '待检修';
-                        item.index = index + 1;
-                    });
-                    this.pagesize = parseInt(res.data.current);
-                    this.totals = parseInt(res.data.total);
-                    this.tableData = res.data.records;
-                }
-            });
-        },
-        // 新增
-        recordAdd() {
-            this.tit = '新增';
-            this.dialogFormVisible = true;
-        },
-        // 修改
-        recordEdit(h, m) {
-            console.log(h);
-            this.tit = '修改';
-            this.ifEdt = true;
-            this.$refs.repairmodal.getmainrepairid({ id: m.id });
-            this.dialogFormVisible = true;
-        },
-        // 查看
-        handleEdit(h, m) {
-            console.log(h);
-            this.$refs.repairexamine.getmainrepairid({ id: m.id });
-            this.dialogFormVisible1 = true;
-        },
-        handleCurrentChange(val) {
-            this.page.current = val;
-            this.getmainrecordpage();
-        },
-        close(num) {
-            this.dialogFormVisible = false;
-            this.dialogFormVisible1 = false;
-            console.log(this.dialogFormVisible1);
-            if (num === '0') {
-                this.getrepairrecordpage();
-            }
-        },
-        // 删除
-        handledistribute(h, m) {
-            // 二次确认删除
-            this.$confirm('确定要删除吗？', '提示', {
-                type: 'warning'
-            })
-                .then(() => {
-                    mainrepairdel(m).then(res => {
-                        if (res.code === '0') {
-                            this.$message.success('删除成功');
-
-                            this.getrepairrecordpage();
-                        }
-                    });
-                })
-                .catch(() => {});
+          let obj = {...this.seachinfo,...this.page}
+          repairrecordpage(obj).then(res => {
+           
+              if (res.code === '0') {
+                  res.data.records.map((item, index) => {
+                      item.states = item.state? '已完成' : '待检修';
+                      item.index = index + 1;
+                  });
+                  this.pagesize = parseInt(res.data.current);
+                  this.totals = parseInt(res.data.total);
+                  this.tableData = res.data.records;
+              }
+          });
+      },
+      // 新增
+      recordAdd(){
+          this.tit = '新增'
+          this.dialogFormVisible = true
+      },
+      // 修改
+      recordEdit(h,m){
+        console.log(h)
+        this.tit= '修改'
+        this.ifEdt = true
+        this.$refs.repairmodal.getmainrepairid({id:m.id})
+        this.dialogFormVisible = true
+      },
+      // 查看
+      handleEdit(h,m){
+        console.log(h)
+        this.$refs.repairexamine.getmainrepairid({id:m.id})
+        this.dialogFormVisible1 = true
+      },
+      handleCurrentChange(val){
+        this.page.current = val
+        this.getmainrecordpage()
+      },
+    close(num){
+        this.dialogFormVisible = false
+        this.dialogFormVisible1 = false
+        console.log(this.dialogFormVisible1)
+        if(num==='0'){
+            this.getrepairrecordpage()
         }
+    },
+    handledistribute(h,m){
+        this.$confirm('确定要删除吗？', '提示', {
+            type: 'warning'
+        })
+        .then(() => {
+                    mainrepairdel(m).then(res=>{
+                        if(res.code==='0'){
+                            this.$message.success(res.msg)
+                            this.getrepairrecordpage()
+                        }
+                    })
+        })
+        .catch(() => {});
+        
+    },
+    // 删除
+    // handledistribute(h,m){
+    //     mainrepairdel(m).then(res=>{
+    //         if(res.code==='0'){
+    //             this.$message.success(res.msg)
+    //             this.getrepairrecordpage()
+    //         }
+    //     })
+    // }
     }
 };
 </script>

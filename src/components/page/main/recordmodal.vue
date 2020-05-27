@@ -52,14 +52,66 @@
                             <el-input type="textarea" :rows="3" :disabled="!ifEdt" v-model="form.remark"></el-input>
                         </el-form-item>
                     </el-col>
-                </el-form>
-            </el-row>
-            <div slot="footer" class="dialog-footer">
-                <el-button @click="close">取 消</el-button>
-                <el-button type="primary" v-if="ifEdt" @click="marksure()" :loading="sureload">确 定</el-button>
-            </div>
-        </el-dialog>
-    </div>
+                    <el-col :span="11">
+                        <el-form-item label="设备编号" :label-width="formLabelWidth" class="formitem formitem1" prop="id">
+                            <el-input
+                                placeholder="请输入内容"
+                                v-model="form.deviceId"
+                                :disabled="true">
+                            </el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="11">
+                        <el-form-item label="规格型号" :label-width="formLabelWidth" class="formitem formitem1" prop="period">
+                                <el-input
+                                placeholder="请输入内容"
+                                v-model="form.deviceNumer"
+                                :disabled="true">
+                            </el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="11">
+                        <el-form-item label="设备类型" v-if="ifEdt" :label-width="formLabelWidth" class="formitem formitem1" prop="toType">
+                            <el-input
+                                placeholder="请输入内容"
+                                v-model="form.toTypeName"
+                                :disabled="true">
+                            </el-input>
+                        </el-form-item>
+                        <el-form-item label="保养月份" v-else :label-width="formLabelWidth" class="formitem formitem1" prop="toType">
+                            <el-input
+                                placeholder="请输入内容"
+                                v-model="form.monthTime"
+                                :disabled="true">
+                            </el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="11">
+                        <el-form-item label="保养时间" v-if="ifEdt" :label-width="formLabelWidth" class="formitem formitem1" prop="dateTime">
+                            <el-input
+                                placeholder="请输入内容"
+                                v-model="form.dateTime"
+                                :disabled="true">
+                            </el-input>
+                        </el-form-item>
+                    </el-col>
+           
+             <el-col :span="24" class="dialogTitle">保养内容</el-col>
+             <el-col :span="24">
+                 <el-form-item  class="formitem formitem1" prop="content">
+                        <el-input type="textarea" :rows="3"  :disabled="!ifEdt" v-model="form.content" ></el-input>
+                </el-form-item>
+             </el-col>
+           
+        </el-form>
+    </el-row>
+        <div slot="footer" class="dialog-footer">
+            <el-button @click="close">取 消</el-button>
+            <el-button type="primary" v-if="ifEdt" @click="marksure()" :loading="sureload">确 定</el-button>
+        </div>
+    </el-dialog>
+
+  </div>
 </template>
 
 <script>
@@ -89,12 +141,12 @@ export default {
             input: '',
             param: {},
             form: {
-                deviceName: '',
-                id: '',
-                deviceNumer: '',
-                toType: '',
-                dateTime: '',
-                remark: ''
+              deviceName:'',
+              id:'',
+              deviceNumer:'',
+              toType:'',
+              dateTime:'',
+              content:''
             },
             formLabelWidth: '90px',
             rules: {
@@ -128,24 +180,28 @@ export default {
             this.init();
             this.$emit('close', num);
         },
-        //初始化
-        init() {
-            this.form = {
-                deviceName: '',
-                id: '',
-                deviceNumer: '',
-                toType: '',
-                dateTime: '',
-                remark: ''
-            };
-        },
-        marksure() {
-            this.param.id = this.form.id;
-            this.param.remark = this.form.remark;
-            mainrecordput(this.param).then(res => {
-                if (res.code === '0') {
-                    this.$message.success(res.msg);
-                    this.close('0');
+       close(num){
+           this.init()
+           this.$emit('close',num)
+       },
+       //初始化
+       init(){
+           this.form= {
+              deviceName:'',
+              id:'',
+              deviceNumer:'',
+              toType:'',
+              dateTime:'',
+              content:''
+            }
+       },
+       marksure(){
+           this.param.id = this.form.id
+           this.param.content = this.form.content
+            mainrecordput(this.param).then(res=>{
+                if(res.code==='0'){
+                    this.$message.success(res.msg)
+                    this.close('0')
                 }
             });
         },

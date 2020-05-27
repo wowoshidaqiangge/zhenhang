@@ -2,32 +2,39 @@
     <div class="record">
         <div class="top">
             <el-row>
-                <el-form :model="seachinfo" ref="seachinfo" class="demo-ruleForm">
-                    <el-col :span="15">
-                        <el-form-item label="">
-                            <el-button type="add" icon="el-icon-circle-plus-outline" @click="add">新增</el-button>
-                        </el-form-item>
-                    </el-col>
-
-                    <el-col :span="2" style="margin:0 20px">
-                        <el-form-item label="" prop="manageState">
-                            <el-select v-model="seachinfo.manageState" placeholder="状态">
-                                <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"> </el-option>
-                            </el-select>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="3" style="margin-right:10px">
-                        <el-form-item label="" prop="nameOrCode">
-                            <el-input placeholder="设备名称" v-model="seachinfo.nameOrCode" class="elinput"> </el-input>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="3">
-                        <el-form-item label="">
-                            <el-button type="add" icon="el-icon-search" @click="seachinfo1">搜索</el-button>
-                            <el-button type="success" icon="el-icon-refresh-right" @click="resetting">重置</el-button>
-                        </el-form-item>
-                    </el-col>
-                </el-form>
+                <el-form :model="seachinfo"  ref="seachinfo"  class="demo-ruleForm">
+                <el-col :span="15">
+                    <el-form-item label="" >
+                        <el-button type="add" icon='el-icon-circle-plus-outline' @click="add">新增</el-button>
+                        <el-button type="add"  @click="addexcel">EXCEL导入</el-button>
+                    </el-form-item>
+                </el-col>
+                
+                <el-col :span="2" style="margin:0 20px">
+                  <el-form-item label=""  prop="manageState" >
+                      <el-select v-model="seachinfo.manageState"  placeholder="状态" >
+                          <el-option
+                              v-for="item in options"
+                              :key="item.value"
+                              :label="item.label"
+                              :value="item.value">
+                            </el-option>
+                      </el-select>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="3" style="margin-right:10px">
+                    <el-form-item label=""  prop="nameOrCode" >
+                      <el-input  placeholder="设备名称" v-model="seachinfo.nameOrCode" class="elinput"> </el-input>
+                  </el-form-item>
+                    
+                </el-col>
+                <el-col :span="3">
+                    <el-form-item label="" >
+                          <el-button type="add" icon="el-icon-search" @click="seachinfo1">搜索</el-button>
+                          <el-button type="success" icon="el-icon-refresh-right" @click="resetting">重置</el-button>
+                    </el-form-item>
+                </el-col>
+              </el-form>
             </el-row>
         </div>
         <div class="bot">
@@ -75,18 +82,20 @@
             >
             </el-pagination>
         </div>
-        <recordModal :dialogFormVisible="dialogFormVisible" @close="close" :tit="tit" ref="recordmodal" />
-    </div>
+        <recordModal :dialogFormVisible='dialogFormVisible' @close='close' :tit='tit' ref='recordmodal'/>
+        <recordexcel :dialogFormVisible1='dialogFormVisible1' @close='close' :tit='tit'/>
+  </div>
 </template>
 
 <script>
-import { devicepage, updateState, devicedelete } from 'api/main';
-import recordModal from './recordmodal';
-import { mapState } from 'vuex';
+import {devicepage,updateState,devicedelete} from 'api/main'
+import recordexcel from './recordexcel'
+import recordModal from './recordmodal'
+import { mapState } from 'vuex'
 export default {
     name: 'record',
-    components: {
-        recordModal
+    components:{
+      recordModal, recordexcel
     },
     data() {
         return {
@@ -111,14 +120,15 @@ export default {
                 current: 1,
                 size: 10
             },
-            dialogFormVisible: false,
-            tit: '',
-            pagesize: 1,
-            totals: 0,
-            screenWidth: document.body.clientHeight - 215 + 'px',
-            options: [
-                { value: '2', label: '报废' },
-                { value: '1', label: '正常' }
+            dialogFormVisible:false,
+            dialogFormVisible1:false,
+            tit:'',
+            pagesize:1,
+            totals:0,
+            screenWidth:(document.body.clientHeight-215) + 'px',
+            options:[
+              {value:'2',label:'报废'},
+              {value:'1',label:'正常'},
             ]
         };
     },
@@ -137,6 +147,10 @@ export default {
         this.getdevicepage();
     },
     methods: {
+      addexcel(){
+        this.tit = "导入物料"
+        this.dialogFormVisible1 = true
+      },
         //获取数据列表
         getdevicepage() {
             let obj = { ...this.seachinfo, ...this.page };
@@ -161,13 +175,15 @@ export default {
             this.page.current = 1;
             this.getdevicepage();
         },
-        seachinfo1() {
-            this.getdevicepage();
+        seachinfo1(){
+            this.page.current =1
+            this.getdevicepage()
         },
-        close(num) {
-            this.dialogFormVisible = false;
-            if (num === '0') {
-                this.getdevicepage();
+        close(num){
+            this.dialogFormVisible = false
+            this.dialogFormVisible1 = false
+            if(num==='0'){
+                this.getdevicepage()
             }
         },
         handleCurrentChange(val) {

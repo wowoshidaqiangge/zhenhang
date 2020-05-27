@@ -44,7 +44,7 @@
                  <el-form-item label="设备类型" :label-width="formLabelWidth" class="formitem formitem1" prop="toType">
                         <el-input
                         placeholder="请输入内容"
-                        v-model="deviceInfo.toType"
+                        v-model="deviceInfo.toTypeName"
                         :disabled="true">
                     </el-input>
                 </el-form-item>
@@ -124,7 +124,7 @@
 </template>
 
 <script>
-import { mainrepairid, mainrepairadd, mainrepairput, devInfo,getListByToType,maintenanceadd,maintenanceid,maintenanceput} from 'api/main'
+import { mainrepairid, mainrepairadd, mainrepairput, devInfo} from 'api/main'
 import {userPage} from 'api/index'
 import { deviceList} from 'api/index'
 import moment from 'moment'

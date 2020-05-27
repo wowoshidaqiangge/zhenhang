@@ -6,6 +6,7 @@
                 <el-col :span="15">
                     <el-form-item label="" >
                         <el-button type="add" icon='el-icon-circle-plus-outline' @click="add">新增</el-button>
+                        <el-button type="add"  @click="addexcel">EXCEL导入</el-button>
                     </el-form-item>
                 </el-col>
                 
@@ -100,16 +101,19 @@
               </div> 
         </div>
         <productModal :dialogFormVisible='dialogFormVisible' @close='close' :tit='tit' ref='promodal'/>
+        <productexcel :dialogFormVisible1='dialogFormVisible1' @close='close' :tit='tit' ref='promodal'/>
   </div>
 </template>
 
 <script>
 import {productpage,productdelete,productupdateState} from 'api/main'
 import productModal from './productmodal'
+import productexcel from './productexcel'
 export default {
     name: 'product',
     components:{
-      productModal
+      productModal,
+      productexcel
     },
     data() {
         return {
@@ -137,6 +141,7 @@ export default {
             pagesize:1,
             totals:0,
             dialogFormVisible:false,
+            dialogFormVisible1:false,
             tit:'',
             options:[
               {value:'0',label:'禁用'},
@@ -151,6 +156,10 @@ export default {
         this.getproductpage()
     },
     methods: {
+        addexcel(){
+            this.tit = "导入物料"
+            this.dialogFormVisible1 = true
+        },
         resetting(){
             this.seachinfo={ productNameOrCode:'',state:''}
             this.page.current = 1
@@ -184,6 +193,7 @@ export default {
         },
         close(num){
             this.dialogFormVisible = false
+            this.dialogFormVisible1 = false
             if(num=='0'){
                 this.getproductpage()
             }

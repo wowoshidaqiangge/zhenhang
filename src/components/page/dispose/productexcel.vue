@@ -11,7 +11,7 @@
            <excelupdate @childByValue ='childByValue'/>
            <div>
                 <el-button size="small" type="primary" @click="UpData" style="margin:25px 0 15px 0">点击导入</el-button>    
-                <p class="login-tips">说明: 导入文件类型必须为excel格式，你可以先点击 <a href="https://thingcom-test.oss-cn-hangzhou.aliyuncs.com/%E8%87%BB%E8%88%AA-%E7%89%A9%E6%96%99-%E6%A8%A1%E6%9D%BF.xlsx">下载模板</a>。</p>
+                <p class="login-tips">说明: 导入文件类型必须为excel格式，你可以先点击 <a href="https://thingcom-test.oss-cn-hangzhou.aliyuncs.com/%E8%87%BB%E8%88%AA-%E4%BA%A7%E5%93%81-%E6%A8%A1%E6%9D%BF.xlsx">下载模板</a>。</p>
             </div>
     </el-row>
     </el-dialog>
@@ -21,7 +21,7 @@
 
 <script>
 import excelupdate from './../../common/excelupdate'
-import {producetaskaddExcel} from 'api/main'
+import {productaddExcel} from 'api/main'
 export default {
     name: 'metaexcel',
     components:{
@@ -59,26 +59,24 @@ export default {
           let arr = []
           val.map((item,index)=>{
             let obj = {}
-            obj.itemName = JSON.parse(JSON.stringify(item))["物料名称"]
-            obj.itemCode = JSON.parse(JSON.stringify(item))["物料编码"]
-            obj.model = JSON.parse(JSON.stringify(item))["型号"]
-            obj.series = JSON.parse(JSON.stringify(item))["系列"]
-            obj.material = JSON.parse(JSON.stringify(item))["材质"]
-            obj.unit = JSON.parse(JSON.stringify(item))["单位"]
-            obj.deptName = JSON.parse(JSON.stringify(item))["关联部门"]
+            obj.productCode = JSON.parse(JSON.stringify(item))["产品编码"]
+            obj.productName = JSON.parse(JSON.stringify(item))["产品名称"]
+            obj.model = JSON.parse(JSON.stringify(item))["规格型号"]
+            obj.itemCode = JSON.parse(JSON.stringify(item))["部件编码"]
+            obj.itemCount = JSON.parse(JSON.stringify(item))["数量"]
             arr[index] = obj
           })
           this.excelData = arr
           console.log(this.excelData)
         },
         UpData () {
-           producetaskaddExcel(this.excelData).then(res=>{
+           productaddExcel(this.excelData).then(res=>{
                if(res.code==='0'){
+                   this.close(0)
                    this.$message({
                         message: '上传成功',
                         type: 'success'
                     });
-                   this.close(0)
                } else {
                    this.$message.error('上传失败');
                }

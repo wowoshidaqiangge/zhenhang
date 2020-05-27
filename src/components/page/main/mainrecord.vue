@@ -128,7 +128,7 @@ export default {
                 { prop: 'assumeUserName', label: '担当人' },
                 { prop: 'dutyUserName', label: '责任人' },
                 { prop: 'createTime', label: '新增时间' },
-                { prop: 'remark', label: '备注' },
+                { prop: 'content', label: '备注' },
                 { prop: 'states', label: '状态' }
             ],
             init: {
@@ -147,88 +147,58 @@ export default {
         if (this.init.id) {
             this.handledistribute(0, this.init);
         }
-        bus.$on('gotoRecords', e => {
-            this.init.id = e;
-            console.log('on', this.init.id);
-            this.handledistribute(0, this.init);
-        });
-    },
+        this.getmainrecordpage()
+      },
     methods: {
-        //重置
-        resetting() {
-            this.state = '';
-            this.maintime = '';
-            this.deviceSearch = '';
-            this.page = {
-                current: 1,
-                size: 10
-            };
-            this.getmainrecordpage();
-        },
-        searchmain() {
-            // var patrn = /^[0-9]{1,20}$/
-            // if (patrn.exec(this.deviceSearch)) {
-            //   this.page.deviceNumber = this.deviceSearch
-            // } else {
-            //   this.page.deviceName = this.deviceSearch
-            // }
-            this.page.deviceNameOrCode = this.deviceSearch;
-            this.page.state = this.state;
-            console.log(this.maintime);
-            if (this.maintime !== null) {
-                this.page.beginDate = this.maintime[0];
-                this.page.endDate = this.maintime[1];
-            } else {
-                this.page.beginDate = '';
-                this.page.endDate = '';
-            }
-            this.getmainrecordpage();
-        },
-        getmainrecordpage() {
-            mainrecordpage(this.page).then(res => {
-                if (res.code === '0') {
-                    res.data.records.map((item, index) => {
-                        item.createTime = item.createTime.split(' ')[0];
-                        item.states = item.state ? '已保养' : '未保养';
-                        item.index = index + 1;
-                    });
-                    this.pagesize = parseInt(res.data.current);
-                    this.totals = parseInt(res.data.total);
-                    this.tableData = res.data.records;
-                    console.log(this.tableData);
-                }
-            });
-        },
-        // 查看
-        examine(h, m) {
-            console.log(h);
-            this.tit = '查看';
-            this.ifEdt = false;
-            this.$refs.recordmodal.getmainrecordid({ id: m.id });
-            this.dialogFormVisible = true;
-        },
-        // 填报
-        handledistribute(h, m) {
-            console.log(h);
-            this.tit = '填报';
-            this.ifEdt = true;
-            this.$refs.recordmodal.getmainrecordid({ id: m.id });
-            this.dialogFormVisible = true;
-        },
-        handleCurrentChange(val) {
-            this.page.current = val;
-            this.getmainrecordpage();
-        },
-        close(num) {
-            this.dialogFormVisible = false;
-            if (num === '0') {
-                this.getmainrecordpage();
-            }
+      getmainrecordpage() {
+          mainrecordpage(this.page).then(res => {
+              if (res.code === '0') {
+                  res.data.records.map((item, index) => {
+                      item.createTime = item.createTime.split(' ')[0]
+                      item.states = item.state? '已保养' : '未保养';
+                      item.periods = item.period === 'month' ? '月' : '年';
+                      item.index = index + 1;
+                  });
+                  this.pagesize = parseInt(res.data.current);
+                  this.totals = parseInt(res.data.total);
+                  this.tableData = res.data.records;
+                  console.log(this.tableData)
+              }
+          });
+      },
+      resetting () {
+        this.page.current = 1
+      },
+      // 查看
+      examine(h,m){
+        console.log(h)
+        this.tit= '查看'
+        this.ifEdt = false
+        this.$refs.recordmodal.getmainrecordid({id:m.id})
+        this.dialogFormVisible = true
+      },
+      // 填报
+      handledistribute(h,m){
+        console.log(h)
+        this.tit= '填报'
+        this.ifEdt = true
+        this.$refs.recordmodal.getmainrecordid({id:m.id})
+        this.dialogFormVisible = true
+      },
+      handleCurrentChange(val){
+        this.page.current = val
+        this.getmainrecordpage()
+      },
+      close(num){
+        this.dialogFormVisible = false
+        if(num==='0'){
+          this.getmainrecordpage()
         }
     },
     beforeDestroy() {
         bus.$off('gotoRecords');
     }
+  }
 };
 </script>
 
