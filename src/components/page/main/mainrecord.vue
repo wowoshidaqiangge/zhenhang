@@ -29,8 +29,7 @@
                     </el-col>
                     <el-col :span="3" style="margin-right:10px">
                         <el-form-item label="" prop="productNameOrCode">
-                            <el-input placeholder="请输入名称或编号" prefix-icon="el-icon-search" v-model="deviceNameOrCode">
-                            </el-input>
+                            <el-input placeholder="请输入名称或编号" prefix-icon="el-icon-search" v-model="deviceNameOrCode"> </el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="3">
@@ -146,69 +145,70 @@ export default {
         if (this.init.id) {
             this.handledistribute(0, this.init);
         }
-        this.getmainrecordpage();
+        bus.$on('gotoRecords', e => {
+            this.init.id = e;
+            this.handledistribute(0, this.init);
+        });
     },
     methods: {
-      getmainrecordpage() {
-          let obj = {...this.seachinfo,...this.page}
-          mainrecordpage(obj).then(res => {
-              if (res.code === '0') {
-                  res.data.records.map((item, index) => {
-                      item.createTime = item.createTime.split(' ')[0]
-                      item.states = item.state? '已保养' : '未保养';
-                      item.periods = item.period === 'month' ? '月' : '年';
-                      item.index = index + 1;
-                  });
-                  this.pagesize = parseInt(res.data.current);
-                  this.totals = parseInt(res.data.total);
-                  this.tableData = res.data.records;
-                  console.log(this.tableData)
-              }
-          });
-      },
-    
-       resetting(){
-            this.seachinfo= { beginDate:'',endDate:'',state:'',}
-            this.state = '',
-            this.deviceNameOrCode = ''
-            this.maintime = []
-            this.page.current = 1
-            this.getmainrecordpage()
+        getmainrecordpage() {
+            let obj = { ...this.seachinfo, ...this.page };
+            mainrecordpage(obj).then(res => {
+                if (res.code === '0') {
+                    res.data.records.map((item, index) => {
+                        item.createTime = item.createTime.split(' ')[0];
+                        item.states = item.state ? '已保养' : '未保养';
+                        item.periods = item.period === 'month' ? '月' : '年';
+                        item.index = index + 1;
+                    });
+                    this.pagesize = parseInt(res.data.current);
+                    this.totals = parseInt(res.data.total);
+                    this.tableData = res.data.records;
+                    console.log(this.tableData);
+                }
+            });
         },
-        searchmain(){
-            this.seachinfo.beginDate = this.maintime[0]
-            this.seachinfo.endDate = this.maintime[1]
-            this.seachinfo.state = this.state
-            this.seachinfo.deviceNameOrCode = this.deviceNameOrCode
-            this.page.current = 1
-            this.getmainrecordpage()
+
+        resetting() {
+            this.seachinfo = { beginDate: '', endDate: '', state: '' };
+            (this.state = ''), (this.deviceNameOrCode = '');
+            this.maintime = [];
+            this.page.current = 1;
+            this.getmainrecordpage();
         },
-      // 查看
-      examine(h,m){
-      
-        this.tit= '查看'
-        this.ifEdt = false
-        this.$refs.recordmodal.getmainrecordid({id:m.id})
-        this.dialogFormVisible = true
-      },
-      // 填报
-      handledistribute(h,m){
-        console.log(h)
-        this.tit= '填报'
-        this.ifEdt = true
-        this.$refs.recordmodal.getmainrecordid({id:m.id})
-        this.dialogFormVisible = true
-      },
-      handleCurrentChange(val){
-        this.page.current = val
-        this.getmainrecordpage()
-      },
-      close(num){
-        this.dialogFormVisible = false
-        if(num==='0'){
-          this.getmainrecordpage()
+        searchmain() {
+            this.seachinfo.beginDate = this.maintime[0];
+            this.seachinfo.endDate = this.maintime[1];
+            this.seachinfo.state = this.state;
+            this.seachinfo.deviceNameOrCode = this.deviceNameOrCode;
+            this.page.current = 1;
+            this.getmainrecordpage();
+        },
+        // 查看
+        examine(h, m) {
+            this.tit = '查看';
+            this.ifEdt = false;
+            this.$refs.recordmodal.getmainrecordid({ id: m.id });
+            this.dialogFormVisible = true;
+        },
+        // 填报
+        handledistribute(h, m) {
+            console.log(h);
+            this.tit = '填报';
+            this.ifEdt = true;
+            this.$refs.recordmodal.getmainrecordid({ id: m.id });
+            this.dialogFormVisible = true;
+        },
+        handleCurrentChange(val) {
+            this.page.current = val;
+            this.getmainrecordpage();
+        },
+        close(num) {
+            this.dialogFormVisible = false;
+            if (num === '0') {
+                this.getmainrecordpage();
+            }
         }
-    }
     }
 };
 </script>
