@@ -37,16 +37,14 @@
                         end-placeholder="结束日期"
                     ></el-date-picker>
                 </el-form-item>
-
-                <el-form-item class="handle-select mr1">
-                    <el-button type="success" icon="el-icon-refresh-right" @click="resetting">重置</el-button>
-                </el-form-item>
-                <el-form-item class="handle-select mr1">
-                    <el-button type="add" icon="el-icon-search" @click="seachinfo">搜索</el-button>
-                </el-form-item>
+               
                 <el-form-item class="handle-select mr1">
                     <el-button type="add" @click="excelexport">EXCEL导出</el-button>
+                    <el-button type="success" icon="el-icon-refresh-right" @click="resetting">重置</el-button>
+                    <el-button type="add" icon="el-icon-search" @click="seachinfo">搜索</el-button>
                 </el-form-item>
+              
+               
             </el-form>
         </div>
 
@@ -151,45 +149,6 @@ export default {
                 toolbox: {
                     show: true,
                     feature: {
-                        //     dataView: {
-                        //         show: true,
-                        //         title:'数据视图',
-                        //         lang: ['数据视图', '关闭', '导出Excel'],
-                        //          contentToOption: function (opts) {
-                        //              debugger
-                        //             $("#tableExcel_Day").table2excel({
-                        //                 exclude: ".noExl", //过滤位置的 css 类名
-                        //                 filename: '每日价格走势图' + ".xls", //文件名称
-                        //                 name: "Excel Document Name.xls",
-                        //                 exclude_img: true,
-                        //                 exclude_links: true,
-                        //                 exclude_inputs: true
-                        //             });
-                        //         },
-                        //         optionToContent: function (opt) {
-                        //             let axisData = opt.xAxis[0].data; //坐标数据
-                        //             let series = opt.series; //折线图数据
-                        //             let tdHeads = '<td  style="padding: 0 10px">时间</td>'; //表头
-                        //             let tdBodys = ''; //数据
-                        //             series.forEach(function (item) {
-                        //                 //组装表头
-                        //                 tdHeads += `<td style="padding: 0 10px">${item.name}</td>`;
-                        //             });
-                        //             let table = `<table id="tableExcel_Day" border="1" style="margin-left:20px;border-collapse:collapse;font-size:14px;text-align:center"><tbody><tr>${tdHeads} </tr>`;
-                        //             for (let i = 0, l = axisData.length; i < l; i++) {
-                        //                 for (let j = 0; j < series.length; j++) {
-                        //                     //组装表数据
-
-                        //                     tdBodys += `<td>${ series[j].data[i]}</td>`;
-                        //                 }
-                        //                 table += `<tr><td style="padding: 0 10px">${axisData[i]}</td>${tdBodys}</tr>`;
-                        //                 tdBodys = '';
-                        //             }
-                        //             table += '</tbody></table>';
-                        //             return table;
-                        //         }
-
-                        //     },
                         magicType: { show: true, type: ['line', 'bar'] }
                         // restore: {show: true},
                         // saveAsImage: {show: true}

@@ -102,18 +102,18 @@ const router = new Router({
                 {
                     path: '/mainplan',
                     component: () => import(/* webpackChunkName: "table" */ '../components/page/main/mainplan.vue'),
-                    meta: { title: '维保计划', keepAlive: true }
+                    meta: { title: '维保计划', keepAlive: false }
                 },
                 {
                     path: '/mainrecord',
                     name: 'mainrecord',
                     component: () => import(/* webpackChunkName: "table" */ '../components/page/main/mainrecord.vue'),
-                    meta: { title: '保养记录', keepAlive: true }
+                    meta: { title: '保养记录', keepAlive: false }
                 },
                 {
                     path: '/repairrecord',
                     component: () => import(/* webpackChunkName: "table" */ '../components/page/main/repairrecord.vue'),
-                    meta: { title: '维修记录', keepAlive: true }
+                    meta: { title: '维修记录', keepAlive: false }
                 },
 
                 // 配置管理

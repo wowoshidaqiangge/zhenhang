@@ -139,6 +139,7 @@ export default {
     methods: {
         resetting(){
             this.seachinfo= { beginDate:'',endDate:'',state:'',}
+            this.chosedTime = []
             this.page.current = 1
             this.getrepairrecordpage()
         },
@@ -148,9 +149,7 @@ export default {
             this.page.current = 1
             this.getrepairrecordpage()
         },
-        seachinfo1() {
-            this.getrepairrecordpage();
-        },
+       
         changedate() {},
         getrepairrecordpage() {
           let obj = {...this.seachinfo,...this.page}

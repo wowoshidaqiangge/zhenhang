@@ -3,7 +3,7 @@
         <div class="top">
             <el-row>
                 <el-form :model="seachinfo" ref="seachinfo" class="demo-ruleForm">
-                    <el-col :span="8">
+                    <el-col :span="9">
                         <el-form-item label>
                            
                         </el-form-item>
@@ -38,7 +38,7 @@
                         </el-form-item>
                     </el-col>
 
-                    <el-col :span="6" style="margin-left:20px">
+                    <el-col :span="5" style="margin-left:20px">
                         <el-form-item label>
                             <el-button type="add" icon="el-icon-search" @click="seachinfo1">搜索</el-button>
                             <el-button

@@ -151,7 +151,8 @@ export default {
       },
     methods: {
       getmainrecordpage() {
-          mainrecordpage(this.page).then(res => {
+          let obj = {...this.seachinfo,...this.page}
+          mainrecordpage(obj).then(res => {
               if (res.code === '0') {
                   res.data.records.map((item, index) => {
                       item.createTime = item.createTime.split(' ')[0]
@@ -166,12 +167,22 @@ export default {
               }
           });
       },
-      resetting () {
-        this.page.current = 1
-      },
+    
+       resetting(){
+            this.seachinfo= { beginDate:'',endDate:'',state:'',}
+            this.maintime = []
+            this.page.current = 1
+            this.getmainrecordpage()
+        },
+        searchmain(){
+            this.seachinfo.beginDate = this.maintime[0]
+            this.seachinfo.endDate = this.maintime[1]
+            this.page.current = 1
+            this.getmainrecordpage()
+        },
       // 查看
       examine(h,m){
-        console.log(h)
+      
         this.tit= '查看'
         this.ifEdt = false
         this.$refs.recordmodal.getmainrecordid({id:m.id})
