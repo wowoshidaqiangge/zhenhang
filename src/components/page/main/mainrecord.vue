@@ -78,7 +78,6 @@
 import { mainrecordpage, mainrecordid } from 'api/main';
 import recordmodal from './recordmodal';
 import bus from '@/components/common/bus';
-// import { sessionGetStore, sessionRemoveStore } from '@/utils/util';
 
 export default {
     name: 'mainrecord',
@@ -147,58 +146,58 @@ export default {
         if (this.init.id) {
             this.handledistribute(0, this.init);
         }
-        this.getmainrecordpage()
-      },
-    methods: {
-      getmainrecordpage() {
-          mainrecordpage(this.page).then(res => {
-              if (res.code === '0') {
-                  res.data.records.map((item, index) => {
-                      item.createTime = item.createTime.split(' ')[0]
-                      item.states = item.state? '已保养' : '未保养';
-                      item.periods = item.period === 'month' ? '月' : '年';
-                      item.index = index + 1;
-                  });
-                  this.pagesize = parseInt(res.data.current);
-                  this.totals = parseInt(res.data.total);
-                  this.tableData = res.data.records;
-                  console.log(this.tableData)
-              }
-          });
-      },
-      resetting () {
-        this.page.current = 1
-      },
-      // 查看
-      examine(h,m){
-        console.log(h)
-        this.tit= '查看'
-        this.ifEdt = false
-        this.$refs.recordmodal.getmainrecordid({id:m.id})
-        this.dialogFormVisible = true
-      },
-      // 填报
-      handledistribute(h,m){
-        console.log(h)
-        this.tit= '填报'
-        this.ifEdt = true
-        this.$refs.recordmodal.getmainrecordid({id:m.id})
-        this.dialogFormVisible = true
-      },
-      handleCurrentChange(val){
-        this.page.current = val
-        this.getmainrecordpage()
-      },
-      close(num){
-        this.dialogFormVisible = false
-        if(num==='0'){
-          this.getmainrecordpage()
-        }
+        this.getmainrecordpage();
     },
-    beforeDestroy() {
-        bus.$off('gotoRecords');
+    methods: {
+        getmainrecordpage() {
+            mainrecordpage(this.page).then(res => {
+                if (res.code === '0') {
+                    res.data.records.map((item, index) => {
+                        item.createTime = item.createTime.split(' ')[0];
+                        item.states = item.state ? '已保养' : '未保养';
+                        item.periods = item.period === 'month' ? '月' : '年';
+                        item.index = index + 1;
+                    });
+                    this.pagesize = parseInt(res.data.current);
+                    this.totals = parseInt(res.data.total);
+                    this.tableData = res.data.records;
+                    console.log(this.tableData);
+                }
+            });
+        },
+        resetting() {
+            this.page.current = 1;
+        },
+        // 查看
+        examine(h, m) {
+            console.log(h);
+            this.tit = '查看';
+            this.ifEdt = false;
+            this.$refs.recordmodal.getmainrecordid({ id: m.id });
+            this.dialogFormVisible = true;
+        },
+        // 填报
+        handledistribute(h, m) {
+            console.log(h);
+            this.tit = '填报';
+            this.ifEdt = true;
+            this.$refs.recordmodal.getmainrecordid({ id: m.id });
+            this.dialogFormVisible = true;
+        },
+        handleCurrentChange(val) {
+            this.page.current = val;
+            this.getmainrecordpage();
+        },
+        close(num) {
+            this.dialogFormVisible = false;
+            if (num === '0') {
+                this.getmainrecordpage();
+            }
+        },
+        beforeDestroy() {
+            bus.$off('gotoRecords');
+        }
     }
-  }
 };
 </script>
 
