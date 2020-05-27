@@ -2,47 +2,67 @@
     <div class="statistics">
         <div class="top">
             <el-form :inline="true" :model="formInline" class="demo-form-inline">
-                <el-form-item label="车间设备:" class="handle-select mr10 mr11" label-width="80px">
-                    <el-cascader
-                        v-model="value2"
-                        :options="devlist"
-                        :props="optionProps"
-                        @change="caschange"
-                        clearable
-                    ></el-cascader>
-                </el-form-item>
-
-                <el-form-item
-                    label="统计:"
-                    class="handle-select mr10"
-                    :label-width="formLabelWidth"
-                    prop="selectType"
-                >
-                    <el-select v-model="formInline.selectType" @change="changesel" placeholder="统计">
-                        <el-option
-                            v-for="item in censuelist"
-                            :key="item.value"
-                            :label="item.label"
-                            :value="item.value"
-                        ></el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item label="日期:" class="handle-select mr10" :label-width="formLabelWidth">
-                    <el-date-picker
-                        v-model="value1"
-                        type="daterange"
-                        @change="timechange"
-                        range-separator="至"
-                        start-placeholder="开始日期"
-                        end-placeholder="结束日期"
-                    ></el-date-picker>
-                </el-form-item>
+                  <el-col :span="1">
+                    <el-form-item >
+                      
+                    </el-form-item>
+                </el-col>
+                <el-col :span="4">
+                    <el-form-item label="车间设备:" label-width="80px">
+                        <el-cascader
+                            v-model="value2"
+                            :options="devlist"
+                            :props="optionProps"
+                            @change="caschange"
+                            clearable
+                        ></el-cascader>
+                    </el-form-item>
+                </el-col>
+                <el-col :span="4">
+                     <el-form-item
+                        label="统计:"
+                       
+                        :label-width="formLabelWidth"
+                        prop="selectType"
+                    >
+                        <el-select v-model="formInline.selectType" @change="changesel" placeholder="统计">
+                            <el-option
+                                v-for="item in censuelist"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value"
+                            ></el-option>
+                        </el-select>
+                    </el-form-item>
+                </el-col>
+                <el-col :span="6">
+                    <el-form-item label="日期:"  :label-width="formLabelWidth">
+                        <el-date-picker
+                            v-model="value1"
+                            type="daterange"
+                            @change="timechange"
+                            range-separator="至"
+                            start-placeholder="开始日期"
+                            end-placeholder="结束日期"
+                        ></el-date-picker>
+                    </el-form-item>
+                </el-col>
+                <el-col :span="2">
+                      <el-form-item label=''  ></el-form-item>
+                </el-col>
+                <el-col :span="7">
+                    <el-form-item style="width:100%">
+                        
+                        
+                        <el-button type="add" icon="el-icon-search" @click="seachinfo">搜索</el-button>
+                        <el-button type="success" icon="el-icon-refresh-right" @click="resetting">重置</el-button>
+                        <el-button type="add" @click="excelexport">EXCEL导出</el-button>
+                    </el-form-item>
+                </el-col>
                
-                <el-form-item class="handle-select mr1">
-                    <el-button type="add" @click="excelexport">EXCEL导出</el-button>
-                    <el-button type="success" icon="el-icon-refresh-right" @click="resetting">重置</el-button>
-                    <el-button type="add" icon="el-icon-search" @click="seachinfo">搜索</el-button>
-                </el-form-item>
+                
+               
+                
               
                
             </el-form>
@@ -593,6 +613,9 @@ export default {
         }
         .mr1 {
             float: right;
+        }
+        .mr2{
+            width: 25%;
         }
         .el-form-item__content {
             width: calc(100% - 80px);

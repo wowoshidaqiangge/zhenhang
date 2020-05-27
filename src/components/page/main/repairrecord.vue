@@ -3,12 +3,12 @@
         <div class="top">
             <el-row>
                 <el-form :model="seachinfo"  ref="seachinfo"  class="demo-ruleForm">
-                <el-col :span="10">
+                <el-col :span="9">
                     <el-form-item label="" >
                         <el-button type="add" icon="el-icon-circle-plus-outline" @click="recordAdd()">新增</el-button>
                     </el-form-item>
                 </el-col>
-                <el-col :span="5">
+                <el-col :span="6">
                     <el-form-item label="" prop="chosedTime">
                             <el-date-picker
                                 v-model="chosedTime"
@@ -231,7 +231,9 @@ export default {
         height: 50px;
         margin-top: 10px;
     }
-
+    .datetime{
+        width: 100%;
+    }
     .page {
         margin-top: 10px;
         float: right;

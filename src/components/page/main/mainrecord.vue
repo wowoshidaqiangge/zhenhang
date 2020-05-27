@@ -6,7 +6,7 @@
                     <el-col :span="6">
                         <el-form-item label=""> </el-form-item>
                     </el-col>
-                    <el-col :span="6">
+                    <el-col :span="5">
                         <el-form-item label="" prop="value1">
                             <el-date-picker
                                 v-model="maintime"
@@ -20,7 +20,7 @@
                             </el-date-picker>
                         </el-form-item>
                     </el-col>
-                    <el-col :span="5" style="margin:0 20px">
+                    <el-col :span="6" style="margin:0 20px">
                         <el-form-item label="设备状态">
                             <el-select v-model="state" placeholder="请选择">
                                 <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"> </el-option>
@@ -29,7 +29,7 @@
                     </el-col>
                     <el-col :span="3" style="margin-right:10px">
                         <el-form-item label="" prop="productNameOrCode">
-                            <el-input placeholder="请输入设备名称或设备编号" prefix-icon="el-icon-search" v-model="deviceNameOrCode">
+                            <el-input placeholder="请输入名称或编号" prefix-icon="el-icon-search" v-model="deviceNameOrCode">
                             </el-input>
                         </el-form-item>
                     </el-col>
