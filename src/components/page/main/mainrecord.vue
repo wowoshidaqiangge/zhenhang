@@ -78,7 +78,6 @@
 import { mainrecordpage, mainrecordid } from 'api/main';
 import recordmodal from './recordmodal';
 import bus from '@/components/common/bus';
-// import { sessionGetStore, sessionRemoveStore } from '@/utils/util';
 
 export default {
     name: 'mainrecord',
@@ -147,8 +146,8 @@ export default {
         if (this.init.id) {
             this.handledistribute(0, this.init);
         }
-        this.getmainrecordpage()
-      },
+        this.getmainrecordpage();
+    },
     methods: {
       getmainrecordpage() {
           let obj = {...this.seachinfo,...this.page}
@@ -205,11 +204,7 @@ export default {
         if(num==='0'){
           this.getmainrecordpage()
         }
-    },
-    beforeDestroy() {
-        bus.$off('gotoRecords');
     }
-  }
 };
 </script>
 
