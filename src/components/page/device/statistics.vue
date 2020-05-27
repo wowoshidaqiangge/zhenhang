@@ -2,41 +2,23 @@
     <div class="statistics">
         <div class="top">
             <el-form :inline="true" :model="formInline" class="demo-form-inline">
-                  <el-col :span="1">
-                    <el-form-item >
-                      
-                    </el-form-item>
+                <el-col :span="1">
+                    <el-form-item> </el-form-item>
                 </el-col>
                 <el-col :span="4">
                     <el-form-item label="车间设备:" label-width="80px">
-                        <el-cascader
-                            v-model="value2"
-                            :options="devlist"
-                            :props="optionProps"
-                            @change="caschange"
-                            clearable
-                        ></el-cascader>
+                        <el-cascader v-model="value2" :options="devlist" :props="optionProps" @change="caschange" clearable></el-cascader>
                     </el-form-item>
                 </el-col>
                 <el-col :span="4">
-                     <el-form-item
-                        label="统计:"
-                       
-                        :label-width="formLabelWidth"
-                        prop="selectType"
-                    >
+                    <el-form-item label="统计:" :label-width="formLabelWidth" prop="selectType">
                         <el-select v-model="formInline.selectType" @change="changesel" placeholder="统计">
-                            <el-option
-                                v-for="item in censuelist"
-                                :key="item.value"
-                                :label="item.label"
-                                :value="item.value"
-                            ></el-option>
+                            <el-option v-for="item in censuelist" :key="item.value" :label="item.label" :value="item.value"></el-option>
                         </el-select>
                     </el-form-item>
                 </el-col>
                 <el-col :span="6">
-                    <el-form-item label="日期:"  :label-width="formLabelWidth">
+                    <el-form-item label="日期:" :label-width="formLabelWidth">
                         <el-date-picker
                             v-model="value1"
                             type="daterange"
@@ -48,28 +30,20 @@
                     </el-form-item>
                 </el-col>
                 <el-col :span="2">
-                      <el-form-item label=''  ></el-form-item>
+                    <el-form-item label=""></el-form-item>
                 </el-col>
                 <el-col :span="7">
                     <el-form-item style="width:100%">
-                        
-                        
                         <el-button type="add" icon="el-icon-search" @click="seachinfo">搜索</el-button>
                         <el-button type="success" icon="el-icon-refresh-right" @click="resetting">重置</el-button>
                         <el-button type="add" @click="excelexport">EXCEL导出</el-button>
                     </el-form-item>
                 </el-col>
-               
-                
-               
-                
-              
-               
             </el-form>
         </div>
 
         <div class="bot">
-            <div class="optiontit">{{optiontitle}}</div>
+            <div class="optiontit">{{ optiontitle }}</div>
             <v-chart ref="chart" :options="option" :auto-resize="true" class="chart" id="chart" />
         </div>
     </div>
@@ -139,8 +113,8 @@ export default {
             const start = new Date();
             start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
             let value1 = [start, end];
-            this.$set(this.$data,'value1',value1)
-            this.timechange(value1)
+            this.$set(this.$data, 'value1', value1);
+            this.timechange(value1);
         },
         getoption() {
             this.option = {
@@ -228,14 +202,14 @@ export default {
             this.formInline = {
                 deviceTye: '',
                 deviceId: '',
-                selectType: 'yield',
+                selectType: 'yield'
             };
             this.casarr = ['1', '1144426692996108301'];
             this.value2 = ['1', '1144426692996108301'];
             this.ismore = false;
             this.optiontname = '开市单轴高精密冲床';
             this.optiontitle = '开市单轴高精密冲床产量';
-            this.getDate()
+            this.getDate();
         },
         seachinfo() {
             if (this.formInline.selectType === 'yield') {
@@ -399,37 +373,40 @@ export default {
                             res.data[0].deviceRunList.map(item => {
                                 state.push(item.state);
                             });
-                            if (res.data[0].dateList.length > 0) {
-                                hour = res.data[0].dateList;
-                            } else {
-                                // 不传日期时 默认为小时
-                                hour = [
-                                    '0',
-                                    '01',
-                                    '02',
-                                    '03',
-                                    '04',
-                                    '05',
-                                    '06',
-                                    '07',
-                                    '08',
-                                    '09',
-                                    '10',
-                                    '11',
-                                    '12',
-                                    '13',
-                                    '14',
-                                    '15',
-                                    '16',
-                                    '17',
-                                    '18',
-                                    '19',
-                                    '20',
-                                    '21',
-                                    '22',
-                                    '23'
-                                ];
-                            }
+                            res.data[0].deviceRunList.map(item => {
+                                hour.push(item.dateTime.split(' ')[1]);
+                            });
+                            // if (res.data[0].dateList.length > 0) {
+                            //     hour = res.data[0].dateList;
+                            // } else {
+                            //     // 不传日期时 默认为小时
+                            //     hour = [
+                            //         '0',
+                            //         '01',
+                            //         '02',
+                            //         '03',
+                            //         '04',
+                            //         '05',
+                            //         '06',
+                            //         '07',
+                            //         '08',
+                            //         '09',
+                            //         '10',
+                            //         '11',
+                            //         '12',
+                            //         '13',
+                            //         '14',
+                            //         '15',
+                            //         '16',
+                            //         '17',
+                            //         '18',
+                            //         '19',
+                            //         '20',
+                            //         '21',
+                            //         '22',
+                            //         '23'
+                            //     ];
+                            // }
                             this.drawStateChart(hour, state);
                         }
                     }
@@ -477,19 +454,18 @@ export default {
                 grid: {
                     bottom: '10%',
                     top: '10%',
-
-                    containLabel: true
+                    containLabel: false
                 },
                 xAxis: {
                     type: 'category',
                     data: hour,
-                    boundaryGap: false,
+                    boundaryGap: true,
                     axisTick: {
                         show: false
                     },
                     axisLabel: {
                         interval: 0,
-                        align: 'left'
+                        align: 'center'
                     }
                 },
                 yAxis: {
@@ -595,8 +571,7 @@ export default {
 };
 </script>
 
-
-<style lang='less'>
+<style lang="less">
 .statistics {
     width: 100%;
     height: 100%;
@@ -614,7 +589,7 @@ export default {
         .mr1 {
             float: right;
         }
-        .mr2{
+        .mr2 {
             width: 25%;
         }
         .el-form-item__content {
