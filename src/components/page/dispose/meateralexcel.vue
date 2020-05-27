@@ -65,7 +65,7 @@ export default {
             obj.series = JSON.parse(JSON.stringify(item))["系列"]
             obj.material = JSON.parse(JSON.stringify(item))["材质"]
             obj.unit = JSON.parse(JSON.stringify(item))["单位"]
-            obj.deptName = JSON.parse(JSON.stringify(item))["关联部门"]
+            obj.deptName = JSON.parse(JSON.stringify(item))["设备车间"]
             arr[index] = obj
           })
           this.excelData = arr

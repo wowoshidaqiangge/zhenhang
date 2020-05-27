@@ -35,6 +35,14 @@ export const deviceupdate = query => {
         method: 'put'
     });
 };
+// 设备导入
+export const devicesaveExcel = query => {
+    return request({
+        url: `/api/device/saveList`,
+        data: query,
+        method: 'post'
+    });
+};
 
 //查看设备详情
 export const deviceid = query => {
@@ -209,6 +217,14 @@ export const producetaskadd = query => {
         data: query
     });
 };
+// 物料导入
+export const producetaskaddExcel = query => {
+    return request({
+        url: `/api/producetask/item/saveList`,
+        data: query,
+        method: 'post'
+    });
+};
 
 // 详情
 export const producetaskid = query => {
@@ -261,6 +277,15 @@ export const producetasklist = query => {
         url: `/api/producetask/item/list`,
         method: 'get',
         params: query
+    });
+};
+
+//产品导入
+export const productaddExcel = query => {
+    return request({
+        url: `/api/producetask/product/saveList`,
+        method: 'post',
+        data: query
     });
 };
 

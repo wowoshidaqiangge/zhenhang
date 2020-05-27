@@ -29,7 +29,7 @@
                     </el-col>
                     <el-col :span="3" style="margin-right:10px">
                         <el-form-item label="" prop="productNameOrCode">
-                            <el-input placeholder="请输入设备名称或设备编号" prefix-icon="el-icon-search" v-model="deviceSearch">
+                            <el-input placeholder="请输入设备名称或设备编号" prefix-icon="el-icon-search" v-model="deviceNameOrCode">
                             </el-input>
                         </el-form-item>
                     </el-col>
@@ -86,7 +86,7 @@ export default {
     },
     data() {
         return {
-            deviceSearch: '',
+            deviceNameOrCode: '',
             maintime: [],
             state: '',
             options: [
@@ -169,6 +169,8 @@ export default {
     
        resetting(){
             this.seachinfo= { beginDate:'',endDate:'',state:'',}
+            this.state = '',
+            this.deviceNameOrCode = ''
             this.maintime = []
             this.page.current = 1
             this.getmainrecordpage()
@@ -176,6 +178,8 @@ export default {
         searchmain(){
             this.seachinfo.beginDate = this.maintime[0]
             this.seachinfo.endDate = this.maintime[1]
+            this.seachinfo.state = this.state
+            this.seachinfo.deviceNameOrCode = this.deviceNameOrCode
             this.page.current = 1
             this.getmainrecordpage()
         },
