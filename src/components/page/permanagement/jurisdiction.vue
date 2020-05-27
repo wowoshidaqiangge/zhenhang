@@ -8,21 +8,36 @@
             </el-breadcrumb>
         </div>
         <el-table :data="tableData" stripe style="width: 100%">
-            <el-table-column prop="index" label="序号" align="center"> </el-table-column>
-            <el-table-column prop="name" label="角色名称" align="center"> </el-table-column>
-            <el-table-column prop="isDeleted" align="center" label="用户列表"> </el-table-column>
-            <el-table-column prop="createTime" align="center" label="描述"> </el-table-column>
-            <el-table-column prop="updateTime" align="center" label="负责人"> </el-table-column>
+            <el-table-column prop="index" label="序号" align="center"></el-table-column>
+            <el-table-column prop="name" label="角色名称" align="center"></el-table-column>
+            <el-table-column prop="isDeleted" align="center" label="用户列表"></el-table-column>
+            <el-table-column prop="createTime" align="center" label="描述"></el-table-column>
+            <el-table-column prop="updateTime" align="center" label="负责人"></el-table-column>
             <el-table-column label="操作" width="280" align="center">
                 <template slot-scope="scope">
-                    <el-button type="success" plain icon="el-icon-edit" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-                    <el-button type="info" plain icon="el-icon-delete" class="red" @click="handleDelete(scope.$index, scope.row)"
-                        >删除</el-button
-                    >
+                    <el-button
+                        type="success"
+                        plain
+                        icon="el-icon-edit"
+                        @click="handleEdit(scope.$index, scope.row)"
+                    >编辑</el-button>
+                    <el-button
+                        type="info"
+                        plain
+                        icon="el-icon-delete"
+                        class="red"
+                        @click="handleDelete(scope.$index, scope.row)"
+                    >删除</el-button>
                 </template>
             </el-table-column>
         </el-table>
-        <Modal1 :dialogFormVisible="dialogFormVisible" ref="juri" :tit="tit" @close="close" :isedit="isedit" />
+        <Modal1
+            :dialogFormVisible="dialogFormVisible"
+            ref="juri"
+            :tit="tit"
+            @close="close"
+            :isedit="isedit"
+        />
     </div>
 </template>
 
@@ -47,13 +62,22 @@ export default {
     },
     methods: {
         handleDelete(h, m) {
+            debugger;
             this.$confirm('确定要删除吗？', '提示', {
                 type: 'warning'
             })
                 .then(() => {
                     roleDelete(m).then(res => {
-                        this.getroleList();
-                        this.$message.success('删除成功');
+                        if (res.code === '0') {
+                            this.getroleList();
+                            this.$message.success('删除成功');
+                        } else {
+                            this.$message({
+                                showClose: true,
+                                message: res.msg,
+                                type: 'warning'
+                            });
+                        }
                     });
                 })
                 .catch(() => {});
@@ -90,4 +114,6 @@ export default {
 };
 </script>
 
-<style scoped></style>
+
+<style scoped>
+</style>

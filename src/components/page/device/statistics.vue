@@ -3,12 +3,28 @@
         <div class="top">
             <el-form :inline="true" :model="formInline" class="demo-form-inline">
                 <el-form-item label="车间设备:" class="handle-select mr10 mr11" label-width="80px">
-                    <el-cascader v-model="value2" :options="devlist" :props="optionProps" @change="caschange" clearable> </el-cascader>
+                    <el-cascader
+                        v-model="value2"
+                        :options="devlist"
+                        :props="optionProps"
+                        @change="caschange"
+                        clearable
+                    ></el-cascader>
                 </el-form-item>
 
-                <el-form-item label="统计:" class="handle-select mr10" :label-width="formLabelWidth" prop="selectType">
+                <el-form-item
+                    label="统计:"
+                    class="handle-select mr10"
+                    :label-width="formLabelWidth"
+                    prop="selectType"
+                >
                     <el-select v-model="formInline.selectType" @change="changesel" placeholder="统计">
-                        <el-option v-for="item in censuelist" :key="item.value" :label="item.label" :value="item.value"> </el-option>
+                        <el-option
+                            v-for="item in censuelist"
+                            :key="item.value"
+                            :label="item.label"
+                            :value="item.value"
+                        ></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="日期:" class="handle-select mr10" :label-width="formLabelWidth">
@@ -19,8 +35,7 @@
                         range-separator="至"
                         start-placeholder="开始日期"
                         end-placeholder="结束日期"
-                    >
-                    </el-date-picker>
+                    ></el-date-picker>
                 </el-form-item>
 
                 <el-form-item class="handle-select mr1">
@@ -29,11 +44,14 @@
                 <el-form-item class="handle-select mr1">
                     <el-button type="add" icon="el-icon-search" @click="seachinfo">搜索</el-button>
                 </el-form-item>
+                <el-form-item class="handle-select mr1">
+                    <el-button type="add" @click="excelexport">EXCEL导出</el-button>
+                </el-form-item>
             </el-form>
         </div>
 
         <div class="bot">
-            <div class="optiontit">{{ optiontitle }}</div>
+            <div class="optiontit">{{optiontitle}}</div>
             <v-chart ref="chart" :options="option" :auto-resize="true" class="chart" id="chart" />
         </div>
     </div>
@@ -41,6 +59,7 @@
 
 <script>
 import { selectDeviceRunData, deviceTypeList, deviceList, deviceListByType } from 'api/index';
+import { export2Excel } from '../../../utils/util.js';
 import moment from 'moment';
 import Echarts from 'echarts';
 export default {
@@ -49,8 +68,8 @@ export default {
     data() {
         return {
             value: '',
-            value1: '',
-            value2: [],
+            value1: [],
+            value2: ['1', '1144426692996108301'],
             option: {},
             formLabelWidth: '60px',
 
@@ -80,14 +99,16 @@ export default {
             ],
 
             devlist: [],
-            casarr: [],
-            optiontitle: '设备产量',
-            optionname: '',
+            casarr: ['1', '1144426692996108301'],
+            excellist: [], //表格数据
+            optiontitle: '开市单轴高精密冲床产量',
+            optiontname: '开市单轴高精密冲床',
             ismore: false
         };
     },
     computed: {},
     mounted() {
+        this.getDate();
         this.getselectDeviceRunData();
         this.getdeviceListByType();
         //    this.getdeviceList()
@@ -95,6 +116,14 @@ export default {
     },
 
     methods: {
+        getDate() {
+            const end = new Date();
+            const start = new Date();
+            start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
+            let value1 = [start, end];
+            this.$set(this.$data,'value1',value1)
+            this.timechange(value1)
+        },
         getoption() {
             this.option = {
                 // title: {
@@ -221,15 +250,13 @@ export default {
                 deviceTye: '',
                 deviceId: '',
                 selectType: 'yield',
-                endDate: '',
-                beginDate: ''
             };
-            this.casarr = [];
-            this.value2 = [];
-            this.value1 = [];
+            this.casarr = ['1', '1144426692996108301'];
+            this.value2 = ['1', '1144426692996108301'];
             this.ismore = false;
-            this.optiontname = '';
-            this.optiontitle = '';
+            this.optiontname = '开市单轴高精密冲床';
+            this.optiontitle = '开市单轴高精密冲床产量';
+            this.getDate()
         },
         seachinfo() {
             if (this.formInline.selectType === 'yield') {
@@ -245,7 +272,54 @@ export default {
             this.init();
             this.getselectDeviceRunData();
         },
+        //表格导出
+        excelexport() {
+            if (this.formInline.selectType === 'yield') {
+                //选择产量
+                let column = [
+                    { prop: 'yield', label: '产量' },
+                    { prop: 'dateList', label: '日期' }
+                ];
+                export2Excel(column, this.excellist, '产量统计');
+            } else {
+                //状态统计
+                if (this.ismore) {
+                    //多日
+                    let excellist = this.excellist[0].deviceRunList;
+                    let dateArr = this.excellist[0].deviceRunTimeList;
+                    excellist.forEach((item, index) => {
+                        item.date = dateArr[index].dateTime;
+                    });
+                    let column = [
+                        { prop: 'date', label: '日期' },
+                        { prop: 'offLength', label: '关机时长' },
+                        { prop: 'onLength', label: '开机时长' },
+                        { prop: 'runLength', label: '运行时长' }
+                    ];
+                    export2Excel(column, excellist, '运行状态统计');
+                } else {
+                    let excellist = this.excellist[0].deviceRunList;
+                    if (excellist.length > 0) {
+                        excellist.forEach(item => {
+                            if (item.state === '0') {
+                                item.stateText = '关机';
+                            } else if (item.state === '1') {
+                                item.stateText = '开机';
+                            } else if (item.state === '2') {
+                                item.stateText = '运行';
+                            }
+                        });
+                        let column = [
+                            { prop: 'dateTime', label: '时间' },
+                            { prop: 'stateText', label: '运行状态' }
+                        ];
+                        export2Excel(column, excellist, '运行状态统计');
+                    }
+                }
+            }
+        },
         timechange(e) {
+            console.log(e);
             this.formInline.beginDate = moment(e[0]).format('YYYY-MM-DD');
             this.formInline.endDate = moment(e[1]).format('YYYY-MM-DD');
             if (this.formInline.beginDate !== this.formInline.endDate) {
@@ -267,6 +341,7 @@ export default {
             }
             selectDeviceRunData(this.formInline).then(res => {
                 if (res.code === '0') {
+                    this.excellist = res.data;
                     var nowtime = [];
                     var num = [];
                     var num1 = [];
@@ -345,40 +420,37 @@ export default {
                             res.data[0].deviceRunList.map(item => {
                                 state.push(item.state);
                             });
-                            res.data[0].deviceRunList.map(item => {
-                                hour.push(item.dateTime.split(' ')[1]);
-                            });
-                            // if (res.data[0].dateList.length > 0) {
-                            //     hour = res.data[0].dateList;
-                            // } else {
-                            //     // 不传日期时 默认为小时
-                            //     hour = [
-                            //         '0',
-                            //         '01',
-                            //         '02',
-                            //         '03',
-                            //         '04',
-                            //         '05',
-                            //         '06',
-                            //         '07',
-                            //         '08',
-                            //         '09',
-                            //         '10',
-                            //         '11',
-                            //         '12',
-                            //         '13',
-                            //         '14',
-                            //         '15',
-                            //         '16',
-                            //         '17',
-                            //         '18',
-                            //         '19',
-                            //         '20',
-                            //         '21',
-                            //         '22',
-                            //         '23'
-                            //     ];
-                            // }
+                            if (res.data[0].dateList.length > 0) {
+                                hour = res.data[0].dateList;
+                            } else {
+                                // 不传日期时 默认为小时
+                                hour = [
+                                    '0',
+                                    '01',
+                                    '02',
+                                    '03',
+                                    '04',
+                                    '05',
+                                    '06',
+                                    '07',
+                                    '08',
+                                    '09',
+                                    '10',
+                                    '11',
+                                    '12',
+                                    '13',
+                                    '14',
+                                    '15',
+                                    '16',
+                                    '17',
+                                    '18',
+                                    '19',
+                                    '20',
+                                    '21',
+                                    '22',
+                                    '23'
+                                ];
+                            }
                             this.drawStateChart(hour, state);
                         }
                     }
@@ -388,6 +460,7 @@ export default {
         // 绘制阶梯状态图（柱状图模拟，无法切换折线/柱状）
 
         drawStateChart(hour, state) {
+            // debugger;
             let myChart = Echarts.init(document.getElementById('chart'));
             // 使用 aidState做填充，fakeState显示小线条
             var aidState = [];
@@ -425,21 +498,19 @@ export default {
                 grid: {
                     bottom: '10%',
                     top: '10%',
-                    containLabel: false
+
+                    containLabel: true
                 },
                 xAxis: {
                     type: 'category',
                     data: hour,
-                    boundaryGap: true,
+                    boundaryGap: false,
                     axisTick: {
                         show: false
                     },
-                    // axisLine: {
-                    //     show: false
-                    // },
                     axisLabel: {
                         interval: 0,
-                        align: 'center'
+                        align: 'left'
                     }
                 },
                 yAxis: {
@@ -545,7 +616,8 @@ export default {
 };
 </script>
 
-<style lang="less">
+
+<style lang='less'>
 .statistics {
     width: 100%;
     height: 100%;

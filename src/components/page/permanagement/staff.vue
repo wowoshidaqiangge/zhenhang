@@ -11,7 +11,6 @@
             :default-expand-all='true'
             :render-content="renderContent"
             @node-click="handleNodeClick">
-
         </el-tree>
       </div>
       <div class="right" >
@@ -151,7 +150,6 @@ export default {
                 { prop:'phone',label:'手机号'},
                 { prop:'deptName',label:'部门'},
                 { prop:'icCard',label:'IC卡'},
-              
                 { prop:'createTime',label:'创建时间'},
             ],
             page:{
@@ -243,12 +241,17 @@ export default {
         init(){
             this.page ={current:1,size:10}
         },
-        handleNodeClick(){
-
+        // 组织架构列表点击
+        handleNodeClick(data){
+             this.seachinfo.deptId = data.id
+             this.getuserPage()
         },
         getuserPage(){
             this.botloading = true
             let obj = {...this.seachinfo,...this.page}
+            if(this.seachinfo.deptId){
+                obj.deptId = this.seachinfo.deptId
+            }
             userPage(obj).then(res=>{
                 this.botloading = false
                 if(res.code==='0'){
