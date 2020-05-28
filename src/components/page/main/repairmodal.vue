@@ -81,26 +81,20 @@
             
             <el-col :span="11">
                  <el-form-item label="维修人" :label-width="formLabelWidth" class="formitem formitem1" prop="repairUserId">
-                        <el-select v-model="form.repairUserId" placeholder="请选择">
-                        <el-option
-                                v-for="item in userlist"
-                                :key="item.id"
-                                :label="item.name"
-                                :value="item.id">
-                            </el-option>
-                        </el-select>
+                        <el-cascader
+                                v-model="form.repairUserId"
+                                :options="userlist"
+                                :props="casprops"
+                            ></el-cascader>
                 </el-form-item>
              </el-col>
             <el-col :span="11">
                  <el-form-item label="验收人" :label-width="formLabelWidth" class="formitem formitem1" prop="checkUserId">
-                        <el-select v-model="form.checkUserId" placeholder="请选择">
-                        <el-option
-                                v-for="item in userlist"
-                                :key="item.id"
-                                :label="item.name"
-                                :value="item.id">
-                            </el-option>
-                        </el-select>
+                        <el-cascader
+                                v-model="form.checkUserId"
+                                :options="userlist"
+                                :props="casprops"
+                            ></el-cascader>
                 </el-form-item>
              </el-col>
            
@@ -125,7 +119,7 @@
 
 <script>
 import { mainrepairid, mainrepairadd, mainrepairput, devInfo} from 'api/main'
-import {userPage} from 'api/index'
+import {userListByDept} from 'api/index'
 import { deviceList} from 'api/index'
 import moment from 'moment'
 export default {
@@ -190,7 +184,12 @@ export default {
 
             },
             timelist:[{value:'year',label:'按年'},{value:'month',label:'按月'}],
-            userlist:[]
+            userlist:[],
+            casprops: {
+                label: 'title',
+                value: 'id',
+                children: 'userList'
+            }
         }
     },
     created(){
@@ -216,9 +215,9 @@ export default {
         },
         // 获取用户列表
         getuserPage(){
-            userPage().then(res=>{
+           userListByDept().then(res=>{
                 if(res.code==='0'){
-                    this.userlist = res.data.records
+                    this.userlist = res.data;
                 }
             })
         },
@@ -267,6 +266,9 @@ export default {
        },
        marksure(form){
             this.$refs[form].validate((valid) => {
+                let formObj = this.form
+                formObj.checkUserId = this.form.checkUserId[1]
+                formObj.repairUserId = this.form.repairUserId[1]
                 if (valid) {
                     if(this.tit==='新增'){
                         mainrepairadd(this.form).then(res=>{

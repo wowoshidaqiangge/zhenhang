@@ -56,7 +56,7 @@
         <div class="bot">
             <el-tabs v-model="activeName" type="card" class="tab">
                 <el-tab-pane label="图形" name="first">
-                    <Charts ref="charts1" />
+                    <Charts ref="charts1" :unit='unit' />
                 </el-tab-pane>
                 <el-tab-pane label="表格" name="second">
                     <el-table class="secondtab" :data="tableData" style="width: 100%">
@@ -95,7 +95,8 @@ export default {
             echarttitle: '车间生产绩效',
             tableData: [],
             options: [],
-            echarttitlename: ''
+            echarttitlename: '',
+            unit:'单位:天'
         };
     },
     created() {

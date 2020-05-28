@@ -2,7 +2,7 @@
     <div class="productmodal">
         <el-dialog :title="tit" :destroy-on-close="isclose" :visible.sync="dialogFormVisible" width="60%" :before-close="beforclose" center>
             <el-row>
-                <el-form :model="form" ref="form">
+                <el-form :model="form" ref="form" :rules="rules">
                     <el-col :span="11">
                         <el-form-item label="产品编码" :label-width="formLabelWidth" class="formitem formitem1" prop="productCode">
                             <el-input v-model="form.productCode"></el-input>
@@ -21,7 +21,7 @@
                     <el-col :span="11"></el-col>
 
                     <el-col :span="11">
-                        <el-form-item label="物料选择" :label-width="formLabelWidth" class="formitem formitem1">
+                        <el-form-item label="物料选择" :label-width="formLabelWidth" class="formitem formitem1" prop="stuff">
                             <el-cascader
                                 :props="casprops"
                                 v-model="infolist"
@@ -143,7 +143,10 @@ export default {
             },
             formLabelWidth: '90px',
             rules: {
-                name: [{ required: true, message: '请输入', trigger: 'blur' }]
+                productCode: [{ required: true, message: '请输入产品编码', trigger: 'blur' }],
+                productName: [{ required: true, message: '请输入产品名称', trigger: 'blur' }],
+                model: [{ required: true, message: '请输入规格型号', trigger: 'blur' }],
+                stuff: [{ required: true, message: '请选择物料', trigger: 'blur' }]
             },
             tableData1: [],
             columnList: [

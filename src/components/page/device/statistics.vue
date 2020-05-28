@@ -95,11 +95,13 @@ export default {
             excellist: [], //表格数据
             optiontitle: '开市单轴高精密冲床产量',
             optiontname: '开市单轴高精密冲床',
-            ismore: false
+            ismore: false,
+            unit:''
         };
     },
     computed: {},
     mounted() {
+        this.unit='单位:件'
         this.getDate();
         this.getselectDeviceRunData();
         this.getdeviceListByType();
@@ -118,14 +120,15 @@ export default {
         },
         getoption() {
             this.option = {
-                // title: {
-                //     text: this.optiontitle,
-                //     left:'center',
-                //     top:20,
-                //     textStyle:{
-                //         color:'#525f86'
-                //     }
-                // },
+                title: {
+                    text: this.unit,
+                    left:40,
+                    top:20,
+                    textStyle:{
+                        color:'#525f86',
+                        fontSize:14
+                    }
+                },
                 tooltip: {
                     trigger: 'axis',
                     axisPointer: {
@@ -209,6 +212,7 @@ export default {
             this.ismore = false;
             this.optiontname = '开市单轴高精密冲床';
             this.optiontitle = '开市单轴高精密冲床产量';
+            this.unit='单位:件'
             this.getDate();
         },
         seachinfo() {
@@ -216,6 +220,7 @@ export default {
                 this.optiontitle = this.optiontname + '产量';
             } else {
                 this.optiontitle = this.optiontname + '运行状态';
+                this.unit = '单位:小时'
             }
 
             this.getselectDeviceRunData();

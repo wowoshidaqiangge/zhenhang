@@ -14,6 +14,9 @@ export default {
         },
         devicelist:{
             type:Array
+        },
+        unit:{
+            type:String
         }
     },
     data() {
@@ -32,14 +35,15 @@ export default {
     methods: {
           getoption(){
             this.option={
-                    // title: {
-                    //     text: this.optiontitle,
-                    //     left:'center',
-                    //     top:20,
-                    //     textStyle:{
-                    //         color:'#525f86'
-                    //     }
-                    // },
+                    title: {
+                        text: this.unit,
+                        left:30,
+                        top:0,
+                        fontSize:12,
+                        textStyle:{
+                            color:'#000000'
+                        }
+                    },
                     tooltip: {
                         trigger: 'axis',
                         axisPointer: {            // 坐标轴指示器，坐标轴触发有效
@@ -50,7 +54,7 @@ export default {
                         left: '3%',
                         right: '3%',
                         bottom: '8%',
-                        top: '5%',
+                        top: '7%',
                         containLabel:true
                     
                     },

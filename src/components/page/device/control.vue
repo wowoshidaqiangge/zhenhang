@@ -8,7 +8,7 @@
                 <div class='row-bg' v-for='h in item.deviceRunVo' :key='h.id'>
                     <div class="p1"><span class="icon"></span><span class="tit" > {{h.deviceName}}</span><span class="img"><img src='~@/assets/img/wifi.png'/></span></div>
                     <div class="p1">
-                        <p><span>开机时长:</span><span> {{h.onLength}}</span></p>
+                        <p><span>开机时长:</span><span> {{h.onLength}}h</span></p>
                         <p>
                           <span class="icon1 icon2" v-if="h.state=='1' "></span> 
                           <span class="icon1 icon3" v-if="h.state=='2' "></span> 
@@ -17,12 +17,12 @@
                         </p>
                     </div>
                     <div class="p1">
-                        <p><span>累计运行:</span><span> {{h.runLength}}</span></p>
-                        <p><span>当日产量:</span><span> {{h.dayProduce}}</span></p>
+                        <p><span>累计运行:</span><span> {{h.runLength}}h</span></p>
+                        <p><span>当日产量:</span><span> {{h.dayProduce}}件</span></p>
                     </div>
                     <div class="p1">
                         <p><span>使用效率:</span><span style="color:#EB6F43 "> {{h.useRate}}</span></p>
-                        <p><span>累计产量:</span><span> {{h.totalProduce}}</span></p>
+                        <p><span>累计产量:</span><span> {{h.totalProduce}}件</span></p>
                     </div>
                 </div>
            

@@ -206,7 +206,9 @@ export default {
         getdept() {
             dept().then(res => {
                 if (res.code === '0') {
+                   
                     this.deptlist = res.data;
+                     console.log(this.deptlist)
                 }
             });
         },
