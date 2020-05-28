@@ -10,13 +10,13 @@
         <div class="header-right">
             <div class="header-user-con">
                 <!-- 全屏显示 -->
-                <div class="btn-fullscreen" @click="handleFullScreen">
+                <div class="btn-fullscreen" @click="handleFullScreen" v-if="!isheadman">
                     <el-tooltip effect="dark" :content="fullscreen ? `取消全屏` : `全屏`" placement="bottom">
                         <i class="el-icon-rank"></i>
                     </el-tooltip>
                 </div>
                 <!-- 消息中心 -->
-                <el-popover placement="bottom" width="400" trigger="click">
+                <el-popover placement="bottom" width="400" trigger="click" v-if="!isheadman">
                     <!-- <el-divider></el-divider> -->
                     <el-table :data="tableData">
                         <el-table-column property="deviceName" label="设备名称"></el-table-column>
@@ -75,7 +75,8 @@ export default {
                 endDate: ''
             },
             tableData: [],
-            totals: 0
+            totals: 0,
+            isheadman:false
         };
     },
     computed: {
@@ -94,11 +95,17 @@ export default {
         this.page.beginDate = this.getToday();
         this.page.endDate = this.page.beginDate;
         this.getmainrecordpage();
+        let that = this
+         bus.$on('isman', e=>{
+            this.isheadman = true
+        })
     },
     mounted() {
+        
         if (document.body.clientWidth < 1500) {
             this.collapseChage();
         }
+       
     },
     beforeDestroy() {
         if (this.timer) {
@@ -181,7 +188,6 @@ export default {
                     this.pagesize = parseInt(res.data.current);
                     this.totals = parseInt(res.data.total);
                     this.tableData = res.data.records;
-                    console.log(this.tableData);
                 }
             });
         },

@@ -19,7 +19,6 @@ const router = new Router({
                     component: () => import(/* webpackChunkName: "dashboard" */ '../components/page/Dashboard.vue'),
                     meta: { title: '系统首页' }
                 },
-
                 // 设备管理
                 {
                     path: '/control',

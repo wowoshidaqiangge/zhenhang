@@ -26,6 +26,7 @@
                     show-checkbox
                     ref='tree'
                     :default-checked-keys="checklist"
+                    @check='checktree'
                  >
                 </el-tree>
             </el-form-item>
@@ -124,12 +125,16 @@ export default {
        },
        //初始化
        init(){
-          this.ruleForm = { menuIds:[],name:'',remark:''}
+          this.ruleForm = { menuIds:[],pmenuIds:[],name:'',remark:''}
           this.checklist = []
+       },
+       checktree(data,node){
+           this.ruleForm.menuIds = node.checkedKeys
+           this.ruleForm.pmenuIds = node.halfCheckedKeys
        },
        marksure(ruleForm){
            this.sureload = true
-            this.ruleForm.menuIds = this.$refs.tree.getCheckedKeys()
+            
             this.$refs[ruleForm].validate((valid) => {
                 if (valid) {
                   if(!this.isedit){

@@ -42,7 +42,7 @@
                         
                     </el-col>
                     <el-col :span="4">
-                        <el-form-item label="" >
+                        <el-form-item label="" class="bot">
                                 <el-button type="add" icon="el-icon-search" @click="seachinfo1">搜索</el-button>
                                 <el-button type="success" icon="el-icon-refresh-right" @click="resetting">重置</el-button>
                         </el-form-item>
@@ -308,6 +308,12 @@ export default {
             .top{
                 height: 50px;
                 margin-top: 10px;
+                .bot {
+                     .el-form-item__content{
+                    // width: calc(100% - 80px);
+                        float: right;
+                    }
+                }
             }
             .bot{
                 height: calc(100% - 45px);

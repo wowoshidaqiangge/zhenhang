@@ -243,6 +243,7 @@ export default {
         },
         //产品详情
         getproductid(id) {
+          
             this.productId = id.id;
             productid(id).then(res => {
                 if (res.code == '0') {
@@ -321,8 +322,9 @@ export default {
         },
         marksure(form) {
             let arr = [];
+            console.log(this.tableData1)
             this.tableData1.map(item => {
-                arr.push({ itemId: item.id, itemCount: item.itemCount });
+                arr.push({ itemCode: item.itemCode, itemCount: item.itemCount });
             });
             this.form.productItemList = arr;
             this.$refs[form].validate(valid => {

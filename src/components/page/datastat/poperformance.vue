@@ -38,8 +38,8 @@
                         </el-form-item>
                     </el-col>
 
-                    <el-col :span="5" style="margin-left:20px">
-                        <el-form-item label>
+                    <el-col :span="5" style="margin-left:20px" >
+                        <el-form-item label class="bot">
                             <el-button type="add" icon="el-icon-search" @click="seachinfo1">搜索</el-button>
                             <el-button
                                 type="success"
@@ -187,9 +187,13 @@ export default {
         .datetime {
             width: 100%;
         }
-        // .el-form-item__content{
-        //     width: calc(100% - 80px);
-        // }
+        .bot{
+            .el-form-item__content{
+            // width: calc(100% - 80px);
+                float: right;
+            }
+        }
+        
         // .demo-form-inline{
         //     margin-top: 9px;
         // }

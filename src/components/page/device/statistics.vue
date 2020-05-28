@@ -594,6 +594,7 @@ export default {
         }
         .el-form-item__content {
             width: calc(100% - 80px);
+            float: right;
         }
         .demo-form-inline {
             margin-top: 9px;

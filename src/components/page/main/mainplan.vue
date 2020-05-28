@@ -81,6 +81,10 @@ export default {
                     res.data.records.map((item, index) => {
                         item.period = item.period == 'month' ? '月' : '年';
                         item.createTime = item.createTime.split(' ')[0];
+                        if(item.dateTime){
+                            item.dateTime = item.dateTime + ':00'
+                        }
+                        
                         item.index = index + 1;
                     });
                     this.pagesize = parseInt(res.data.current);

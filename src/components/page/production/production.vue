@@ -274,7 +274,7 @@ export default {
         handleEdit(h,m){
              this.tit = '详情'
              this.$refs.promodal.getproduceTaskid(m)
-              this.$refs.promodal.getProduceProgress(m)
+             this.$refs.promodal.getProduceProgress(m)
              
              this.dialogFormVisibledit = true
            
@@ -301,6 +301,8 @@ export default {
                 if(res.code==='0'){
                     this.$message.success(res.msg)
                     this.getproduceTaskpage()
+                }else{
+                    this.$message.error(res.msg)
                 }
             })
         }

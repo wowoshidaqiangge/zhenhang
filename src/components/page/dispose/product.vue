@@ -41,6 +41,9 @@
               <el-table
                 :data="tableData"
                 stripe
+                v-loading='isload'
+                element-loading-text="加载中..."
+                element-loading-spinner="el-icon-loading"
                 :height="screenWidth"
                 style="width: 100%">
                   <el-table-column
@@ -101,7 +104,7 @@
               </div> 
         </div>
         <productModal :dialogFormVisible='dialogFormVisible' @close='close' :tit='tit' ref='promodal'/>
-        <productexcel :dialogFormVisible1='dialogFormVisible1' @close='close' :tit='tit' ref='promodal'/>
+        <productexcel :dialogFormVisible1='dialogFormVisible1' @close='close' :tit='tit' />
   </div>
 </template>
 
@@ -146,7 +149,8 @@ export default {
             options:[
               {value:'0',label:'禁用'},
               {value:'1',label:'正常'},
-            ]
+            ],
+            isload:false
         }
     },
      computed: {
@@ -174,7 +178,9 @@ export default {
         },
         getproductpage(){
             let obj = {...this.seachinfo,...this.page}
+            this.isload = true
             productpage(obj).then(res=>{
+               this.isload = false
                if(res.code === '0'){
                   res.data.records.map((item,index)=>{
                       item.index = index + 1

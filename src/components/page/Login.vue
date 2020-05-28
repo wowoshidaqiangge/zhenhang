@@ -39,6 +39,7 @@
 <script>
 import { login } from 'api/index';
 import { mapActions, mapState } from 'vuex';
+import bus from './../common/bus'
 export default {
     data: function() {
         return {
@@ -84,6 +85,7 @@ export default {
                         localStorage.setItem('TagsList', '');
 
                         if (res.roleId === '1000') {
+                            bus.$emit('isman', true);
                             this.$router.push('/headman');
                         } else {
                             this.$router.push('/');

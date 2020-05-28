@@ -99,7 +99,7 @@
 </template>
 
 <script>
-import { dept, rolePage, authUser, authputUser, authputUserid } from 'api/index';
+import { dept, roleList, authUser, authputUser, authputUserid } from 'api/index';
 import SelectTree from '../../common/treeSelect';
 export default {
     name: 'staffmodal',
@@ -163,7 +163,7 @@ export default {
     },
     created() {
         this.getdept();
-        this.getrolePage();
+        this.getroleList();
     },
     mounted() {
         setTimeout(() => {
@@ -195,11 +195,11 @@ export default {
                 }
             });
         },
-        getrolePage() {
-            rolePage().then(res => {
+        getroleList() {
+            roleList().then(res => {
                 if (res.code === '0') {
                     //    this.rolelist =[{name:'班组长',id:'1000'}]
-                    this.rolelist.push(...res.data.records);
+                    this.rolelist.push(...res.data);
                 }
             });
         },
