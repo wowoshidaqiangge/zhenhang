@@ -52,7 +52,7 @@
                             <el-input type="textarea" :rows="3" :disabled="!ifEdt" v-model="form.remark"></el-input>
                         </el-form-item>
                     </el-col>
-                    <el-col :span="11">
+                     <!--<el-col :span="11">
                         <el-form-item label="设备编号" :label-width="formLabelWidth" class="formitem formitem1" prop="id">
                             <el-input
                                 placeholder="请输入内容"
@@ -101,7 +101,7 @@
                  <el-form-item  class="formitem formitem1" prop="content">
                         <el-input type="textarea" :rows="3"  :disabled="!ifEdt" v-model="form.content" ></el-input>
                 </el-form-item>
-             </el-col>
+             </el-col> -->
            
         </el-form>
     </el-row>
@@ -163,7 +163,8 @@ export default {
         //   this.getdeviceToTypeList()
         //   this.getuserPage()
     },
-    mounted() {},
+    mounted() {
+    },
     watch: {},
     methods: {
         //查看详情
