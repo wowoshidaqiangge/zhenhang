@@ -6,17 +6,16 @@
             <i v-else class="el-icon-s-unfold"></i>
         </div>
         <div class="logo">臻航生产管理系统</div>
-
         <div class="header-right">
             <div class="header-user-con">
                 <!-- 全屏显示 -->
-                <div class="btn-fullscreen" @click="handleFullScreen" v-if="!isheadman">
+                <div class="btn-fullscreen" @click="handleFullScreen" v-if="fullScreenVis">
                     <el-tooltip effect="dark" :content="fullscreen ? `取消全屏` : `全屏`" placement="bottom">
                         <i class="el-icon-rank"></i>
                     </el-tooltip>
                 </div>
                 <!-- 消息中心 -->
-                <el-popover placement="bottom" width="400" trigger="click" v-if="!isheadman">
+                <el-popover placement="bottom" width="400" trigger="click" v-if="msgVis">
                     <!-- <el-divider></el-divider> -->
                     <el-table :data="tableData">
                         <el-table-column property="deviceName" label="设备名称"></el-table-column>
@@ -39,7 +38,7 @@
                 </div>
                 <!-- 用户名下拉菜单 -->
                 <el-dropdown class="user-name" trigger="click" @command="handleCommand">
-                    <span class="el-dropdown-link">
+                    <span class="el-dropdown-link" v-bind:style="fixColorObj">
                         {{ username }}
                         <i class="el-icon-caret-bottom"></i>
                     </span>
@@ -76,8 +75,26 @@ export default {
             },
             tableData: [],
             totals: 0,
-            isheadman:false
+            isheadman: false
         };
+    },
+    props: {
+        fullScreenVis: {
+            type: Boolean,
+            default: true
+        },
+        msgVis: {
+            type: Boolean,
+            default: true
+        },
+        fixColorObj: {
+            type: Object,
+            default() {
+                return {
+                    color: '#606266'
+                };
+            }
+        }
     },
     computed: {
         username() {
@@ -95,17 +112,15 @@ export default {
         this.page.beginDate = this.getToday();
         this.page.endDate = this.page.beginDate;
         this.getmainrecordpage();
-        let that = this
+        let that = this;
         //  bus.$on('isman', e=>{
         //     this.isheadman = true
         // })
     },
     mounted() {
-        
         if (document.body.clientWidth < 1500) {
             this.collapseChage();
         }
-       
     },
     beforeDestroy() {
         if (this.timer) {

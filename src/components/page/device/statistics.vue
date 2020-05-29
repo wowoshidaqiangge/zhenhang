@@ -41,10 +41,32 @@
                 </el-col>
             </el-form>
         </div>
-
+        <div class="echarttit">
+            {{ echarttitle }}
+        </div>
+        <!-- <div class="bot"> -->
+        <!-- <div class="optiontit">{{ optiontitle }}</div>
+        <!-- </div> -->
+        <!-- TDDO -->
         <div class="bot">
-            <div class="optiontit">{{ optiontitle }}</div>
-            <v-chart ref="chart" :options="option" :auto-resize="true" class="chart" id="chart" />
+            <el-tabs v-model="activeName" type="card" class="tab">
+                <el-tab-pane label="图形" name="first">
+                    <v-chart ref="chart" :options="option" :auto-resize="true" class="chart" id="chart" />
+                </el-tab-pane>
+                <el-tab-pane label="表格" name="second">
+                    <el-table
+                        class="secondtab"
+                        :data="excellist"
+                        v-loading="isload"
+                        element-loading-text="加载中..."
+                        element-loading-spinner="el-icon-loading"
+                        style="width: 100%"
+                    >
+                        <el-table-column prop="dateList" label="日期" align="center" />
+                        <el-table-column prop="yield" label="产量" align="center" />
+                    </el-table>
+                </el-tab-pane>
+            </el-tabs>
         </div>
     </div>
 </template>
@@ -64,7 +86,6 @@ export default {
             value2: ['1', '1144426692996108301'],
             option: {},
             formLabelWidth: '60px',
-
             optionProps: {
                 // checkStrictly: true,
                 value: 'id',
@@ -74,7 +95,6 @@ export default {
             formInline: {
                 deviceTye: '',
                 deviceId: '',
-
                 selectType: 'yield',
                 endDate: '',
                 beginDate: ''
@@ -89,19 +109,20 @@ export default {
                     label: '运行状态'
                 }
             ],
-
             devlist: [],
             casarr: ['1', '1144426692996108301'],
+            echarttitle: '车间设备统计',
+            echarttitlename: '',
             excellist: [], //表格数据
             optiontitle: '开市单轴高精密冲床产量',
             optiontname: '开市单轴高精密冲床',
             ismore: false,
-            unit:''
+            unit: ''
         };
     },
     computed: {},
     mounted() {
-        this.unit='单位:件'
+        this.unit = '单位:件';
         this.getDate();
         this.getselectDeviceRunData();
         this.getdeviceListByType();
@@ -122,11 +143,11 @@ export default {
             this.option = {
                 title: {
                     text: this.unit,
-                    left:40,
-                    top:20,
-                    textStyle:{
-                        color:'#525f86',
-                        fontSize:14
+                    left: 40,
+                    top: 20,
+                    textStyle: {
+                        color: '#525f86',
+                        fontSize: 14
                     }
                 },
                 tooltip: {
@@ -212,7 +233,7 @@ export default {
             this.ismore = false;
             this.optiontname = '开市单轴高精密冲床';
             this.optiontitle = '开市单轴高精密冲床产量';
-            this.unit='单位:件'
+            this.unit = '单位:件';
             this.getDate();
         },
         seachinfo() {
@@ -220,9 +241,8 @@ export default {
                 this.optiontitle = this.optiontname + '产量';
             } else {
                 this.optiontitle = this.optiontname + '运行状态';
-                this.unit = '单位:小时'
+                this.unit = '单位:小时';
             }
-
             this.getselectDeviceRunData();
         },
         // 重置
@@ -375,6 +395,7 @@ export default {
                         } else {
                             let state = [];
                             let hour = [];
+                            this.excellist = res.data[0].deviceRunList;
                             res.data[0].deviceRunList.map(item => {
                                 state.push(item.state);
                             });
@@ -604,6 +625,14 @@ export default {
         .demo-form-inline {
             margin-top: 9px;
         }
+    }
+    .echarttit {
+        text-align: center;
+        font-size: 18px;
+        letter-spacing: 1px;
+        font-weight: 600;
+        margin-bottom: -60px;
+        line-height: 69px;
     }
     .bot {
         flex: 1;

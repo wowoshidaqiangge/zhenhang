@@ -22,7 +22,6 @@ export default {
     data() {
         return {
             option:{
-
             },
             series:[],
             xAxisarr:[]
@@ -30,10 +29,12 @@ export default {
         }
     },
     created(){
-        
+
     },
     methods: {
-          getoption(){
+        showLoading(){},
+        hideLoading(){},
+        getoption(){
             this.option={
                     title: {
                         text: this.unit,
@@ -56,13 +57,13 @@ export default {
                         bottom: '8%',
                         top: '7%',
                         containLabel:true
-                    
+
                     },
                     toolbox: {
                         show: true,
                         feature: {
                             // dataView: {
-                            //     show: true, 
+                            //     show: true,
                             //     title:'数据视图',
                             //     // readOnly: false,
                             // },
@@ -95,9 +96,9 @@ export default {
                             barMaxWidth: 30
                        });
                 })
-                
+
                  this.series = series
-                 
+
                 }
             },
             getxAxis(arr){

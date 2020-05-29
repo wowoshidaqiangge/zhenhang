@@ -2,7 +2,7 @@
     <div class="productmodal">
         <el-dialog :title="tit" :destroy-on-close="isclose" :visible.sync="dialogFormVisible" width="60%" :before-close="beforclose" center>
             <el-row>
-                <el-form :model="form" ref="form" :rules="rules">
+                <el-form id="addProduct" :model="form" ref="form" :rules="rules">
                     <el-col :span="11">
                         <el-form-item label="产品编码" :label-width="formLabelWidth" class="formitem formitem1" prop="productCode">
                             <el-input v-model="form.productCode"></el-input>
@@ -246,7 +246,6 @@ export default {
         },
         //产品详情
         getproductid(id) {
-          
             this.productId = id.id;
             productid(id).then(res => {
                 if (res.code == '0') {
@@ -325,7 +324,7 @@ export default {
         },
         marksure(form) {
             let arr = [];
-            console.log(this.tableData1)
+            console.log(this.tableData1);
             this.tableData1.map(item => {
                 arr.push({ itemCode: item.itemCode, itemCount: item.itemCount });
             });
@@ -432,5 +431,10 @@ export default {
 
 .dialog-footer {
     text-align: end;
+}
+</style>
+<style scoped>
+#addProduct >>> .el-cascader {
+    width: 100%;
 }
 </style>

@@ -4,17 +4,11 @@
             <el-row>
                 <el-form :model="seachinfo" ref="seachinfo" class="demo-ruleForm">
                     <el-col :span="9">
-                        <el-form-item label>
-                           
-                        </el-form-item>
+                        <el-form-item label> </el-form-item>
                     </el-col>
                     <el-col :span="3" style="margin:0 20px">
                         <el-form-item label="车间" label-width="50px" prop="state">
-                            <el-select
-                                v-model="seachinfo.state"
-                                @change="changesel"
-                                placeholder="请选择车间"
-                            >
+                            <el-select v-model="seachinfo.state" @change="changesel" placeholder="请选择车间">
                                 <el-option
                                     v-for="item in options"
                                     :key="item.deptId"
@@ -38,28 +32,31 @@
                         </el-form-item>
                     </el-col>
 
-                    <el-col :span="5" style="margin-left:20px" >
+                    <el-col :span="5" style="margin-left:20px">
                         <el-form-item label class="bot">
                             <el-button type="add" icon="el-icon-search" @click="seachinfo1">搜索</el-button>
-                            <el-button
-                                type="success"
-                                icon="el-icon-refresh-right"
-                                @click="resetting"
-                            >重置</el-button>
-                             <el-button type="add" @click="excelexport">EXCEL导出</el-button>
+                            <el-button type="success" icon="el-icon-refresh-right" @click="resetting">重置</el-button>
+                            <el-button type="add" @click="excelexport">EXCEL导出</el-button>
                         </el-form-item>
                     </el-col>
                 </el-form>
             </el-row>
         </div>
-        <div class="echarttit">{{echarttitle}}</div>
+        <div class="echarttit">{{ echarttitle }}</div>
         <div class="bot">
             <el-tabs v-model="activeName" type="card" class="tab">
                 <el-tab-pane label="图形" name="first">
-                    <Charts ref="charts1" :unit='unit' />
+                    <Charts ref="charts1" :unit="unit" />
                 </el-tab-pane>
                 <el-tab-pane label="表格" name="second">
-                    <el-table class="secondtab" :data="tableData" style="width: 100%">
+                    <el-table
+                        class="secondtab"
+                        :data="tableData"
+                        v-loading="isload"
+                        element-loading-text="加载中..."
+                        element-loading-spinner="el-icon-loading"
+                        style="width: 100%"
+                    >
                         <el-table-column prop="taskNumber" label="生产工单号" align="center"></el-table-column>
                         <el-table-column prop="planDay" label="计划时长(H)" align="center"></el-table-column>
                         <el-table-column prop="realDay" align="center" label="完成时长(H)"></el-table-column>
@@ -96,7 +93,8 @@ export default {
             tableData: [],
             options: [],
             echarttitlename: '',
-            unit:'单位:天'
+            unit: '单位:天',
+            isload: false
         };
     },
     created() {
@@ -120,11 +118,13 @@ export default {
             });
         },
         getselectProduceWorkRate() {
+            this.isload = true;
             selectProduceWorkRate(this.seachinfo).then(res => {
                 let a = [];
                 let b = [];
                 let c = [];
                 let d = [];
+                this.isload = false;
                 if (res.code === '0') {
                     this.tableData = res.data;
                     res.data.map(item => {
@@ -162,20 +162,19 @@ export default {
             this.seachinfo.endDate = moment(val[1]).format('YYYY-MM-DD');
         },
         //表格导出
-        excelexport(){
-                let column = [
-                    { prop: 'taskNumber', label: '生产工单号' },
-                    { prop: 'planDay', label: '计划时长' },
-                    { prop: 'realDay', label: '完成时长' }
-                ];
-                export2Excel(column, this.tableData, this.echarttitle);
+        excelexport() {
+            let column = [
+                { prop: 'taskNumber', label: '生产工单号' },
+                { prop: 'planDay', label: '计划时长' },
+                { prop: 'realDay', label: '完成时长' }
+            ];
+            export2Excel(column, this.tableData, this.echarttitle);
         }
     }
 };
 </script>
 
-
-<style lang='less'>
+<style lang="less">
 .poper {
     width: 100%;
     height: 100%;
@@ -188,13 +187,13 @@ export default {
         .datetime {
             width: 100%;
         }
-        .bot{
-            .el-form-item__content{
-            // width: calc(100% - 80px);
+        .bot {
+            .el-form-item__content {
+                // width: calc(100% - 80px);
                 float: right;
             }
         }
-        
+
         // .demo-form-inline{
         //     margin-top: 9px;
         // }
