@@ -81,7 +81,7 @@ export default {
         }
     },
     created(){
-      this.getrolePage()
+    //   this.getrolePage()
       this.getuserListMenu()
     },
     mounted(){
