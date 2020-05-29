@@ -81,18 +81,6 @@ export default {
             },
             series: [{
               data: yarr,
-              // itemStyle: {
-              //   normal: {
-              //     label: {
-              //       show: true, //开启显示
-              //       position: 'top', //在上方显示
-              //       textStyle: { //数值样式
-              //         color: 'black',
-              //         fontSize: 16
-              //       }
-              //     }
-              //   }
-              // },
               type: 'bar',
               barWidth: "50%",
               showBackground: true,
@@ -101,7 +89,18 @@ export default {
               }
             }]
           };
-
+          // var index = 0; //播放所在下标
+          // var mTime = setInterval(function () {
+          //   myChart.dispatchAction({
+          //     type: 'showTip',
+          //     seriesIndex: 0,
+          //     dataIndex: index
+          //   });
+          //   index++;
+          //   if (index > data.length) {
+          //     index = 0;
+          //   }
+          // }, 1000);
           myChart.setOption(option, (window.onresize = myChart.resize));
         })
         .catch(function (error) {
