@@ -8,11 +8,11 @@
             </el-breadcrumb>
         </div>
         <el-table :data="tableData" stripe style="width: 100%">
-            <el-table-column prop="index" label="序号" align="center"></el-table-column>
+            <el-table-column prop="index" label="序号" align="center" width=80></el-table-column>
             <el-table-column prop="name" label="角色名称" align="center"></el-table-column>
             <el-table-column prop="isDeleted" align="center" label="用户列表"></el-table-column>
-            <el-table-column prop="createTime" align="center" label="描述"></el-table-column>
-            <el-table-column prop="updateTime" align="center" label="负责人"></el-table-column>
+            <el-table-column prop="remark" align="center" label="描述"></el-table-column>
+         
             <el-table-column label="操作" width="280" align="center">
                 <template slot-scope="scope">
                     <el-button

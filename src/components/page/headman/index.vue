@@ -55,7 +55,8 @@ export default {
             input:'',
             dialogVisible1:false,
             modalinfo:{},
-            goToPayinfo:''
+            goToPayinfo:'',
+            icCard:localStorage.getItem('icCard'),
 
         }
     },
@@ -74,17 +75,21 @@ export default {
     },
     methods: {
         search(){
-            
-            updateTaskPlanClaimById(this.goToPayinfo).then(res=>{
-                if(res.code==='0'){
-                    this.$message.success(res.msg)
-                     this.dialogVisible = false
-                     this.input = ''
-                     this.getlistByUserId()
-                }else{
-                    this.$message.error(res.msg)
-                }
-            })
+            if(this.icCard===this.input){
+                updateTaskPlanClaimById(this.goToPayinfo).then(res=>{
+                    if(res.code==='0'){
+                        this.$message.success(res.msg)
+                        this.dialogVisible = false
+                        this.input = ''
+                        this.getlistByUserId()
+                    }else{
+                        this.$message.error(res.msg)
+                    }
+                })
+            }else{
+                this.$message.error('卡号与登录者卡号不符！')
+            }
+           
            
         },
         goToPay(item) {

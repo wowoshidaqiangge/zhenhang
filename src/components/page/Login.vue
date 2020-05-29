@@ -85,7 +85,7 @@ export default {
                         localStorage.setItem('TagsList', '');
 
                         if (res.roleId === '1000') {
-                            bus.$emit('isman', true);
+                            // bus.$emit('isman', true);
                             this.$router.push('/headman');
                         } else {
                             this.$router.push('/');

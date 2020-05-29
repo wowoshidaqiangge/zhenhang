@@ -101,7 +101,10 @@ export default {
                     res.data.menuIds = res.data.menus
                     var arr = []
                      res.data.menus.map(item=>{
-                            arr.push(item.id)
+                         item.children.map(v=>{
+                             arr.push(v.id)
+                         })
+                            
                     })
                      this.ruleForm = res.data
                      this.checklist = arr
@@ -129,8 +132,10 @@ export default {
           this.checklist = []
        },
        checktree(data,node){
-           this.ruleForm.menuIds = node.checkedKeys
-           this.ruleForm.pmenuIds = node.halfCheckedKeys
+           let arr = []
+           arr.push(...node.halfCheckedKeys, ...node.checkedKeys)
+           this.ruleForm.menuIds = arr
+         
        },
        marksure(ruleForm){
            this.sureload = true

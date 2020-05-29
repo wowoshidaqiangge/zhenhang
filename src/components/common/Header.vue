@@ -96,9 +96,9 @@ export default {
         this.page.endDate = this.page.beginDate;
         this.getmainrecordpage();
         let that = this
-         bus.$on('isman', e=>{
-            this.isheadman = true
-        })
+        //  bus.$on('isman', e=>{
+        //     this.isheadman = true
+        // })
     },
     mounted() {
         

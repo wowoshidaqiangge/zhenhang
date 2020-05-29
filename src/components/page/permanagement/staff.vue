@@ -149,6 +149,7 @@ export default {
                 { prop:'name',label:'员工姓名'},
                 { prop:'phone',label:'手机号'},
                 { prop:'deptName',label:'部门'},
+                { prop:'roleName',label:'角色'},
                 { prop:'icCard',label:'IC卡'},
                 { prop:'createTime',label:'创建时间'},
             ],
@@ -257,6 +258,10 @@ export default {
                 if(res.code==='0'){
                     res.data.records.map((item,index)=>{
                         item.index = index+1
+                        if(!item.roleName){
+                            item.roleName = '班组长'
+                        }
+                        item.createTime = item.createTime.split(' ')[0]
                     })
                     this.tableData =res.data.records
                     this.pagesize =parseInt(res.data.current) 

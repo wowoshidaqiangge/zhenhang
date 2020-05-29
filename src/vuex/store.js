@@ -27,6 +27,10 @@ const store = new Vuex.Store({
           if(res.code==='0'){
             const data = res.data
             localStorage.setItem('userId',data.id)
+            if(data.icCard){
+              localStorage.setItem('icCard',data.icCard)
+            }
+            
             commit('setUserId', data.id)
             resolve(data)
           }else{
