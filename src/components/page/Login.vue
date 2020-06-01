@@ -80,7 +80,13 @@ export default {
                         obj = { ...that.param };
                     }
                     this.handleLogin(obj).then(res => {
-                        this.$message.success('登录成功');
+                        this.$message({
+                        showClose: true,
+                        message: '登录成功',
+                        type: 'success',
+                        duration: 700,
+                        });
+                        // this.$message.success('登录成功');
                         localStorage.setItem('ms_username', res.username);
                         localStorage.setItem('TagsList', '');
 

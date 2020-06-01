@@ -109,10 +109,11 @@ export default {
             },
             formLabelWidth: '90px',
             rules: {
-                name: [
-                    { required: true, message: '请输入', trigger: 'blur' },
-                ],
-               
+                name: [{ required: true, message: '请输入', trigger: 'blur' }],
+                model: [{ required: true, message: '请输入', trigger: 'blur' }],
+                number: [{ required: true, message: '请输入', trigger: 'blur' }],
+                toType: [{ required: true, message: '请输入', trigger: 'blur' }],               
+                type: [{ required: true, message: '请输入', trigger: 'blur' }],               
             }
         }
     },
