@@ -12,7 +12,7 @@
                         </el-col>
                         <el-col :span="11">
                             <el-form-item label="设备编号" :label-width="formLabelWidth" class="formitem formitem1" prop="id">
-                                <el-input placeholder="请输入内容" v-model="form.id" :disabled="true"> </el-input>
+                                <el-input placeholder="请输入内容" v-model="form.deviceNumer" :disabled="true"> </el-input>
                             </el-form-item>
                         </el-col>
                         <el-col :span="11">
