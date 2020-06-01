@@ -267,8 +267,16 @@ export default {
        marksure(form){
             this.$refs[form].validate((valid) => {
                 let formObj = this.form
-                formObj.checkUserId = this.form.checkUserId[1]
-                formObj.repairUserId = this.form.repairUserId[1]
+                if (Array.isArray(this.form.checkUserId)) {
+                    formObj.checkUserId = this.form.checkUserId[1]
+                } else {
+                    formObj.checkUserId = this.form.checkUserId
+                }
+                if (Array.isArray(this.form.repairUserId)) {
+                    formObj.repairUserId = this.form.repairUserId[1]
+                } else {
+                    formObj.repairUserId = this.form.repairUserId
+                }
                 if (valid) {
                     if(this.tit==='新增'){
                         mainrepairadd(this.form).then(res=>{
