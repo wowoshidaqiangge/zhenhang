@@ -195,6 +195,7 @@ export default {
     handleCommand(command) {
       if (command == 'loginout') {
         localStorage.removeItem('ms_username');
+        sessionStorage.removeItem('TagsList')
         this.$router.push('/login');
       }
     },

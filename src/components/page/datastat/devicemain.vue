@@ -207,6 +207,7 @@ export default {
                         arr.push({ ...item,...arr1})
                     });
                     this.$nextTick(()=>{
+                        
                         this.tableData = arr
                     })
                 }else{
