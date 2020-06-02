@@ -48,8 +48,8 @@
                     </div>
                     <el-col :span="24" class="dialogTitle">保养内容</el-col>
                     <el-col :span="24">
-                        <el-form-item class="formitem formitem1" prop="remark">
-                            <el-input type="textarea" :rows="3" :disabled="!ifEdt" v-model="form.remark"></el-input>
+                        <el-form-item class="formitem formitem1" prop="content">
+                            <el-input type="textarea" :rows="3" :disabled="!ifEdt" v-model="form.content"></el-input>
                         </el-form-item>
                     </el-col>
                      <!--<el-col :span="11">
