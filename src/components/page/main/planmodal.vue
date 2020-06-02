@@ -173,7 +173,7 @@ export default {
                 dutyUserId: '',
                 remark: ''
             },
-            formatime: 'MM-dd HH',
+            formatime: 'MM-dd HH:mm',
             formLabelWidth: '90px',
             rules: {
                 toType: [{ required: true, message: '请选择设备类型', trigger: 'blur' }],
@@ -209,10 +209,10 @@ export default {
             maintenanceid(id).then(res => {
                 if (res.code === '0') {
                     if (res.data.period === 'year') {
-                        this.formatime = 'MM-dd HH';
+                        this.formatime = 'MM-dd HH:mm';
                         res.data.dateTime1 = this.getday(true) + res.data.dateTime + ':00:00';
                     } else {
-                        this.formatime = 'dd HH';
+                        this.formatime = 'dd HH mm';
                         res.data.dateTime1 = this.getday(false) + res.data.dateTime + ':00:00';
                     }
 

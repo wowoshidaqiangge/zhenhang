@@ -279,9 +279,7 @@ export default {
             trigger: 'blur'
           }
         ],
-        stuff: [
-          { required: true, message: '请选择物料', trigger: 'blur' }
-        ]
+        stuff: [{ message: '请选择物料', trigger: 'blur' }]
       },
       tableData1: [],
       columnList: [
