@@ -137,12 +137,18 @@ export default {
                             if(res.code==='0'){
                                 this.$message.success(res.msg)
                                 this.close('0')
+                            } else {
+                                this.$message.error(res.msg)
+                                this.close('0')
                             }
                         })
                     }else[
                         orderput(this.form).then(res=>{
                             if(res.code==='0'){
                                 this.$message.success(res.msg)
+                                this.close('0')
+                            } else {
+                                this.$message.error(res.msg)
                                 this.close('0')
                             }
                         })

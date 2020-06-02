@@ -205,11 +205,11 @@ export default {
                             arr.push({id:h.id,name:h.label})
                         }
                     })
-                     this.items.unshift({
-                        icon: 'el-icon-lx-home',
-                        index: 'dashboard',
-                        label: '系统首页'
-                    })
+                    //  this.items.unshift({
+                    //     icon: 'el-icon-lx-home',
+                    //     index: 'dashboard',
+                    //     label: '系统首页'
+                    // })
                     // 设置人员设置中角色权限
                     sessionStorage.setItem('checkbox',JSON.stringify(arr))
                 }
