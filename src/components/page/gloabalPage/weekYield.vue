@@ -21,7 +21,7 @@ export default {
     weekYieldFunc() {
       api.weekYield()
         .then(response => {
-          console.log(response);
+          // console.log(response);
           let date = []
           for (var i = 0; i < response.data.length; i++) {
             let a = response.data[i].date.split("-")
@@ -29,7 +29,7 @@ export default {
             let c = b.join('-')
             date.push(c)
           }
-          console.log(date)
+          // console.log(date)
           let xarr = []
           let yarr = []
           response.data.map(item => {

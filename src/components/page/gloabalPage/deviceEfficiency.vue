@@ -15,15 +15,17 @@ import echarts from 'echarts';
 export default {
   data() {
     return {
-      devEfficiencyList: [{ workpieceRate: '' }]
+      devEfficiencyList: [{ workpieceRate: '' }],
+      timer: ''
     };
   },
   mounted() {
-    this.deviceEfficiencyFunc();
+    // this.timer = setInterval(() => {
+    this.deviceEfficiencyFunc()
+    // }, 5000)
   },
   created() { },
   computed: {
-
   },
   methods: {
     // 设备综合利用率
@@ -33,7 +35,7 @@ export default {
           // console.log(response);
           let res = response.data;
           this.devEfficiencyList = res;
-          console.log(this.devEfficiencyList);
+          // console.log(this.devEfficiencyList);
           let xarr = []
           let yarr = []
           response.data.map(item => {

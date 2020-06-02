@@ -4,7 +4,7 @@
       <div class="textBox" v-for="(item,index) in useRateList" :key='index' v-if="item.useRate||item.useRate==0">
         {{item.useRate}}</div>
     </div>
-    <div class="chart" id="devUseRate"></div>
+    <div class="chart" id="devUseRate" @mouseover="mouseOver" @mouseleave="mouseLeave"></div>
   </div>
 
 </template>
@@ -17,14 +17,38 @@ export default {
     return {
       useRateList: [
         { deviceName: '', useRate: '', useRateOrder: '' }
-      ]
+      ],
+      mTime: ''
     }
   },
   mounted() {
-    this.devUseRateFunc()
+    this.devUseRateFunc();
   },
-  created() { },
+  created() {
+
+  },
   methods: {
+    mouseOver() {
+      clearInterval(this.mTime)
+    },
+    mouseLeave() {
+      this.devUseRateFunc();
+    },
+    // 设置数据高亮轮播定时器
+    setCarouselTime(xarr, myChart) {
+      var index = 0; //播放所在下标
+      this.mTime = setInterval(function () {
+        myChart.dispatchAction({
+          type: 'showTip',
+          seriesIndex: 0,
+          dataIndex: index
+        });
+        index++;
+        if (index > xarr.length - 1) {
+          index = 0;
+        }
+      }, 1000);
+    },
     // 设备综合利用率
     devUseRateFunc() {
       api.devUseRate()
@@ -89,18 +113,7 @@ export default {
               }
             }]
           };
-          // var index = 0; //播放所在下标
-          // var mTime = setInterval(function () {
-          //   myChart.dispatchAction({
-          //     type: 'showTip',
-          //     seriesIndex: 0,
-          //     dataIndex: index
-          //   });
-          //   index++;
-          //   if (index > data.length) {
-          //     index = 0;
-          //   }
-          // }, 1000);
+          this.setCarouselTime(xarr, myChart)
           myChart.setOption(option, (window.onresize = myChart.resize));
         })
         .catch(function (error) {

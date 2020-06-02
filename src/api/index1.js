@@ -1,5 +1,5 @@
 import axios from 'axios';
-const url ="http://139.9.7.204:7000"
+const url = 'http://139.9.7.204:7000';
 
 export const api = {
     // 设备运行情况
@@ -96,6 +96,21 @@ export const api = {
     deviceMonitor() {
         return axios({
                 url: `${url}/api/device/deviceWorkStatistics/selectDeviceRunList`,
+                method: 'get',
+                headers: {},
+                data: {}
+            })
+            .then(response => {
+                return response.data;
+            })
+            .catch(error => {
+                console.log(error);
+            });
+    },
+    // 设备运行监控
+    getCircleDate() {
+        return axios({
+                url: `${url}/api/producetask/produceStatistics/selectMonthYield`,
                 method: 'get',
                 headers: {},
                 data: {}

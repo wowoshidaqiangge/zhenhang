@@ -17,7 +17,7 @@
       <div class="sideMain">
         <div class="chartBox">
           <div class="chartTitle">设备运行情况</div>
-          <devOperation class="chartContent"></devOperation>
+          <devOperation class="chartContent" @func="getCircleDateFunc"></devOperation>
         </div>
         <div class="chartBox">
           <div class="chartTitle">设备综合利用率</div>
@@ -32,19 +32,19 @@
       <div class="centerMain">
         <div class="circleSection">
           <div class="circleBox">
-            <div class="circleTitle">78</div>
+            <div class="circleTitle">{{this.circleDate.monthYield}}</div>
             <div class="circleText">本月产量</div>
           </div>
           <div class="circleBox">
-            <div class="circleTitle">12</div>
+            <div class="circleTitle">{{this.circleDate.offCount}}</div>
             <div class="circleText">关机设备数</div>
           </div>
           <div class="circleBox">
-            <div class="circleTitle">88</div>
+            <div class="circleTitle">{{this.circleDate.runCount}}</div>
             <div class="circleText">运行设备总数</div>
           </div>
           <div class="circleBox">
-            <div class="circleTitle">71%</div>
+            <div class="circleTitle">{{this.circleDate.useRate}}</div>
             <div class="circleText">设备使用率</div>
           </div>
         </div>
@@ -69,12 +69,12 @@
                 <div class="text">车间</div>
               </div>
             </div>
-            <div class="devRobotBox" v-for="(item,index) in deviceFirstLine" :key='index'>
+            <div class="devRobotBox" v-for="(item,index) in deviceTypeList[0].deviceRunVo" :key='index'>
               <div class="devRobot">
-                <div :class="deviceTypeColor[index]"></div>
+                <div :class="item.color"></div>
                 <div class="robot"></div>
               </div>
-              <div class="devText">{{deviceNameList[index]}}</div>
+              <div class="devText">{{item.deviceNameRecord}}</div>
             </div>
           </div>
           <div class="devList">
@@ -84,21 +84,21 @@
                 <div class="text">车间</div>
               </div>
             </div>
-            <div class="devRobotBox" v-for="(item,index) in deviceSecondLine" :key='index'>
+            <div class="devRobotBox" v-for="(item,index) in deviceTypeList[2].deviceRunVo" :key='index'>
               <div class="devRobot">
-                <div :class="deviceTypeColor[index]"></div>
+                <div :class="item.color"></div>
                 <div class="robot"></div>
               </div>
-              <div class="devText">{{deviceNameList[index]}}</div>
+              <div class="devText">{{item.deviceNameRecord}}</div>
             </div>
           </div>
           <div class="devList">
             <div class="devRobotBox" v-for="(item,index) in deviceThirdLine" :key='index'>
               <div class="devRobot">
-                <div :class="deviceTypeColor[index]"></div>
+                <div :class="item.color"></div>
                 <div class="robot"></div>
               </div>
-              <div class="devText">{{deviceNameList[index]}}</div>
+              <div class="devText">{{item.deviceNameRecord}}</div>
             </div>
           </div>
           <div class="devList">
@@ -108,12 +108,12 @@
                 <div class="text">车间</div>
               </div>
             </div>
-            <div class="devRobotBox" v-for="(item,index) in deviceFourthLine" :key='index'>
+            <div class="devRobotBox" v-for="(item,index) in deviceTypeList[3].deviceRunVo" :key='index'>
               <div class="devRobot">
-                <div :class="deviceTypeColor[index]"></div>
+                <div :class="item.color"></div>
                 <div class="robot"></div>
               </div>
-              <div class="devText">{{deviceNameList[index]}}</div>
+              <div class="devText">{{item.deviceNameRecord}}</div>
             </div>
           </div>
           <div class="devList">
@@ -123,21 +123,12 @@
                 <div class="text">车间</div>
               </div>
             </div>
-            <div class="devRobotBox" v-for="(item,index) in deviceFifthLine" :key='index'>
+            <div class="devRobotBox" v-for="(item,index) in deviceTypeList[1].deviceRunVo" :key='index'>
               <div class="devRobot">
-                <div :class="deviceTypeColor[index]"></div>
+                <div :class="item.color"></div>
                 <div class="robot"></div>
               </div>
-              <div class="devText">{{deviceNameList[index]}}</div>
-            </div>
-          </div>
-          <div class="devList">
-            <div class="devRobotBox" v-for="(item,index) in deviceSixthLine" :key='index'>
-              <div class="devRobot">
-                <div :class="deviceTypeColor[index]"></div>
-                <div class="robot"></div>
-              </div>
-              <div class="devText">{{deviceNameList[index]}}</div>
+              <div class="devText">{{item.deviceNameRecord}}</div>
             </div>
             <div class="devTextBox">
               <div class="devText">
@@ -145,12 +136,12 @@
                 <div class="text">车间</div>
               </div>
             </div>
-            <div class="devRobotBox" v-for="(item,index) in deviceSeventhLine" :key='index'>
+            <div class="devRobotBox" v-for="(item,index) in deviceTypeList[4].deviceRunVo" :key='index'>
               <div class="devRobot">
-                <div :class="deviceTypeColor[index]"></div>
+                <div :class="item.color"></div>
                 <div class="robot"></div>
               </div>
-              <div class="devText">{{deviceNameList[index]}}</div>
+              <div class="devText">{{item.deviceNameRecord}}</div>
             </div>
             <div class="devTextBox">
               <div class="devText">
@@ -158,14 +149,23 @@
                 <div class="text">车间</div>
               </div>
             </div>
-            <div class="devRobotBox" v-for="(item,index) in deviceEighthLine" :key='index'>
+            <div class="devRobotBox" v-for="(item,index) in deviceTypeList[5].deviceRunVo" :key='index'>
               <div class="devRobot">
-                <div :class="deviceTypeColor[index]"></div>
+                <div :class="item.color"></div>
                 <div class="robot"></div>
               </div>
-              <div class="devText">{{deviceNameList[index]}}</div>
+              <div class="devText">{{item.deviceNameRecord}}</div>
             </div>
           </div>
+          <!-- <div class="devList">
+            <div class="devRobotBox" v-for="(item,index) in deviceTypeList" :key='index'>
+              <div class="devRobot">
+                <div :class="item.color"></div>
+                <div class="robot"></div>
+              </div>
+              <div class="devText">{{item.deviceNameRecord}}</div>
+            </div>
+          </div> -->
         </div>
       </div>
       <div class="sideMain">
@@ -189,7 +189,7 @@
 
 <script>
 import { api } from '@/api/index1'
-import {userListMenu} from 'api/index'
+import { userListMenu } from 'api/index'
 import $ from 'jquery';
 // 引入路由
 import Routers from '@/router';
@@ -221,9 +221,14 @@ export default {
       userName: localStorage.getItem('ms_username'),
       currentTmie: '', //当前时间
       currentTimer: {}, // 实时日期时间的定时器
-      deviceTypeColor: [], //设备运行监控状态绑定class
-      deviceNameList: [], // 设备监控设备名简称,
-      nextroute:'',
+      nextroute: '',
+      deviceTypeList: '', // 设备监控列表
+      circleDate: {
+        monthYield: '',
+        offCount: '',
+        useRate: '',
+        runCount: ''
+      }
     };
   },
   created() {
@@ -288,93 +293,79 @@ export default {
     }, 1000);
   },
   mounted() {
-    $(document).ready(
-      function () {
-        var that = this;
-        let topTitleHeight = $('.header').height();
-        let mainHeight = $(window).height() - topTitleHeight;
-        $('.main').height(mainHeight);
-      }.bind(this)
-    );
+    // $(document).ready(
+    //   function () {
+    //     // var that = this;
+    //     let topTitleHeight = $('.header').height();
+    //     let mainHeight = $(window).height() - topTitleHeight;
+    //     $('.main').height(mainHeight);
+    //   }.bind(this)
+    // );
     this.deviceMonitorFunc()
     this.getuserListMenu()
   },
-  computed: {
-       
-    deviceFirstLine() {
-      return this.deviceTypeColor.slice(0, 9);
-      return this.deviceNameList.slice(0, 9);
-    },
-    deviceSecondLine() {
-      return this.deviceTypeColor.slice(24, 34);
-      return this.deviceNameList.slice(24, 34);
-    },
-    deviceThirdLine() {
-      return this.deviceTypeColor.slice(34, 40);
-      return this.deviceNameList.slice(34, 40);
-    },
-    deviceFourthLine() {
-      return this.deviceTypeColor.slice(40, 50);
-      return this.deviceNameList.slice(40, 50);
-    },
-    deviceFifthLine() {
-      return this.deviceTypeColor.slice(9, 19);
-      return this.deviceNameList.slice(9, 19);
-    },
-    deviceSixthLine() {
-      return this.deviceTypeColor.slice(19, 24);
-      return this.deviceNameList.slice(19, 24);
-    },
-    deviceSeventhLine() {
-      return this.deviceTypeColor.slice(50, 52);
-      return this.deviceNameList.slice(50, 52);
-    },
-    deviceEighthLine() {
-      return this.deviceTypeColor.slice(52, 54);
-      return this.deviceNameList.slice(52, 54);
-    },
-  },
+  computed: {},
   methods: {
     goControl() {
       this.$router.push({ path: `/${this.nextroute}` })
     },
-    getuserListMenu(){
-          userListMenu({id:localStorage.getItem('userId')}).then(res=>{
-            if(res.code==='0'){
-              if(Array.isArray(res.data)&&res.data.length>0){
-                this.nextroute =  res.data[0].children[0].obj.index
-              }
-            }
-          })
-     },      
+    getuserListMenu() {
+      userListMenu({ id: localStorage.getItem('userId') }).then(res => {
+        if (res.code === '0') {
+          if (Array.isArray(res.data) && res.data.length > 0) {
+            this.nextroute = res.data[0].children[0].obj.index
+          }
+        }
+      })
+    },
     // API相关
+    // 中间圈内数据
+    getCircleDateFunc(deviceOperateList) {
+      this.circleDate.offCount = deviceOperateList.offCount
+      this.circleDate.useRate = deviceOperateList.useRate
+      this.circleDate.runCount = deviceOperateList.runCount
+      api.getCircleDate().then(response => {
+        this.circleDate.monthYield = response.data.currentMonthYield
+        console.log(this.circleDate)
+      }).catch(function (error) {
+        console.log(error);
+      });
+    },
     // 设备运行监控
     deviceMonitorFunc() {
       api.deviceMonitor()
         .then(response => {
-          console.log(response);
+          console.log(response.data);
           let deviceType = []
-          let deviceName = []
-          for (let i = 0; i < response.data.length; i++) {
-            for (let j = 0; j < response.data[i].deviceRunVo.length; j++) {
-              if (response.data[i].deviceRunVo[j].state == '0') {
-                deviceType.push('redIcon')
-              } else if (response.data[i].deviceRunVo[j].state == '1') {
-                deviceType.push('grayIcon')
-              } else if (response.data[i].deviceRunVo[j].state == '2') {
-                deviceType.push('blueIcon')
-              } else if (response.data[i].deviceRunVo[j].state == '3') {
-                deviceType.push('greenIcon')
+          // let deviceName = []
+
+          if (Array.isArray(response.data)) {
+            response.data.map((item, index) => {
+              if (item.deviceRunVo) {
+                item.deviceRunVo.map((v, m) => {
+                  if (v.state === '1') {
+                    v.color = 'grayIcon'
+                  } else if (v.state === '2') {
+                    v.color = 'blueIcon'
+                  } else if (v.state === '3') {
+                    v.color = 'greenIcon'
+                  } else if (v.state === '0') {
+                    v.color = 'redIcon'
+                  }
+
+                })
               }
-              deviceName.push(response.data[i].deviceRunVo[j].deviceNameRecord)
-              // deviceType.push(response.data[i].deviceRunVo[j].state)
-            }
+              deviceType.push(item)
+
+            })
           }
+          // console.log(response.data);
           // 设备监控设备状态
-          this.deviceTypeColor = deviceType
-          // 设备监控设备名简称
-          this.deviceNameList = deviceName
-          console.log(this.deviceTypeColor)
+
+          this.deviceTypeList = deviceType
+
+
+          console.log(this.deviceTypeList)
         })
         .catch(function (error) {
           console.log(error);
@@ -389,21 +380,20 @@ div {
   box-sizing: border-box;
 }
 .global {
+  overflow: hidden;
   margin: 0px;
   padding: 0px;
   height: 100%;
   width: 100%;
   background: url('~@/assets/img/globalPage/background.png') no-repeat;
   background-size: 100% 100%;
+  display: flex;
+  flex-direction: column;
   .header {
     display: flex;
-    height: 68px;
     width: 100%;
     background: url('~@/assets/img/globalPage/topTitle.png') no-repeat;
     background-size: 100% 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
     .leftWelcome {
       width: 300px;
       color: white;
@@ -419,8 +409,10 @@ div {
       font-size: 30px;
       color: white;
       .title {
+        height: 68px;
+        display: flex;
         justify-content: center;
-        text-align: center;
+        align-items: center;
         cursor: pointer;
         letter-spacing: 5px;
       }
@@ -441,7 +433,9 @@ div {
   }
   .main {
     display: flex;
-    padding-bottom: 30px;
+    flex: 1;
+    // height: 0; // 与下面overflow作用一样
+    overflow: hidden;
     .sideMain {
       width: 24%;
       // display: flex;
@@ -538,7 +532,7 @@ div {
         border-radius: 5px;
         margin-top: 10px;
         .devTitle {
-          height: 10%;
+          height: 8%;
           width: 100%;
           position: relative;
           .lefTitle {
@@ -600,11 +594,12 @@ div {
           }
         }
         .devList {
-          height: 15%;
           width: 100%;
           display: flex;
           flex-direction: row;
+          flex-wrap: wrap;
           .devTextBox {
+            margin: 1.5% 0;
             width: 9%;
             display: flex;
             flex-direction: column;
@@ -624,6 +619,7 @@ div {
             }
           }
           .devRobotBox {
+            margin: 1.5% 0;
             width: 9%;
             display: flex;
             flex-direction: column;

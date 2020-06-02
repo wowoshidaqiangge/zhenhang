@@ -10,11 +10,13 @@ import echarts from 'echarts';
 export default {
   data() {
     return {
-
+      timer: ''
     }
   },
   mounted() {
+    // this.timer = setInterval(() => {
     this.deviceOperationFunc()
+    // }, 5000)
   },
   created() { },
   methods: {
@@ -22,14 +24,14 @@ export default {
     deviceOperationFunc() {
       api.deviceOperation()
         .then(response => {
-          // console.log(response);
+          console.log(response);
           let myChart = echarts.init(document.getElementById('deviceOperation'));
           let res = {
             name: ["关机", "开机", "运行"],
             value: [
-              { value: response.data.offCount, name: "关机" },
-              { value: response.data.onCount, name: "开机" },
-              { value: response.data.runCount, name: "运行" }
+              { value: response.data.offCount, name: "关机", rate: response.data.offRate },
+              { value: response.data.onCount, name: "开机", rate: response.data.onRate },
+              { value: response.data.runCount, name: "运行", rate: response.data.runRate }
             ]
           };
           let option = {
@@ -46,37 +48,23 @@ export default {
               orient: 'vertical',
               right: "10%",
               top: "20%",
-              data: [
-                '关机',
-                '开机',
-                '运行'
-              ],
+              // data: [
+              //   '关机',
+              //   '开机',
+              //   '运行'
+              // ],
               data: res.name,
               formatter: function (name) {
-                var total = 0;
+                // var total = 0;
                 var target;
-                for (var i = 0, l = res.value.length; i < l; i++) {
-                  total += res.value[i].value;
+                for (var i = 0; i < res.value.length; i++) {
+                  // total += res.value[i].value;
                   if (res.value[i].name === name) {
-                    target = res.value[i].value;
+                    target = res.value[i].rate;
                   }
                 }
-                return name + "： " + ((target / total) * 10000).toFixed(2) + "%";
+                return name + "： " + target;
               },
-              // formatter: function (name) {
-              //   let rate = [
-              //     { value: response.data.offRate, name: "关机" },
-              //     { value: response.data.onRate, name: "开机" },
-              //     { value: response.data.runRate, name: "运行" }
-              //   ]
-              //   let target;
-              //   for (var i = 0; i < rate.length; i++) {
-              //     if (rate.value[i].name === name) {
-              //       target = rate.value[i].value;
-              //     }
-              //   }
-              //   return name + " " + target;
-              // },
               textStyle: {
                 color: "#fff"
               }
@@ -108,6 +96,7 @@ export default {
             color: ['#EB6F43', '#6BCAFA', '#FFFE7E']
           };
           myChart.setOption(option, (window.onresize = myChart.resize));
+          this.$emit('func', response.data)
         })
         .catch(function (error) {
           console.log(error);
