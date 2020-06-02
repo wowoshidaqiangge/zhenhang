@@ -17,7 +17,7 @@
                         </el-col>
                         <el-col :span="11">
                             <el-form-item label="规格型号" :label-width="formLabelWidth" class="formitem formitem1" prop="period">
-                                <el-input placeholder="请输入内容" v-model="form.deviceNumer" :disabled="true"> </el-input>
+                                <el-input placeholder="请输入内容" v-model="form.deviceModel" :disabled="true"> </el-input>
                             </el-form-item>
                         </el-col>
                         <el-col :span="11">
@@ -26,9 +26,9 @@
                                 v-if="ifEdt"
                                 :label-width="formLabelWidth"
                                 class="formitem formitem1"
-                                prop="toType"
+                                prop="toTypeName"
                             >
-                                <el-input placeholder="请输入内容" v-model="form.toType" :disabled="true"> </el-input>
+                                <el-input placeholder="请输入内容" v-model="form.toTypeName" :disabled="true"> </el-input>
                             </el-form-item>
                             <el-form-item label="保养月份" v-else :label-width="formLabelWidth" class="formitem formitem1" prop="toType">
                                 <el-input placeholder="请输入内容" v-model="form.monthTime" :disabled="true"> </el-input>
