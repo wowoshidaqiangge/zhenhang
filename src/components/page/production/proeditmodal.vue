@@ -527,6 +527,7 @@ export default {
             }
             this.produceTaskId = ''
             this.value2 = []
+            this.activeName = 'first'
        }
     }
 }

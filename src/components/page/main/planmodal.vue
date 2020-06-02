@@ -215,7 +215,6 @@ export default {
                         this.formatime = 'dd HH';
                         res.data.dateTime1 = this.getday(false) + res.data.dateTime + ':00:00';
                     }
-
                     res.data.toType = res.data.toType.toString();
                     this.getListByToType({ toTypeId: res.data.toType });
                     console.log(res.data);

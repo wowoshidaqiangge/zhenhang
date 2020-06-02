@@ -6,25 +6,51 @@
       <i v-else class="el-icon-s-unfold"></i>
     </div>
     <div class="logo" @click="goGlobal">臻航生产管理系统</div>
-
     <div class="header-right">
       <div class="header-user-con">
+        <div class="nowtime">{{ currentTime }} {{ nowWeek }}</div>
         <!-- 全屏显示 -->
-        <div class="btn-fullscreen" @click="handleFullScreen" v-if="!isheadman">
-          <el-tooltip effect="dark" :content="fullscreen ? `取消全屏` : `全屏`" placement="bottom">
+        <div
+          class="btn-fullscreen"
+          @click="handleFullScreen"
+          v-if="fullScreenVis"
+        >
+          <el-tooltip
+            effect="dark"
+            :content="fullscreen ? `取消全屏` : `全屏`"
+            placement="bottom"
+          >
             <i class="el-icon-rank"></i>
           </el-tooltip>
         </div>
         <!-- 消息中心 -->
-        <el-popover placement="bottom" width="400" trigger="click" v-if="!isheadman">
+        <el-popover
+          placement="bottom"
+          width="400"
+          trigger="click"
+          v-if="msgVis"
+        >
           <!-- <el-divider></el-divider> -->
           <el-table :data="tableData">
-            <el-table-column property="deviceName" label="设备名称"></el-table-column>
-            <el-table-column property="deviceNumer" label="设备编号"></el-table-column>
-            <el-table-column property="dateTime" label="保养时间"></el-table-column>
+            <el-table-column
+              property="deviceName"
+              label="设备名称"
+            ></el-table-column>
+            <el-table-column
+              property="deviceNumer"
+              label="设备编号"
+            ></el-table-column>
+            <el-table-column
+              property="dateTime"
+              label="保养时间"
+            ></el-table-column>
             <el-table-column label="操作">
               <template slot-scope="scope">
-                <el-button type="primary" @click="gotoRecords(scope.row.id)">查看</el-button>
+                <el-button
+                  type="primary"
+                  @click="gotoRecords(scope.row.id)"
+                  >查看</el-button
+                >
               </template>
             </el-table-column>
           </el-table>
@@ -38,18 +64,23 @@
           <img src="../../assets/logo.png" />
         </div>
         <!-- 用户名下拉菜单 -->
-        <el-dropdown class="user-name" trigger="click" @command="handleCommand">
-          <span class="el-dropdown-link">
+        <el-dropdown
+          class="user-name"
+          trigger="click"
+          @command="handleCommand"
+        >
+          <span class="el-dropdown-link" v-bind:style="fixColorObj">
             {{ username }}
             <i class="el-icon-caret-bottom"></i>
           </span>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item divided command="loginout">退出登录</el-dropdown-item>
+            <el-dropdown-item divided command="loginout"
+              >退出登录</el-dropdown-item
+            >
           </el-dropdown-menu>
         </el-dropdown>
       </div>
     </div>
-    <div class="nowtime">{{ currentTime }} &nbsp;{{ nowWeek }}</div>
   </div>
 </template>
 <script>
@@ -79,6 +110,24 @@ export default {
       isheadman: false
     };
   },
+  props: {
+    fullScreenVis: {
+      type: Boolean,
+      default: true
+    },
+    msgVis: {
+      type: Boolean,
+      default: true
+    },
+    fixColorObj: {
+      type: Object,
+      default() {
+        return {
+          color: '#606266'
+        };
+      }
+    }
+  },
   computed: {
     username() {
       let username = localStorage.getItem('ms_username');
@@ -87,7 +136,7 @@ export default {
   },
   beforeCreate() {
     var _this = this; //声明一个变量指向Vue实例this，保证作用域一致
-    this.timer = setInterval(function () {
+    this.timer = setInterval(function() {
       _this.setnowtime();
     }, 1000);
   },
@@ -95,17 +144,15 @@ export default {
     this.page.beginDate = this.getToday();
     this.page.endDate = this.page.beginDate;
     this.getmainrecordpage();
-    let that = this
+    let that = this;
     //  bus.$on('isman', e=>{
     //     this.isheadman = true
     // })
   },
   mounted() {
-
     if (document.body.clientWidth < 1500) {
       this.collapseChage();
     }
-
   },
   beforeDestroy() {
     if (this.timer) {
@@ -114,10 +161,18 @@ export default {
   },
   methods: {
     goGlobal() {
-      this.$router.push({ path: '/dashboard' })
+      this.$router.push({ path: '/dashboard' });
     },
     setnowtime() {
-      const weeks = ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'];
+      const weeks = [
+        '星期日',
+        '星期一',
+        '星期二',
+        '星期三',
+        '星期四',
+        '星期五',
+        '星期六'
+      ];
       const wk = new Date().getDay();
       this.currentTime = //修改数据date
         new Date().getFullYear() +
@@ -144,6 +199,7 @@ export default {
     handleCommand(command) {
       if (command == 'loginout') {
         localStorage.removeItem('ms_username');
+        sessionStorage.removeItem('TagsList');
         this.$router.push('/login');
       }
     },

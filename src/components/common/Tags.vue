@@ -95,7 +95,6 @@
            if(sessionStorage.getItem('TagsList')){
                this.tagsList = JSON.parse(sessionStorage.getItem('TagsList'))
            }
-            
             this.setTags(this.$route);
             // 监听关闭当前页面的标签页
             bus.$on('close_current_tags', () => {

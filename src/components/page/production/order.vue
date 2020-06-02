@@ -20,7 +20,7 @@
                             end-placeholder="结束日期">
                         </el-date-picker>
                   </el-form-item>
-                  
+
               </el-col>
               <el-col :span="2" style="margin:0 20px">
                  <el-form-item label=""  prop="state" >
@@ -36,9 +36,9 @@
               </el-col>
               <el-col :span="3" style="margin-right:10px">
                   <el-form-item label=""  prop="productNameOrCode" >
-                     <el-input  placeholder="请输入名称或编码" v-model="seachinfo.productNameOrCode" class="elinput"> </el-input>
+                     <el-input  placeholder="请输入产品名称或编码" v-model="seachinfo.productNameOrCode" class="elinput"> </el-input>
                  </el-form-item>
-                  
+
               </el-col>
               <el-col :span="3">
                   <el-form-item label="" >
@@ -127,8 +127,8 @@
                                 >删除</el-button>
                             </template>
                     </el-table-column>
-            
-            </el-table> 
+
+            </el-table>
             <div class="page">
                 <el-pagination
                     :background='true'
@@ -201,7 +201,7 @@ export default {
             orderlist:[]
         }
     },
-   
+
     created(){
         this.getorderpage()
         this.getorderTypeList()
@@ -240,7 +240,7 @@ export default {
                 if(res.code==='0'){
                     res.data.records.map((item,index)=>{
                         item.index = index + 1
-                       
+
                         item.createTime = item.createTime.split(' ')[0]
                     })
                     this.tableData = res.data.records
@@ -267,7 +267,7 @@ export default {
              this.tit = '编辑订单'
              this.$refs.ordermodal.getorderid(m)
              this.dialogFormVisible = true
-           
+
         },
         handleDelete(h,m){
             this.$confirm('确定要删除吗？', '提示', {
@@ -282,7 +282,7 @@ export default {
                         })
             })
             .catch(() => {});
-           
+
         },
         // 锁定解锁
         handleUntie(h,m){
@@ -303,13 +303,13 @@ export default {
          .top{
                 height: 50px;
                 margin-top: 10px;
-              
+
                 .datetime{
                    width: 100%;
                 }
             }
 
-            
+
             .page{
                 margin-top: 10px;
                 float: right;
