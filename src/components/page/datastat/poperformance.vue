@@ -9,9 +9,9 @@
                         </el-form-item>
                     </el-col>
                     <el-col :span="3" style="margin:0 20px">
-                        <el-form-item label="车间" label-width="50px" prop="state">
+                        <el-form-item label="车间" label-width="50px" prop="deptId">
                             <el-select
-                                v-model="seachinfo.state"
+                                v-model="seachinfo.deptId"
                                 @change="changesel"
                                 placeholder="请选择车间"
                             >
@@ -89,7 +89,7 @@ export default {
             seachinfo: {
                 beginDate: '',
                 endDate: '',
-                state: ''
+                deptId: ''
             },
             activeName: 'first',
             echarttitle: '车间生产绩效',
@@ -149,7 +149,7 @@ export default {
             this.seachinfo = {
                 beginDate: '',
                 endDate: '',
-                state: ''
+                deptId: ''
             };
             this.value1 = '';
             this.getselectProduceWorkRate();

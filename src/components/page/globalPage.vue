@@ -188,7 +188,8 @@
 </template>
 
 <script>
-import { api } from '@/api/index1';
+import { api } from '@/api/index1'
+import {userListMenu} from 'api/index'
 import $ from 'jquery';
 // 引入路由
 import Routers from '@/router';
@@ -221,7 +222,8 @@ export default {
       currentTmie: '', //当前时间
       currentTimer: {}, // 实时日期时间的定时器
       deviceTypeColor: [], //设备运行监控状态绑定class
-      deviceNameList: [] // 设备监控设备名简称
+      deviceNameList: [], // 设备监控设备名简称,
+      nextroute:'',
     };
   },
   created() {
@@ -295,8 +297,10 @@ export default {
       }.bind(this)
     );
     this.deviceMonitorFunc()
+    this.getuserListMenu()
   },
   computed: {
+       
     deviceFirstLine() {
       return this.deviceTypeColor.slice(0, 9);
       return this.deviceNameList.slice(0, 9);
@@ -329,12 +333,20 @@ export default {
       return this.deviceTypeColor.slice(52, 54);
       return this.deviceNameList.slice(52, 54);
     },
-
   },
   methods: {
     goControl() {
-      this.$router.push({ path: '/control' })
+      this.$router.push({ path: `/${this.nextroute}` })
     },
+    getuserListMenu(){
+          userListMenu({id:localStorage.getItem('userId')}).then(res=>{
+            if(res.code==='0'){
+              if(Array.isArray(res.data)&&res.data.length>0){
+                this.nextroute =  res.data[0].children[0].obj.index
+              }
+            }
+          })
+     },      
     // API相关
     // 设备运行监控
     deviceMonitorFunc() {
