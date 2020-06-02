@@ -92,9 +92,9 @@ export default {
 
                         if (res.roleId === '1000') {
                             // bus.$emit('isman', true);
-                            this.$router.push('/headman');
+                            this.$router.replace('/headman');
                         } else {
-                            this.$router.push('/');
+                            this.$router.replace('/');
                         }
                     });
 
