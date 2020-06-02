@@ -1,9 +1,9 @@
 <template>
     <div class="constrol">
-        <el-tabs type="card">
-            <el-tab-pane :label="item.deviceType" v-for="(item, index) in runlist" :key="index" class="conlist">
-                <div class="con">
-                    <div class="row-bg" v-for="h in item.deviceRunVo" :key="h.id">
+        <el-tabs type="card" @tab-click="handleClick">
+            <el-tab-pane :label="item.deviceType" v-for="(item, index) in runlist" :key="index"  class="conlist">
+                <div class="con" >
+                    <div class="row-bg" v-for="h in runlistinfo" :key="h.id" >
                         <div class="p1">
                             <span class="icon"></span><span class="tit"> {{ h.deviceName }}</span
                             ><span class="img"><img src="~@/assets/img/wifi.png"/></span>
@@ -24,7 +24,7 @@
                                 <span>累计运行:</span><span> {{ h.runLength ? h.runLength + ' h' : '--' }}</span>
                             </p>
                             <p>
-                                <span>当日产量:</span><span> {{ h.dayProduce ? h.dayProduce + '件' : '--' }}</span>
+                                <span>当日产量:</span><span v-if='h.dva|| h.dva ===0'> {{  h.dva + '件' }}</span>
                             </p>
                         </div>
                         <div class="p1">
@@ -44,21 +44,59 @@
 
 <script>
 import { selectDeviceRunList } from 'api/index';
+import {onenet} from 'api/onenet'
 export default {
     name: 'control',
     data() {
         return {
-            runlist: []
+            runlist: [],
+            runlistinfo:[],
+          
         };
     },
     created() {
         this.getselectDeviceRunList();
     },
     methods: {
-        getselectDeviceRunList() {
-            selectDeviceRunList().then(res => {
+        handleClick(val){
+            let obj ={}
+            let arr = []
+            this.runlist[`${val.index}`].deviceRunVo.map(item=>{
+                    obj  = {apikey:item.apiKey,id:item.onenetId,datastream_id:item.streamId}
+                    this.getnoet(obj,(res)=>{
+                        if(res.errno===0){
+                            if(res.data&&res.data.datastreams.length>0){
+                                item.dva = res.data.datastreams[0].datapoints[0].value
+                            }
+                            this.$forceUpdate()
+                        }else{
+                            this.$message.error(res.error)
+                        }
+                      })
+                        arr.push(item)
+                    })
+                    this.runlistinfo = arr;
+        },
+        getnoet:async function(info,cb){
+             await onenet.datapoint(info).then(res=>{
+               cb&&cb(res)
+            })
+        },
+         getselectDeviceRunList:async function() {
+           await selectDeviceRunList().then(res => {
                 if (res.code === '0') {
-                    this.runlist = res.data;
+                    let obj = {}
+                    let arr = []
+                    this.runlist = res.data
+                    res.data[0].deviceRunVo.map(item=>{
+                     obj  = {apikey:item.apiKey,id:item.onenetId,datastream_id:item.streamId}
+                     this.getnoet(obj,(res)=>{
+                         item.dva = res.data.datastreams[0].datapoints[0].value
+                         this.$forceUpdate()
+                      })
+                        arr.push(item)
+                    })
+                    this.runlistinfo = arr;
                 }
             });
         }
