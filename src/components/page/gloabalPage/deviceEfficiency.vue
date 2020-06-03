@@ -9,6 +9,7 @@
   </div>
 </template>
 <script>
+import ElementUI from 'element-ui';
 import { api } from '@/api/index1';
 // 引入echarts
 import echarts from 'echarts';
@@ -121,10 +122,10 @@ export default {
 .chartContent {
   .chartText {
     position: absolute;
-    left: 50%;
+    left: 48.8%;
     top: 70px;
     transform: translate(-50%, 50%);
-    width: 77%;
+    width: 79%;
     height: 20px;
     color: white;
     font-size: 13px;

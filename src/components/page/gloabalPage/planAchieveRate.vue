@@ -1,15 +1,17 @@
 <template>
-  <div class="chartContent">
+  <div class="chartContent" v-loading="loading">
     <div class="chart" id="planAchieveRate"></div>
   </div>
 </template>
 <script>
+import ElementUI from 'element-ui';
 import { api } from '@/api/index1';
 // 引入Charts
 import Charts from '@jiaminghi/charts';
 export default {
   data() {
     return {
+      loading: false,
     }
   },
   mounted() {

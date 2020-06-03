@@ -107,7 +107,7 @@ export const api = {
                 console.log(error);
             });
     },
-    // 设备运行监控
+    // 顶部圈内数据
     getCircleDate() {
         return axios({
                 url: `${url}/api/producetask/produceStatistics/selectMonthYield`,

@@ -1,5 +1,5 @@
 <template>
-  <div class="chartContent">
+  <div class="chartContent" v-loading="loading">
     <div class="chartText">
       <div class="textBox" v-for="(item,index) in useRateList" :key='index' v-if="item.useRate||item.useRate==0">
         {{item.useRate}}</div>
@@ -9,12 +9,14 @@
 
 </template>
 <script>
+import ElementUI from 'element-ui';
 import { api } from '@/api/index1';
 // 引入echarts
 import echarts from 'echarts';
 export default {
   data() {
     return {
+      loading: false,
       useRateList: [
         { deviceName: '', useRate: '', useRateOrder: '' }
       ],

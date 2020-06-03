@@ -1,15 +1,17 @@
 <template>
-  <div class="chartContent">
+  <div class="chartContent" v-loading="loading">
     <div class="chart" id="deviceOperation"></div>
   </div>
 </template>
 <script>
+import ElementUI from 'element-ui';
 import { api } from '@/api/index1';
 // 引入echarts
 import echarts from 'echarts';
 export default {
   data() {
     return {
+      loading: false,
       timer: ''
     }
   },

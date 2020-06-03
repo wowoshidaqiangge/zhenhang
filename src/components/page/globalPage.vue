@@ -1,6 +1,8 @@
 <!-- 大屏 -->
 <template>
-  <div class="global">
+  <el-main class="global" v-loading="loading"
+    element-loading-text="加载中。。。"
+    element-loading-background="RGBA(0, 18, 53, 0.5)">
     <div class="header">
       <!-- <div class="leftWelcome">
         <div class="welcomeText">欢迎您，{{ userName }}</div>
@@ -62,110 +64,25 @@
               <div class="iconText">关机</div>
             </div>
           </div>
-          <div class="devList">
-            <div class="devTextBox">
-              <div class="devText">
-                <div class="text">冲压</div>
-                <div class="text">车间</div>
+          <div class="devSectionMain" >
+            <div class="devList" v-for="(v,m) in deviceTypeList1" :key="m" :style="{flex:v.flex}">
+              <div class="devTextBox">
+                <div class="devText">
+                  <div class="text">{{v.deviceType}}</div>
+                </div>
               </div>
-            </div>
-            <div class="devRobotBox" v-for="(item,index) in deviceTypeList[0].deviceRunVo" :key='index'>
-              <div class="devRobot">
-                <div :class="item.color"></div>
-                <div class="robot"></div>
+              <div class="devRobotBox" v-for="(item,index) in v.deviceRunVo" :key='index'>
+                <div class="devRobot" v-if='!item.isdevice'>
+                  <div :class="item.color"></div>
+                  <div class="robot"></div>
+                </div>
+                <div class="devText" v-if='!item.isdevice'>{{item.deviceNameRecord}}</div>
+                <div class="devTextOnly" v-if='item.isdevice'>
+                  <div class="text">{{item.deviceNameRecord}}</div>
+                </div>
               </div>
-              <div class="devText">{{item.deviceNameRecord}}</div>
             </div>
           </div>
-          <div class="devList">
-            <div class="devTextBox">
-              <div class="devText">
-                <div class="text">封装</div>
-                <div class="text">车间</div>
-              </div>
-            </div>
-            <div class="devRobotBox" v-for="(item,index) in deviceTypeList[2].deviceRunVo" :key='index'>
-              <div class="devRobot">
-                <div :class="item.color"></div>
-                <div class="robot"></div>
-              </div>
-              <div class="devText">{{item.deviceNameRecord}}</div>
-            </div>
-          </div>
-          <div class="devList">
-            <div class="devRobotBox" v-for="(item,index) in deviceThirdLine" :key='index'>
-              <div class="devRobot">
-                <div :class="item.color"></div>
-                <div class="robot"></div>
-              </div>
-              <div class="devText">{{item.deviceNameRecord}}</div>
-            </div>
-          </div>
-          <div class="devList">
-            <div class="devTextBox">
-              <div class="devText">
-                <div class="text">包装</div>
-                <div class="text">车间</div>
-              </div>
-            </div>
-            <div class="devRobotBox" v-for="(item,index) in deviceTypeList[3].deviceRunVo" :key='index'>
-              <div class="devRobot">
-                <div :class="item.color"></div>
-                <div class="robot"></div>
-              </div>
-              <div class="devText">{{item.deviceNameRecord}}</div>
-            </div>
-          </div>
-          <div class="devList">
-            <div class="devTextBox">
-              <div class="devText">
-                <div class="text">纸芯</div>
-                <div class="text">车间</div>
-              </div>
-            </div>
-            <div class="devRobotBox" v-for="(item,index) in deviceTypeList[1].deviceRunVo" :key='index'>
-              <div class="devRobot">
-                <div :class="item.color"></div>
-                <div class="robot"></div>
-              </div>
-              <div class="devText">{{item.deviceNameRecord}}</div>
-            </div>
-            <div class="devTextBox">
-              <div class="devText">
-                <div class="text">喷涂</div>
-                <div class="text">车间</div>
-              </div>
-            </div>
-            <div class="devRobotBox" v-for="(item,index) in deviceTypeList[4].deviceRunVo" :key='index'>
-              <div class="devRobot">
-                <div :class="item.color"></div>
-                <div class="robot"></div>
-              </div>
-              <div class="devText">{{item.deviceNameRecord}}</div>
-            </div>
-            <div class="devTextBox">
-              <div class="devText">
-                <div class="text">动力</div>
-                <div class="text">车间</div>
-              </div>
-            </div>
-            <div class="devRobotBox" v-for="(item,index) in deviceTypeList[5].deviceRunVo" :key='index'>
-              <div class="devRobot">
-                <div :class="item.color"></div>
-                <div class="robot"></div>
-              </div>
-              <div class="devText">{{item.deviceNameRecord}}</div>
-            </div>
-          </div>
-          <!-- <div class="devList">
-            <div class="devRobotBox" v-for="(item,index) in deviceTypeList" :key='index'>
-              <div class="devRobot">
-                <div :class="item.color"></div>
-                <div class="robot"></div>
-              </div>
-              <div class="devText">{{item.deviceNameRecord}}</div>
-            </div>
-          </div> -->
         </div>
       </div>
       <div class="sideMain">
@@ -184,10 +101,11 @@
         </div>
       </div>
     </div>
-  </div>
+  </el-main>
 </template>
 
 <script>
+import ElementUI from 'element-ui';
 import { api } from '@/api/index1'
 import { userListMenu } from 'api/index'
 import $ from 'jquery';
@@ -218,17 +136,19 @@ export default {
   },
   data() {
     return {
+      loading: true, // 未加载完成动画
       userName: localStorage.getItem('ms_username'),
       currentTmie: '', //当前时间
       currentTimer: {}, // 实时日期时间的定时器
       nextroute: '',
-      deviceTypeList: '', // 设备监控列表
-      circleDate: {
+      deviceTypeList1: '', // 设备监控列表
+      deviceTypeList2: '',
+      circleDate: {   
         monthYield: '',
         offCount: '',
         useRate: '',
         runCount: ''
-      }
+      }  // 顶部圈内数据
     };
   },
   created() {
@@ -293,14 +213,14 @@ export default {
     }, 1000);
   },
   mounted() {
-    // $(document).ready(
-    //   function () {
-    //     // var that = this;
-    //     let topTitleHeight = $('.header').height();
-    //     let mainHeight = $(window).height() - topTitleHeight;
-    //     $('.main').height(mainHeight);
-    //   }.bind(this)
-    // );
+    //  const loading = this.$loading({
+    //   //  customClass: 'create-isLoading',
+    //     // lock: true,//lock的修改符--默认是false
+    //     // // text: 'Loading',//显示在加载图标下方的加载文案
+    //     // // spinner: 'el-icon-loading',//自定义加载图标类名
+    //     // background: 'RGBA(0, 18, 53, 0.5)',//遮罩层颜色
+    //     // target: document.querySelector('#table')//loading覆盖的dom元素节点
+    // });
     this.deviceMonitorFunc()
     this.getuserListMenu()
   },
@@ -333,16 +253,22 @@ export default {
     },
     // 设备运行监控
     deviceMonitorFunc() {
+      this.loading = true
       api.deviceMonitor()
         .then(response => {
+          this.loading = false
           console.log(response.data);
-          let deviceType = []
-          // let deviceName = []
-
+          let deviceType1 = []
+          let deviceType2 = []
           if (Array.isArray(response.data)) {
             response.data.map((item, index) => {
-              if (item.deviceRunVo) {
+              if (index < 5) {
                 item.deviceRunVo.map((v, m) => {
+                  if(m > 10){
+                    item.flex = '2'
+                  } else {
+                    item.flex = '1'
+                  }
                   if (v.state === '1') {
                     v.color = 'grayIcon'
                   } else if (v.state === '2') {
@@ -352,20 +278,41 @@ export default {
                   } else if (v.state === '0') {
                     v.color = 'redIcon'
                   }
-
                 })
+                deviceType1.push(item)
+              } else if(index = 6) {
+                item.deviceRunVo.map((v, m) => {
+                  if(m > 10){
+                    item.flex = '2'
+                  } else {
+                    item.flex = '1'
+                  }
+                  if (v.state === '1') {
+                    v.color = 'grayIcon'
+                  } else if (v.state === '2') {
+                    v.color = 'blueIcon'
+                  } else if (v.state === '3') {
+                    v.color = 'greenIcon'
+                  } else if (v.state === '0') {
+                    v.color = 'redIcon'
+                  }
+                })
+                deviceType2.push(item)
               }
-              deviceType.push(item)
-
             })
           }
+          let att = []
+         
+          att.push(...deviceType1[4].deviceRunVo,{deviceNameRecord:'动力类',isdevice:true},...deviceType2[0].deviceRunVo)
+           let obj = {deviceRunVo:att,deviceType:'喷涂车间'}
+          deviceType1[4] = obj
+          console.log(att)
+          // deviceType1[4] = 
           // console.log(response.data);
           // 设备监控设备状态
-
-          this.deviceTypeList = deviceType
-
-
-          console.log(this.deviceTypeList)
+          this.deviceTypeList1 = deviceType1
+          // this.deviceTypeList2 = deviceType2
+          // console.log(this.deviceTypeList1)
         })
         .catch(function (error) {
           console.log(error);
@@ -389,6 +336,12 @@ div {
   background-size: 100% 100%;
   display: flex;
   flex-direction: column;
+  // .create-isLoading{
+  //   .el-loading-text{
+  //     color:white;
+  //   }
+  // }
+  
   .header {
     display: flex;
     width: 100%;
@@ -593,94 +546,123 @@ div {
             }
           }
         }
-        .devList {
-          width: 100%;
+        .devSectionMain {
+          position: relative;
           display: flex;
-          flex-direction: row;
-          flex-wrap: wrap;
-          .devTextBox {
-            margin: 1.5% 0;
-            width: 9%;
+          flex:1;
+          flex-direction: column;
+          .styleObj {
+            position:absolute;
+            left: 27%;
+            bottom: 2.6%;
+          }
+          .devList {
+            flex:1;
+            width: 100%;
             display: flex;
-            flex-direction: column;
-            .devText {
-              margin: 0 auto;
-              width: 48px;
-              height: 48px;
+            flex-direction: row;
+            flex-wrap: wrap;
+            .styleObj {
+              position:absolute;
+              left: 40%;
+              bottom: 10%;
+            }
+            .devTextBox {
+              width: 9%;
               display: flex;
               flex-direction: column;
-              .text {
-                font-weight: bold;
+              .devText {
+                margin: 0 auto;
+                width: 48px;
+                height: 48px;
+                display: flex;
+                flex-direction: column;
+                .text {
+                  font-weight: bold;
+                  color: white;
+                  font-size: 16px;
+                  letter-spacing: 3px;
+                  text-align: center;
+                }
+              }
+            }
+            .devRobotBox {
+              width: 9%;
+              display: flex;
+              flex-direction: column;
+              .devTextOnly {
+                margin: 0 auto;
+                width: 48px;
+                height: 48px;
+                display: flex;
+                flex-direction: column;
+                .text {
+                  font-weight: bold;
+                  color: white;
+                  font-size: 16px;
+                  letter-spacing: 3px;
+                  text-align: center;
+                }
+              }
+              .devRobot {
+                position: relative;
+                margin: 0 auto;
+                width: 48px;
+                height: 48px;
+                border: 1px solid rgba(0, 246, 255, 0.6);
+                .greenIcon {
+                  position: absolute;
+                  top: 3px;
+                  left: 3px;
+                  width: 5px;
+                  height: 12px;
+                  background: rgba(72, 227, 69, 1);
+                  border-radius: 2px;
+                }
+                .blueIcon {
+                  position: absolute;
+                  top: 3px;
+                  left: 3px;
+                  width: 5px;
+                  height: 12px;
+                  background: rgba(64, 139, 255, 1);
+                  border-radius: 2px;
+                }
+                .redIcon {
+                  position: absolute;
+                  top: 3px;
+                  left: 3px;
+                  width: 5px;
+                  height: 12px;
+                  background: rgba(234, 94, 6, 1);
+                  border-radius: 2px;
+                }
+                .grayIcon {
+                  position: absolute;
+                  top: 3px;
+                  left: 3px;
+                  width: 5px;
+                  height: 12px;
+                  background: rgba(164, 163, 163, 1);
+                  border-radius: 2px;
+                }
+                .robot {
+                  position: absolute;
+                  top: 9px;
+                  left: 7px;
+                  width: 31px;
+                  height: 31px;
+                  background: url('~@/assets/img/globalPage/robot.png')
+                    no-repeat;
+                  background-size: 100% 100%;
+                }
+              }
+              .devText {
                 color: white;
-                font-size: 16px;
-                letter-spacing: 3px;
                 text-align: center;
+                font-size: 13px;
+                line-height: 27px;
               }
-            }
-          }
-          .devRobotBox {
-            margin: 1.5% 0;
-            width: 9%;
-            display: flex;
-            flex-direction: column;
-            .devRobot {
-              position: relative;
-              margin: 0 auto;
-              width: 48px;
-              height: 48px;
-              border: 1px solid rgba(0, 246, 255, 0.6);
-              .greenIcon {
-                position: absolute;
-                top: 3px;
-                left: 3px;
-                width: 5px;
-                height: 12px;
-                background: rgba(72, 227, 69, 1);
-                border-radius: 2px;
-              }
-              .blueIcon {
-                position: absolute;
-                top: 3px;
-                left: 3px;
-                width: 5px;
-                height: 12px;
-                background: rgba(64, 139, 255, 1);
-                border-radius: 2px;
-              }
-              .redIcon {
-                position: absolute;
-                top: 3px;
-                left: 3px;
-                width: 5px;
-                height: 12px;
-                background: rgba(234, 94, 6, 1);
-                border-radius: 2px;
-              }
-              .grayIcon {
-                position: absolute;
-                top: 3px;
-                left: 3px;
-                width: 5px;
-                height: 12px;
-                background: rgba(164, 163, 163, 1);
-                border-radius: 2px;
-              }
-              .robot {
-                position: absolute;
-                top: 9px;
-                left: 7px;
-                width: 31px;
-                height: 31px;
-                background: url('~@/assets/img/globalPage/robot.png')
-                  no-repeat;
-                background-size: 100% 100%;
-              }
-            }
-            .devText {
-              color: white;
-              text-align: center;
-              font-size: 13px;
-              line-height: 27px;
             }
           }
         }
