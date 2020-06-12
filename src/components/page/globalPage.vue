@@ -1,7 +1,6 @@
 <!-- 大屏 -->
 <template>
-  <el-main class="global" v-loading="loading"
-    element-loading-text="加载中。。。"
+  <el-main class="global" v-loading="loading" element-loading-text="加载中。。。"
     element-loading-background="RGBA(0, 18, 53, 0.5)">
     <div class="header">
       <!-- <div class="leftWelcome">
@@ -64,7 +63,7 @@
               <div class="iconText">关机</div>
             </div>
           </div>
-          <div class="devSectionMain" >
+          <div class="devSectionMain">
             <div class="devList" v-for="(v,m) in deviceTypeList1" :key="m" :style="{flex:v.flex}">
               <div class="devTextBox">
                 <div class="devText">
@@ -143,7 +142,7 @@ export default {
       nextroute: '',
       deviceTypeList1: '', // 设备监控列表
       deviceTypeList2: '',
-      circleDate: {   
+      circleDate: {
         monthYield: '',
         offCount: '',
         useRate: '',
@@ -264,7 +263,7 @@ export default {
             response.data.map((item, index) => {
               if (index < 5) {
                 item.deviceRunVo.map((v, m) => {
-                  if(m > 10){
+                  if (m > 10) {
                     item.flex = '2'
                   } else {
                     item.flex = '1'
@@ -280,9 +279,9 @@ export default {
                   }
                 })
                 deviceType1.push(item)
-              } else if(index = 6) {
+              } else if (index = 6) {
                 item.deviceRunVo.map((v, m) => {
-                  if(m > 10){
+                  if (m > 10) {
                     item.flex = '2'
                   } else {
                     item.flex = '1'
@@ -302,9 +301,9 @@ export default {
             })
           }
           let att = []
-         
-          att.push(...deviceType1[4].deviceRunVo,{deviceNameRecord:'动力类',isdevice:true},...deviceType2[0].deviceRunVo)
-           let obj = {deviceRunVo:att,deviceType:'喷涂车间'}
+
+          att.push(...deviceType1[4].deviceRunVo, { deviceNameRecord: '动力类', isdevice: true }, ...deviceType2[0].deviceRunVo)
+          let obj = { deviceRunVo: att, deviceType: '喷涂车间' }
           deviceType1[4] = obj
           console.log(att)
           // deviceType1[4] = 
@@ -341,7 +340,7 @@ div {
   //     color:white;
   //   }
   // }
-  
+
   .header {
     display: flex;
     width: 100%;
@@ -464,7 +463,7 @@ div {
             background-position-x: center;
             color: #00f6ff;
             text-align: center;
-            height: 70%;
+            height: 75%;
             width: 100%;
             display: flex;
             justify-content: center;
@@ -549,21 +548,21 @@ div {
         .devSectionMain {
           position: relative;
           display: flex;
-          flex:1;
+          flex: 1;
           flex-direction: column;
           .styleObj {
-            position:absolute;
+            position: absolute;
             left: 27%;
             bottom: 2.6%;
           }
           .devList {
-            flex:1;
+            flex: 1;
             width: 100%;
             display: flex;
             flex-direction: row;
             flex-wrap: wrap;
             .styleObj {
-              position:absolute;
+              position: absolute;
               left: 40%;
               bottom: 10%;
             }
@@ -607,51 +606,51 @@ div {
               .devRobot {
                 position: relative;
                 margin: 0 auto;
-                width: 48px;
-                height: 48px;
+                width: 2.5vw;
+                height: 5.12vh;
                 border: 1px solid rgba(0, 246, 255, 0.6);
                 .greenIcon {
                   position: absolute;
-                  top: 3px;
-                  left: 3px;
-                  width: 5px;
-                  height: 12px;
+                  top: 9%;
+                  left: 7%;
+                  width: 10%;
+                  height: 25%;
                   background: rgba(72, 227, 69, 1);
                   border-radius: 2px;
                 }
                 .blueIcon {
                   position: absolute;
-                  top: 3px;
-                  left: 3px;
-                  width: 5px;
-                  height: 12px;
+                  top: 9%;
+                  left: 7%;
+                  width: 10%;
+                  height: 25%;
                   background: rgba(64, 139, 255, 1);
                   border-radius: 2px;
                 }
                 .redIcon {
                   position: absolute;
-                  top: 3px;
-                  left: 3px;
-                  width: 5px;
-                  height: 12px;
+                  top: 9%;
+                  left: 7%;
+                  width: 10%;
+                  height: 25%;
                   background: rgba(234, 94, 6, 1);
                   border-radius: 2px;
                 }
                 .grayIcon {
                   position: absolute;
-                  top: 3px;
-                  left: 3px;
-                  width: 5px;
-                  height: 12px;
+                  top: 9%;
+                  left: 7%;
+                  width: 10%;
+                  height: 25%;
                   background: rgba(164, 163, 163, 1);
                   border-radius: 2px;
                 }
                 .robot {
                   position: absolute;
-                  top: 9px;
-                  left: 7px;
-                  width: 31px;
-                  height: 31px;
+                  top: 20%;
+                  left: 16%;
+                  width: 65%;
+                  height: 65%;
                   background: url('~@/assets/img/globalPage/robot.png')
                     no-repeat;
                   background-size: 100% 100%;

@@ -122,10 +122,10 @@ export default {
 .chartContent {
   .chartText {
     position: absolute;
-    left: 48.8%;
+    left: 49.8%;
     top: 70px;
     transform: translate(-50%, 50%);
-    width: 79%;
+    width: 76.5%;
     height: 20px;
     color: white;
     font-size: 13px;
