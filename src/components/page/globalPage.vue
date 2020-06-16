@@ -409,7 +409,7 @@ div {
           text-align: center;
           padding: 30px 5px;
           width: 100%;
-          height: 70px;
+          height: 7.8vh;
           line-height: 31px;
           color: #00f6ff;
           font-size: 14px;
