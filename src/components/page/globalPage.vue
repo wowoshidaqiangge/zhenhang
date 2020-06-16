@@ -577,8 +577,8 @@ div {
                 .text {
                   font-weight: bold;
                   color: white;
-                  font-size: 16px;
-                  letter-spacing: 3px;
+                  font-size: 1.8vh;
+                  letter-spacing: 0.3vh;
                   text-align: center;
                 }
               }
@@ -596,8 +596,8 @@ div {
                 .text {
                   font-weight: bold;
                   color: white;
-                  font-size: 16px;
-                  letter-spacing: 3px;
+                  font-size: 1.8vh;
+                  letter-spacing: 0.3vh;
                   text-align: center;
                 }
               }
@@ -657,8 +657,8 @@ div {
               .devText {
                 color: white;
                 text-align: center;
-                font-size: 13px;
-                line-height: 27px;
+                font-size: 1.5vh;
+                line-height: 3vh;
               }
             }
           }
