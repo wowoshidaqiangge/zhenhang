@@ -253,66 +253,64 @@ export default {
     // 设备运行监控
     deviceMonitorFunc() {
       this.loading = true
-      api.deviceMonitor()
-        .then(response => {
-          this.loading = false
-          console.log(response.data);
-          let deviceType1 = []
-          let deviceType2 = []
-          if (Array.isArray(response.data)) {
-            response.data.map((item, index) => {
-              if (index < 5) {
-                item.deviceRunVo.map((v, m) => {
-                  if (m > 10) {
-                    item.flex = '2'
-                  } else {
-                    item.flex = '1'
-                  }
-                  if (v.state === '1') {
-                    v.color = 'grayIcon'
-                  } else if (v.state === '2') {
-                    v.color = 'blueIcon'
-                  } else if (v.state === '3') {
-                    v.color = 'greenIcon'
-                  } else if (v.state === '0') {
-                    v.color = 'redIcon'
-                  }
-                })
-                deviceType1.push(item)
-              } else if (index = 6) {
-                item.deviceRunVo.map((v, m) => {
-                  if (m > 10) {
-                    item.flex = '2'
-                  } else {
-                    item.flex = '1'
-                  }
-                  if (v.state === '1') {
-                    v.color = 'grayIcon'
-                  } else if (v.state === '2') {
-                    v.color = 'blueIcon'
-                  } else if (v.state === '3') {
-                    v.color = 'greenIcon'
-                  } else if (v.state === '0') {
-                    v.color = 'redIcon'
-                  }
-                })
-                deviceType2.push(item)
-              }
-            })
-          }
-          let att = []
-
-          att.push(...deviceType1[4].deviceRunVo, { deviceNameRecord: '动力类', isdevice: true }, ...deviceType2[0].deviceRunVo)
-          let obj = { deviceRunVo: att, deviceType: '喷涂车间' }
-          deviceType1[4] = obj
-          console.log(att)
-          // deviceType1[4] = 
-          // console.log(response.data);
-          // 设备监控设备状态
-          this.deviceTypeList1 = deviceType1
-          // this.deviceTypeList2 = deviceType2
-          // console.log(this.deviceTypeList1)
-        })
+      api.deviceMonitor().then(response => {
+        this.loading = false
+        console.log(response.data);
+        let deviceType1 = []
+        let deviceType2 = []
+        if (Array.isArray(response.data)) {
+          response.data.map((item, index) => {
+            if (index < 5) {
+              item.deviceRunVo.map((v, m) => {
+                if (m > 10) {
+                  item.flex = '2'
+                } else {
+                  item.flex = '1'
+                }
+                if (v.state === '1') {
+                  v.color = 'grayIcon'
+                } else if (v.state === '2') {
+                  v.color = 'blueIcon'
+                } else if (v.state === '3') {
+                  v.color = 'greenIcon'
+                } else if (v.state === '0') {
+                  v.color = 'redIcon'
+                }
+              })
+              deviceType1.push(item)
+            } else if (index = 6) {
+              item.deviceRunVo.map((v, m) => {
+                if (m > 10) {
+                  item.flex = '2'
+                } else {
+                  item.flex = '1'
+                }
+                if (v.state === '1') {
+                  v.color = 'grayIcon'
+                } else if (v.state === '2') {
+                  v.color = 'blueIcon'
+                } else if (v.state === '3') {
+                  v.color = 'greenIcon'
+                } else if (v.state === '0') {
+                  v.color = 'redIcon'
+                }
+              })
+              deviceType2.push(item)
+            }
+          })
+        }
+        let att = []
+        att.push(...deviceType1[4].deviceRunVo, { deviceNameRecord: '动力类', isdevice: true }, ...deviceType2[0].deviceRunVo)
+        let obj = { deviceRunVo: att, deviceType: '喷涂车间' }
+        deviceType1[4] = obj
+        console.log(att)
+        // deviceType1[4] = 
+        // console.log(response.data);
+        // 设备监控设备状态
+        this.deviceTypeList1 = deviceType1
+        // this.deviceTypeList2 = deviceType2
+        // console.log(this.deviceTypeList1)
+      })
         .catch(function (error) {
           console.log(error);
         });
@@ -572,8 +570,8 @@ div {
               flex-direction: column;
               .devText {
                 margin: 0 auto;
-                width: 48px;
-                height: 48px;
+                width: 2.5vw;
+                height: 5.12vh;
                 display: flex;
                 flex-direction: column;
                 .text {
@@ -591,8 +589,8 @@ div {
               flex-direction: column;
               .devTextOnly {
                 margin: 0 auto;
-                width: 48px;
-                height: 48px;
+                width: 2.5vw;
+                height: 5.12vh;
                 display: flex;
                 flex-direction: column;
                 .text {
