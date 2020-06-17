@@ -1,11 +1,10 @@
 <template>
     <div class="mainrecord">
         <div class="top">
-            <el-row>
+            
                 <el-form :model="seachinfo" ref="seachinfo" class="demo-ruleForm">
-                    <el-col :span="6">
-                        <el-form-item label=""> </el-form-item>
-                    </el-col>
+                    <el-row type="flex" justify="end">
+                   
                     <el-col :span="5">
                         <el-form-item label="" prop="value1">
                             <el-date-picker
@@ -16,30 +15,30 @@
                                 range-separator="至"
                                 start-placeholder="开始日期"
                                 end-placeholder="结束日期"
+                                style="width:100%"
                             >
                             </el-date-picker>
                         </el-form-item>
                     </el-col>
-                    <el-col :span="6" style="margin:0 20px">
-                        <el-form-item label="设备状态">
+                    <el-col :span="3" style="margin:0 20px">
+                        <el-form-item label="">
                             <el-select v-model="state" placeholder="请选择">
                                 <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"> </el-option>
                             </el-select>
                         </el-form-item>
                     </el-col>
-                    <el-col :span="3" style="margin-right:10px">
+                    <el-col :span="3" >
                         <el-form-item label="" prop="productNameOrCode">
                             <el-input placeholder="请输入名称或编号" prefix-icon="el-icon-search" v-model="deviceNameOrCode"> </el-input>
                         </el-form-item>
                     </el-col>
-                    <el-col :span="3">
-                        <el-form-item label="">
-                            <el-button class="searchBtn" size="mini" type="add" @click="searchmain()">查询</el-button>
+                    <div style="margin:0 15px">
+                            <el-button class="searchBtn"  type="add" @click="searchmain()">查询</el-button>
                             <el-button type="success" icon="el-icon-refresh-right" @click="resetting">重置</el-button>
-                        </el-form-item>
-                    </el-col>
+                    </div>
+                    </el-row>
                 </el-form>
-            </el-row>
+            
         </div>
 
         <div class="bot">

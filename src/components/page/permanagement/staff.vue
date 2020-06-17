@@ -15,13 +15,12 @@
       </div>
       <div class="right" >
            <div class="top">
-                <el-row>
-                    <el-form :model="seachinfo"  ref="seachinfo"  class="demo-ruleForm">
-                    <el-col :span="12">
-                        <el-form-item label="" >
+                
+                <el-form :model="seachinfo"  ref="seachinfo"  class="demo-ruleForm">
+                    <el-row type="flex" justify="end">
+                    <div style="flex:1">
                             <el-button type="add" icon='el-icon-circle-plus-outline' @click="add">新增</el-button>
-                        </el-form-item>
-                    </el-col>
+                    </div>
                    
                     <el-col :span="3" style="margin:0 20px">
                         <el-form-item label=""  prop="isValid" >
@@ -35,20 +34,19 @@
                             </el-select>
                         </el-form-item>
                     </el-col>
-                    <el-col :span="3" style="margin-right:10px">
+                    <el-col :span="3" >
                         <el-form-item label=""  prop="userNameOrPhone" >
                             <el-input  placeholder="用户名" v-model="seachinfo.userNameOrPhone" class="elinput"> </el-input>
                         </el-form-item>
                         
                     </el-col>
-                    <el-col :span="4">
-                        <el-form-item label="" class="bot">
-                                <el-button type="add" icon="el-icon-search" @click="seachinfo1">搜索</el-button>
-                                <el-button type="success" icon="el-icon-refresh-right" @click="resetting">重置</el-button>
-                        </el-form-item>
-                    </el-col>
-                    </el-form>
-                </el-row>
+                    <div style="margin:0 15px">
+                            <el-button type="add" icon="el-icon-search" @click="seachinfo1">搜索</el-button>
+                            <el-button type="success" icon="el-icon-refresh-right" @click="resetting">重置</el-button>
+                    </div>
+                    </el-row>
+                </el-form>
+                
             </div>
           <div class="bot" v-loading='botloading'  element-loading-spinner="el-icon-loading" element-loading-text="加载中...">
              <el-table

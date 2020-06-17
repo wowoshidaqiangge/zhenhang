@@ -136,7 +136,7 @@ export default {
   data() {
     return {
       loading: true, // 未加载完成动画
-      userName: localStorage.getItem('ms_username'),
+      userName: sessionStorage.getItem('ms_username'),
       currentTmie: '', //当前时间
       currentTimer: {}, // 实时日期时间的定时器
       nextroute: '',
@@ -229,7 +229,7 @@ export default {
       this.$router.push({ path: `/${this.nextroute}` })
     },
     getuserListMenu() {
-      userListMenu({ id: localStorage.getItem('userId') }).then(res => {
+      userListMenu({ id: sessionStorage.getItem('userId') }).then(res => {
         if (res.code === '0') {
           if (Array.isArray(res.data) && res.data.length > 0) {
             this.nextroute = res.data[0].children[0].obj.index

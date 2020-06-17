@@ -1,13 +1,10 @@
 <template>
   <div class="purchase">
        <div class="top">
-          <el-row>
+          
               <el-form :model="seachinfo"  ref="seachinfo"  class="demo-ruleForm">
-              <el-col :span="12">
-                   <el-form-item label="" >
-                      
-                   </el-form-item>
-              </el-col>
+              <el-row type="flex" justify="end">
+              
               <el-col :span="5">
                   <el-form-item label="" prop="value1">
                         <el-date-picker
@@ -29,14 +26,13 @@
                  </el-form-item>
                   
               </el-col>
-              <el-col :span="3">
-                  <el-form-item label="" >
-                        <el-button type="add" icon="el-icon-search" @click="seachinfo1">搜索</el-button>
-                        <el-button type="success" icon="el-icon-refresh-right" @click="resetting">重置</el-button>
-                   </el-form-item>
-              </el-col>
+              <div style="margin:0 15px">
+                      <el-button type="add" icon="el-icon-search" @click="seachinfo1">搜索</el-button>
+                      <el-button type="success" icon="el-icon-refresh-right" @click="resetting">重置</el-button>
+              </div>
+              </el-row>
             </el-form>
-          </el-row>
+         
      </div>
      <div>
          <el-table

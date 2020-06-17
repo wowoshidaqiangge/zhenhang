@@ -1,55 +1,52 @@
 <template>
   <div class="production">
       <div class="top">
-          <el-row>
               <el-form :model="seachinfo"  ref="seachinfo"  class="demo-ruleForm">
-              <el-col :span="10">
-                   <el-form-item label="" >
-                       <el-button type="add" icon='el-icon-circle-plus-outline' @click="add">新增</el-button>
-                   </el-form-item>
-              </el-col>
-              
-              <el-col :span="5">
-                  <el-form-item label="" prop="value1">
-                        <el-date-picker
-                            v-model="value1"
-                            type="daterange"
-                            range-separator="至"
-                            start-placeholder="开始日期"
-                            @change="changedate"
-                            class="datetime"
-                            end-placeholder="结束日期">
-                        </el-date-picker>
-                  </el-form-item>
-                  
-              </el-col>
-              <el-col :span="2" style="margin:0 20px">
-                 <el-form-item label=""  prop="state" >
-                     <el-select v-model="seachinfo.state"  placeholder="状态" >
-                        <el-option
-                            v-for="item in orderlist"
-                            :key="item.enumKey"
-                            :label="item.enumValue"
-                            :value="item.enumKey">
-                        </el-option>
-                    </el-select>
-                 </el-form-item>
-              </el-col>
-              <el-col :span="3" style="margin-right:10px">
-                  <el-form-item label=""  prop="productNameOrCode" >
-                     <el-input  placeholder="产品名称或编码" v-model="seachinfo.productNameOrCode" class="elinput"> </el-input>
-                 </el-form-item>
-                  
-              </el-col>
-              <el-col :span="3">
-                  <el-form-item label="" >
-                        <el-button type="add" icon="el-icon-search" @click="seachinfo1">搜索</el-button>
-                        <el-button type="success" icon="el-icon-refresh-right" @click="resetting">重置</el-button>
-                   </el-form-item>
-              </el-col>
-            </el-form>
-          </el-row>
-     </div>
+              <el-row type="flex" justify="end">
+                    <div style="flex:1">
+                        <el-button type="add" icon='el-icon-circle-plus-outline' @click="add">新增</el-button>
+                    </div>
+                    
+                    <el-col :span="5">
+                        <el-form-item label="" prop="value1">
+                                <el-date-picker
+                                    v-model="value1"
+                                    type="daterange"
+                                    range-separator="至"
+                                    start-placeholder="开始日期"
+                                    @change="changedate"
+                                    class="datetime"
+                                    end-placeholder="结束日期">
+                                </el-date-picker>
+                        </el-form-item>
+                        
+                    </el-col>
+                    <el-col :span="2" style="margin:0 20px">
+                        <el-form-item label=""  prop="state" >
+                            <el-select v-model="seachinfo.state"  placeholder="状态" >
+                                <el-option
+                                    v-for="item in orderlist"
+                                    :key="item.enumKey"
+                                    :label="item.enumValue"
+                                    :value="item.enumKey">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="3">
+                        <el-form-item label=""  prop="productNameOrCode" >
+                            <el-input  placeholder="产品名称或编码" v-model="seachinfo.productNameOrCode" class="elinput"> </el-input>
+                        </el-form-item>
+                        
+                    </el-col>
+                    <div style="margin:0 15px">
+                            <el-button type="add" icon="el-icon-search" @click="seachinfo1">搜索</el-button>
+                            <el-button type="success" icon="el-icon-refresh-right" @click="resetting">重置</el-button>
+                    </div>
+                    </el-row>
+                </el-form>
+                
+            </div>
      <div>
              <el-table
                 :data="tableData"
@@ -313,7 +310,7 @@ export default {
 <style lang='less'>
     .production{
          .top{
-                height: 5px;
+                height: 50px;
             
                 margin-top: 10px;
                 .datetime{

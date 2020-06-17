@@ -1,19 +1,18 @@
 <template>
   <div class="poper">
     <div class="top">
-      <el-row>
+      
         <el-form
           :model="seachinfo"
           ref="seachinfo"
           class="demo-ruleForm"
         >
-          <el-col :span="9">
-            <el-form-item label> </el-form-item>
-          </el-col>
+        <el-row type="flex" justify="end">
+          
           <el-col :span="3" style="margin:0 20px">
             <el-form-item
-              label="车间"
-              label-width="50px"
+              label=""
+             
               prop="deptId"
             >
               <el-select
@@ -44,8 +43,7 @@
             </el-form-item>
           </el-col>
 
-          <el-col :span="5" style="margin-left:20px">
-            <el-form-item label class="bot">
+          <div style="margin:0 15px">
               <el-button
                 type="add"
                 icon="el-icon-search"
@@ -61,10 +59,10 @@
               <el-button type="add" @click="excelexport"
                 >EXCEL导出</el-button
               >
-            </el-form-item>
-          </el-col>
+          </div>
+          </el-row>
         </el-form>
-      </el-row>
+      
     </div>
     <div class="echarttit">{{ echarttitle }}</div>
     <div class="bot">
@@ -88,13 +86,13 @@
             ></el-table-column>
             <el-table-column
               prop="planDay"
-              label="计划时长(H)"
+              label="计划时长(天)"
               align="center"
             ></el-table-column>
             <el-table-column
               prop="realDay"
               align="center"
-              label="完成时长(H)"
+              label="完成时长(天)"
             ></el-table-column>
           </el-table>
         </el-tab-pane>

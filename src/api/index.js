@@ -94,7 +94,7 @@ export const authUser = query => {
         url: '/api/auth/user',
         data:query,
         method: 'post',
-        headers: {'userId': localStorage.getItem('userId')}
+        headers: {'userId': sessionStorage.getItem('userId')}
       })
   }
 
@@ -133,7 +133,7 @@ export const authrole = query => {
     url: '/api/auth/role',
     data:query,
     method: 'post',
-    headers: {'userId': localStorage.getItem('userId')}
+    headers: {'userId': sessionStorage.getItem('userId')}
   })
 }
 
@@ -172,7 +172,7 @@ export const planPage = query => {
       url: `/api/maintain/plan/page`,
       method: 'get',
       params:query,
-      // headers: {'userId': localStorage.getItem('userId')}
+      // headers: {'userId': sessionStorage.getItem('userId')}
   });
 }
 
@@ -295,7 +295,7 @@ export const produceTask = query => {
       url: `/api/producetask/produceTask`,
       method: 'post',
       data:query,
-      headers: {'userId': localStorage.getItem('userId')}
+      headers: {'userId': sessionStorage.getItem('userId')}
   });
 }
 
@@ -489,7 +489,7 @@ export const listByUserId = query => {
       url: `/api/producetask/produceTaskAssign/listByUserId`,
       method: 'get',
       params:query,
-      headers: {'userId': localStorage.getItem('userId')}
+      headers: {'userId': sessionStorage.getItem('userId')}
   });
 }
 
@@ -510,7 +510,7 @@ export const produceTaskReport = query => {
       url: `/api/producetask/produceTaskReport`,
       method: 'post',
       data:query,
-      headers: {'userId': localStorage.getItem('userId')}
+      headers: {'userId': sessionStorage.getItem('userId')}
   });
 }
 

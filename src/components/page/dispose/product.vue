@@ -1,14 +1,13 @@
 <template>
   <div class="product">
        <div class="top">
-            <el-row>
-                <el-form :model="seachinfo"  ref="seachinfo"  class="demo-ruleForm">
-                <el-col :span="15">
-                    <el-form-item label="" >
+            
+            <el-form :model="seachinfo"  ref="seachinfo"  class="demo-ruleForm">
+                <el-row type="flex" justify="end">
+               <div style="flex:1">
                         <el-button type="add" icon='el-icon-circle-plus-outline' @click="add">新增</el-button>
                         <el-button type="add"  @click="addexcel">EXCEL导入</el-button>
-                    </el-form-item>
-                </el-col>
+               </div>
                 
                 <el-col :span="2" style="margin:0 20px">
                   <el-form-item label=""  prop="state" >
@@ -22,20 +21,19 @@
                       </el-select>
                   </el-form-item>
                 </el-col>
-                <el-col :span="3" style="margin-right:10px">
+                <el-col :span="3" >
                     <el-form-item label=""  prop="productNameOrCode" >
                       <el-input  placeholder="产品名称或编码" v-model="seachinfo.productNameOrCode" class="elinput"> </el-input>
                   </el-form-item>
                     
                 </el-col>
-                <el-col :span="3">
-                    <el-form-item label="" >
+                <div style="margin:0 15px">
                           <el-button type="add" icon="el-icon-search" @click="seachinfo1">搜索</el-button>
                           <el-button type="success" icon="el-icon-refresh-right" @click="resetting">重置</el-button>
-                    </el-form-item>
-                </el-col>
+                </div>
+                </el-row>
               </el-form>
-            </el-row>
+           
       </div>
         <div class="bot">
               <el-table
@@ -161,7 +159,7 @@ export default {
     },
     methods: {
         addexcel(){
-            this.tit = "导入物料"
+            this.tit = "导入EXCEL"
             this.dialogFormVisible1 = true
         },
         resetting(){

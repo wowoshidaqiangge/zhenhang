@@ -1,48 +1,45 @@
 <template>
   <div class="devicemain">
       <div class="top">
-          <el-row>
-              <el-form :model="terms"  ref="terms"  class="demo-ruleForm">
-              <el-col :span="3">
-                  <el-form-item label="日期" label-width='50px'  prop="yearParam">
-                        <el-date-picker
-                               v-model="terms.yearParam"
-                                @change="changeyear"
-                                class="datetime"
-                                type="year" format="yyyy"
-                                placeholder="选择年">
-                        </el-date-picker>
-                    </el-form-item>
-              </el-col>
-              <el-col :span="3" style="margin:0 20px">
-                 <el-form-item label="设备类型" prop='toType' label-width='80px'>
-                        <el-select v-model="terms.toType"   @change='changesel' placeholder="选择设备类型">
-                            <el-option v-for="item in deviceList" :label="item.enumValue" :key='item.enumKey' :value="item.enumKey"></el-option>
-                        </el-select>
-                    </el-form-item>
-              </el-col>
-              <el-col :span="4" style="margin-right:10px">
-                 <el-form-item label="设备" prop='deviceId' label-width='50px'>
-                       <el-select v-model="terms.deviceId"  clearable filterable placeholder="选择设备">
-                            <el-option v-for="item in stateArr" :label="item.deviceName" :key='item.deviceId' :value="item.deviceId"></el-option>
-                        </el-select>
-                    </el-form-item>
-                  
-              </el-col>
-               <el-col :span="10">
-                   <el-form-item label="" >
-                      
-                   </el-form-item>
-              </el-col>
-              <el-col :span="3">
-                  <el-form-item label="" >
-                        <el-button type="primary" @click="onReset" style="float:right;margin-left:10px">重置</el-button>
-                         <el-button type="danger" @click="onSubmit" style="float:right">查询</el-button>
+          
+        <el-form :model="terms"  ref="terms"  class="demo-ruleForm">
+            <el-row type="flex" justify="end">
+              <div style="flex:1">
+                  <el-col :span="3">
+                        <el-form-item   prop="yearParam" style="margin-left: 15px">
+                                <el-date-picker
+                                    v-model="terms.yearParam"
+                                        @change="changeyear"
+                                        class="datetime"
+                                        type="year" format="yyyy"
+                                        placeholder="选择年">
+                                </el-date-picker>
+                            </el-form-item>
+                    </el-col>
+                    <el-col :span="3" style="margin:0 20px">
+                        <el-form-item label="" prop='toType'>
+                                <el-select v-model="terms.toType"   @change='changesel' placeholder="选择设备类型" style="width:100%">
+                                    <el-option v-for="item in deviceList" :label="item.enumValue" :key='item.enumKey' :value="item.enumKey"></el-option>
+                                </el-select>
+                            </el-form-item>
+                    </el-col>
+                    <el-col :span="4" style="margin-right:10px">
+                        <el-form-item label="" prop='deviceId'>
+                            <el-select v-model="terms.deviceId"  clearable filterable placeholder="选择设备">
+                                    <el-option v-for="item in stateArr" :label="item.deviceName" :key='item.deviceId' :value="item.deviceId"></el-option>
+                                </el-select>
+                            </el-form-item>
                         
-                   </el-form-item>
-              </el-col>
-            </el-form>
-          </el-row>
+                    </el-col>
+              </div>
+               <div style="margin:0 15px">
+                        <el-button type="primary" @click="onReset" style="float:right;margin-left:10px">重置</el-button>
+                        <el-button type="danger" @click="onSubmit" style="float:right">查询</el-button>
+                        
+               </div>
+            </el-row>
+        </el-form>
+         
      </div>
       
        
@@ -241,6 +238,7 @@ export default {
                         if(item.createTime){
                             item.createTime = item.createTime.split(' ')[0]
                         }
+                        item.period = item.period === 'month' ? '月' : '年'
                     })
                     this.pagesize = parseInt(res.data.current)
                     this.totals = parseInt(res.data.total)

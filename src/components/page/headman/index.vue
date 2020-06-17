@@ -120,7 +120,7 @@ export default {
       dialogVisible1: false,
       modalinfo: {},
       goToPayinfo: '',
-      icCard: localStorage.getItem('icCard')
+      icCard: sessionStorage.getItem('icCard')
     };
   },
   computed: {

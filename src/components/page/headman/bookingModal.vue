@@ -111,7 +111,7 @@ export default {
                 productCode:'',
                 produceCount:''
             },
-            icCard:localStorage.getItem('icCard'),
+            icCard:sessionStorage.getItem('icCard'),
             formLabelWidth: '80px',
             rules: {
                

@@ -1,5 +1,5 @@
 <template>
-  <div class="planmodal">
+  <div class="repairexamodal">
     <el-dialog 
     title="查看" 
     :destroy-on-close='isclose'
@@ -73,7 +73,7 @@
 <script>
 import { mainrepairid, devInfo} from 'api/main'
 export default {
-    name: 'planmodal',
+    name: 'repairexamodal',
   
     props:{
         dialogFormVisible1:{
@@ -149,7 +149,7 @@ export default {
 
 
 <style lang='less'>
-    .planmodal{
+    .repairexamodal{
         .el-dialog{
             border-radius: 5px;
         }

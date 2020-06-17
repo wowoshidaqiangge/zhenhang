@@ -61,9 +61,12 @@
 
                         <el-col :span="12">
                             <el-form-item label="生产设备" :label-width="formLabelWidth" prop="deviceId">
-                                <el-select v-model="form.deviceId" placeholder="请选择">
+                                <el-cascader v-model="form.deviceId" :options="devicelist" :props="casprops1" >
+                                </el-cascader>
+                                <!-- <el-select v-model="form.deviceId" placeholder="请选择">
+                                    
                                     <el-option v-for="item in devicelist" :key="item.id" :label="item.name" :value="item.id"> </el-option>
-                                </el-select>
+                                </el-select> -->
                             </el-form-item>
                         </el-col>
                     </div>
@@ -104,7 +107,7 @@
 </template>
 
 <script>
-import { produceTaskPlanid, saveProduceTaskPlan, deviceList, userListByDept, produceTaskAssign } from 'api/index';
+import { produceTaskPlanid, saveProduceTaskPlan, deviceList, userListByDept, produceTaskAssign,deviceListByType } from 'api/index';
 import { onenet } from 'api/onenet';
 import moment from 'moment';
 export default {
@@ -157,19 +160,33 @@ export default {
             getuserList: [],
             casprops: {
                 label: 'title',
-
                 value: 'id',
                 children: 'userList'
+            },
+            casprops1: {
+                label: 'title',
+                value: 'id',
+                children: 'deviceList'
             }
         };
     },
     created() {
-        this.getdeviceList();
+        // this.getdeviceList();
         this.getuserListByDept();
+        this.getdeviceListByType()
     },
     watch: {},
 
     methods: {
+        // 所有设备
+        getdeviceListByType(){
+            deviceListByType().then(res=>{
+                if(res.code ==='0') {
+                    debugger
+                    this.devicelist = res.data;
+                }
+            })
+        },
         handleSuccess(res, file) {
             var a = this.host + '/' + this.ossParams.key;
             this.form.technologyName = file.name;
@@ -209,7 +226,7 @@ export default {
                                 this.ossParams.OSSAccessKeyId = response.accessid;
                                 this.ossParams.policy = response.policy;
                                 this.ossParams.signature = response.signature;
-                                this.ossParams.key = localStorage.getItem('userId') + this.randomWord(true, 9, 12) + '.' + fileName;
+                                this.ossParams.key = sessionStorage.getItem('userId') + this.randomWord(true, 9, 12) + '.' + fileName;
                                 resolve();
                             }
                         }.bind(this)
@@ -306,6 +323,9 @@ export default {
                         if (Array.isArray(this.form.userId)) {
                             this.form.deptId = this.form.userId[0];
                             this.form.userId = this.form.userId[1];
+                        }
+                        if(Array.isArray(this.form.deviceId)){
+                            this.form.deviceId = this.form.deviceId[1]
                         }
                         produceTaskAssign(this.form).then(res => {
                             this.$message.success(res.msg);

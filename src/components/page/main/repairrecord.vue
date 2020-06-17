@@ -1,13 +1,12 @@
 <template>
     <div class="repairrecord">
         <div class="top">
-            <el-row>
+            
                 <el-form :model="seachinfo"  ref="seachinfo"  class="demo-ruleForm">
-                <el-col :span="9">
-                    <el-form-item label="" >
-                        <el-button type="add" icon="el-icon-circle-plus-outline" @click="recordAdd()">新增</el-button>
-                    </el-form-item>
-                </el-col>
+                <el-row type="flex" justify="end">
+                <div style="flex:1">
+                    <el-button type="add" icon="el-icon-circle-plus-outline" @click="recordAdd()">新增</el-button>
+                </div>
                 <el-col :span="6">
                     <el-form-item label="" prop="chosedTime">
                             <el-date-picker
@@ -31,19 +30,18 @@
                             </el-select>
                         </el-form-item>
                     </el-col>
-                    <el-col :span="3" style="margin-right:10px">
+                    <el-col :span="3" >
                         <el-form-item label="" prop="deviceNameOrCode">
                             <el-input placeholder="设备名称或编码" v-model="seachinfo.deviceNameOrCode" class="elinput"> </el-input>
                         </el-form-item>
                     </el-col>
-                    <el-col :span="3">
-                        <el-form-item label="">
+                    <div style="margin:0 15px">
                             <el-button type="add" icon="el-icon-search" @click="seachinfo1">搜索</el-button>
                             <el-button type="success" icon="el-icon-refresh-right" @click="resetting">重置</el-button>
-                        </el-form-item>
-                    </el-col>
+                    </div>
+                    </el-row>
                 </el-form>
-            </el-row>
+            
         </div>
 
         <div class="bot">

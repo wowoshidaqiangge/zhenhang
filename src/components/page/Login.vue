@@ -87,8 +87,8 @@ export default {
                         duration: 700,
                         });
                         // this.$message.success('登录成功');
-                        localStorage.setItem('ms_username', res.username);
-                        localStorage.setItem('TagsList', '');
+                        sessionStorage.setItem('ms_username', res.username);
+                        sessionStorage.setItem('TagsList', '');
 
                         if (res.roleId === '1000') {
                             // bus.$emit('isman', true);
@@ -101,13 +101,13 @@ export default {
                     // login(this.param).then(res=>{
                     //  if(res.code==='0'){
                     //       this.$message.success('登录成功');
-                    //      localStorage.setItem('userId', res.data.id);
-                    //      localStorage.setItem('ms_username', res.data.username);
+                    //      sessionStorage.setItem('userId', res.data.id);
+                    //      sessionStorage.setItem('ms_username', res.data.username);
                     //      this.$router.push('/')
                     //  }
                     // })
                     // this.$message.success('登录成功');
-                    // localStorage.setItem('ms_username', this.param.username);
+                    // sessionStorage.setItem('ms_username', this.param.username);
                     // this.$router.push('/')
                 } else {
                     this.$message.error('请输入账号和密码');
