@@ -29,11 +29,11 @@ export default {
   computed: {
   },
   methods: {
-    // 设备综合利用率
+    // 设备工作效率排行
     deviceEfficiencyFunc() {
       api.deviceEfficiency()
         .then(response => {
-          // console.log(response);
+          console.log(response);
           let res = response.data;
           this.devEfficiencyList = res;
           // console.log(this.devEfficiencyList);
@@ -41,7 +41,7 @@ export default {
           let yarr = []
           response.data.map(item => {
             xarr.push(item.deviceName)
-            yarr.push(item.workpieceRate)
+            yarr.push(item.runYield)
           })
           // debugger
           let myChart = echarts.init(
@@ -75,7 +75,7 @@ export default {
               formatter: '设备工作效率<br/>{b}：{c}'
             },
             grid: {
-              left: '3.3%',
+              left: '6%',
               right: '12%',
               // height: "100%",
               top: '5%',
