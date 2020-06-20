@@ -1,5 +1,5 @@
 <template>
-  <div class="recordmodal">
+  <div class="recordmodal2">
     <el-dialog 
     :title="tit" 
     :destroy-on-close='isclose'
@@ -81,7 +81,7 @@ import { deviceToTypeList,devicesave,deviceid,deviceupdate} from 'api/main'
 import { deviceTypeList} from 'api/index'
 
 export default {
-    name: 'recordmodal',
+    name: 'recordmodal2',
   
     props:{
         dialogFormVisible:{
@@ -206,7 +206,7 @@ export default {
 
 
 <style lang='less'>
-    .recordmodal{
+    .recordmodal2{
         .el-dialog{
             border-radius: 5px;
         }

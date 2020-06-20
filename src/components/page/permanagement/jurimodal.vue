@@ -138,10 +138,12 @@ export default {
          
        },
        marksure(ruleForm){
-           this.sureload = true
+           
             
             this.$refs[ruleForm].validate((valid) => {
+                
                 if (valid) {
+                    this.sureload = true
                   if(!this.isedit){
                         authrole(this.ruleForm).then(res=>{
                             this.$message.success(res.msg);   

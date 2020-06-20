@@ -235,20 +235,26 @@ export default {
                     // 判断是编辑还是新增
                     if (!this.isedit) {
                         authUser(this.form).then(res => {
+                             this.sureload = false;
                             if (res.code === '0') {
                                 this.$message.success(res.msg);
                                 this.init();
-                                this.sureload = false;
+                               
                                 this.$emit('close', '0');
+                            }else{
+                                this.$message.error(res.msg);
                             }
                         });
                     } else {
                         authputUser(this.form).then(res => {
+                             this.sureload = false;
                             if (res.code === '0') {
                                 this.$message.success(res.msg);
-                                this.sureload = false;
+                               
                                 this.init();
                                 this.$emit('close', '0');
+                            }else{
+                                this.$message.error(res.msg);
                             }
                         });
                     }

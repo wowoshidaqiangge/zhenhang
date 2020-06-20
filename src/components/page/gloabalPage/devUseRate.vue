@@ -49,7 +49,7 @@ export default {
         if (index > xarr.length - 1) {
           index = 0;
         }
-      }, 1000);
+      }, 2000);
     },
     // 设备综合利用率
     devUseRateFunc() {
@@ -59,7 +59,6 @@ export default {
           for (var i = 0; i < response.data.length; i++) {
             response.data[i].useRateOrder = (response.data[i].useRateOrder * 100).toFixed(2)
           }
-
           let res = response.data;
           this.useRateList = res;
           let xarr = []

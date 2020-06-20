@@ -212,7 +212,20 @@ export default {
                 ]
             },
             rules1:{
-               
+               planYield:[
+                   { required: true, message: '请输入', trigger: 'blur' },
+                   {
+                        validator(rule, value, callback) {
+                        var reg = /^[1-9][0-9]*$/
+                        if (reg.test(value)) {
+                            callback()
+                        } else {
+                            callback(new Error('产量必须为整数'))
+                        }
+                        },
+                        trigger: 'change'
+                    }
+               ]
             }
          
         }
@@ -238,20 +251,25 @@ export default {
                 this.$message.error('请选择时间')
                 return
             }
-            this.tableData2.map((item,index)=>{
-               if(item.id ===this.form1.id){
-                 
-                  this.tableData2[index].planYield = this.form1.planYield
-                  this.tableData2[index].planBuyYield = this.form1.planBuyYield
-                  this.tableData2[index].planEndTime = this.form1.planEndTime
-                  this.tableData2[index].planStartTime = this.form1.planStartTime
-                  this.value2 = []
-                  this.form1.planEndTime = ''
-                  this.form1.planStartTime = ''
-               }
+            this.$refs.form1.validate((valid) => {
+                if (valid) {
+                    this.tableData2.map((item,index)=>{
+                        if(item.id ===this.form1.id){
+                            
+                            this.tableData2[index].planYield = this.form1.planYield
+                            this.tableData2[index].planBuyYield = this.form1.planBuyYield
+                            this.tableData2[index].planEndTime = this.form1.planEndTime
+                            this.tableData2[index].planStartTime = this.form1.planStartTime
+                            this.value2 = []
+                            this.form1.planEndTime = ''
+                            this.form1.planStartTime = ''
+                        }
+                    })
+                    this.$forceUpdate()
+                    this.innerVisible = false
+                }
             })
-            this.$forceUpdate()
-            this.innerVisible = false
+            
         },
        
         //查询物料列表

@@ -1,5 +1,5 @@
 <template>
-  <div class="repairmodal">
+  <div class="repairmodal3">
     <el-dialog 
     :title="tit" 
     :destroy-on-close='isclose'
@@ -123,7 +123,7 @@ import {userListByDept} from 'api/index'
 import { deviceList} from 'api/index'
 import moment from 'moment'
 export default {
-    name: 'repairmodal',
+    name: 'repairmodal3',
   
     props:{
         dialogFormVisible:{
@@ -310,7 +310,7 @@ export default {
 
 
 <style lang='less'>
-    .repairmodal{
+    .repairmodal3{
         .el-dialog{
             border-radius: 5px;
         }

@@ -226,6 +226,7 @@ export default {
         },
         //搜索
         seachinfo1(){
+            this.page.current = 1
             this.getproduceTaskPlanpage(this.seachinfo)
         },
         //重置

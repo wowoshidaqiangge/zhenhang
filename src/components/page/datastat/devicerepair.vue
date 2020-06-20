@@ -46,8 +46,9 @@
        <div class="titimg">
            <p>
                 <span v-if='isshow'><img src="~@/assets/img/circle.png"/> 维修</span>
+                <span  v-if='isshow'><img src="~@/assets/img/nocircle.png"/> 待维修</span>
            </p>
-            <!-- <span><img src="~@/assets/img/nocircle.png"/> 未维修</span> -->
+            
              <span class="tit"> 设备年度维修情况</span>
        </div>
       <div class="bot">
@@ -80,10 +81,18 @@
                             align="center"
                             >
                             <template slot-scope="scope">
-                                <img  v-if="scope.row.deviceRepairList[scope.column.index]&&(scope.row.deviceRepairList[scope.column.index].state.split(',').findIndex(v=> v=='1')!==-1)" src="~@/assets/img/circle.png"/>
-                                <!-- <img  v-if="scope.row.deviceRepairList[scope.column.index]&&(scope.row.deviceRepairList[scope.column.index].state.split(',').findIndex(v=> v=='0')!==-1)" src="~@/assets/img/nocircle.png"/>
-                                <img  v-if="scope.row.deviceRepairList[scope.column.index]&&(scope.row.deviceRepairList[scope.column.index].state.split(',').findIndex(v=> v=='')!==-1)" src="~@/assets/img/nocircle.png"/> -->
-                                <span v-if="scope.row.deviceRepairList[scope.column.index].repairCount > 1"> X {{scope.row.deviceRepairList[scope.column.index].repairCount}}</span>
+                                <p>
+                                    <img  v-if="scope.row.deviceRepairList[scope.column.index]&&(scope.row.deviceRepairList[scope.column.index].isRepairCount!==0)" src="~@/assets/img/circle.png"/>
+                                <span v-if="scope.row.deviceRepairList[scope.column.index].isRepairCount > 0"> X {{scope.row.deviceRepairList[scope.column.index].isRepairCount}}</span>
+                                </p>
+                                <p>
+                                    <img  v-if="scope.row.deviceRepairList[scope.column.index]&&(scope.row.deviceRepairList[scope.column.index].unRepairCount!==0)" src="~@/assets/img/nocircle.png" />
+                                <span v-if="scope.row.deviceRepairList[scope.column.index].unRepairCount > 0"> X {{scope.row.deviceRepairList[scope.column.index].unRepairCount}}</span>
+                                </p>
+                                <!-- <img  v-if="scope.row.deviceRepairList[scope.column.index]&&(scope.row.deviceRepairList[scope.column.index].state.split(',').findIndex(v=> v=='1')!==-1)" src="~@/assets/img/circle.png"/> -->
+                                <!-- <img  v-if="scope.row.deviceRepairList[scope.column.index]&&(scope.row.deviceRepairList[scope.column.index].state.split(',').findIndex(v=> v=='0')!==-1)" src="~@/assets/img/nocircle.png"/> -->
+                                <!-- <img  v-if="scope.row.deviceRepairList[scope.column.index]&&(scope.row.deviceRepairList[scope.column.index].state.split(',').findIndex(v=> v=='')!==-1)" src="~@/assets/img/nocircle.png"/> -->
+                                <!-- <span v-if="scope.row.deviceRepairList[scope.column.index].repairCount > 1"> X {{scope.row.deviceRepairList[scope.column.index].repairCount}}</span> -->
                             </template>
                         </el-table-column>
                     </el-table>
@@ -311,6 +320,12 @@ export default {
             display: flex;
             align-items: center;
             justify-content: center;
+            flex-direction: column;
+            p{
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
             img{
                 width: 18px;
                 margin: 1px;

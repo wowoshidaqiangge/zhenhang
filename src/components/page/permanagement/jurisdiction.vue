@@ -75,7 +75,7 @@ export default {
                             this.$message({
                                 showClose: true,
                                 message: res.msg,
-                                type: 'warning'
+                                type: 'error'
                             });
                         }
                     });
@@ -106,7 +106,7 @@ export default {
                     res.data.map((item, index) => {
                         item.index = index + 1;
                     });
-                    console.log(res.data)
+                   
                     this.tableData = res.data;
                 }
             });

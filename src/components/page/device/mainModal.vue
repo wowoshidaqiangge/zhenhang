@@ -170,9 +170,10 @@ export default {
             }
        },
        marksure(form){
-           this.sureload = true
+           
             this.$refs[form].validate((valid) => {
                 if (valid) {
+                  this.sureload = true
                   if(!this.isedit){
                        maintain(this.form).then(res=>{
                             if(res.code ==='0'){

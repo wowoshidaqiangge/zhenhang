@@ -234,6 +234,7 @@ export default {
         },
         //搜索
         seachinfo1(){
+            this.page.current = 1
            this.getproduceTaskpage(this.seachinfo)
         },
         // 获取列表

@@ -1,6 +1,7 @@
 <template>
   <div class="charts">
       <v-chart ref='chart' :options="option" :auto-resize="true" class="chart"/>
+      <div class="popno" v-if='isshow'>暂无数据</div>
   </div>
 </template>
 
@@ -23,6 +24,7 @@ export default {
         return {
             option:{
             },
+            isshow:false,
             series:[],
             xAxisarr:[]
 
@@ -32,9 +34,14 @@ export default {
 
     },
     methods: {
+         chartclear(){
+             this.$refs.chart.clear()
+             this.isshow = true
+        },
         showLoading(){},
         hideLoading(){},
         getoption(){
+            this.isshow = false
             this.option={
                     title: {
                         text: this.unit,
@@ -116,6 +123,16 @@ export default {
         .chart{
             width: 100%;
             height: 100%;
+        }
+        .popno{
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            line-height: 300px;
+            text-align: center;
+            color: #999;
         }
     }
 

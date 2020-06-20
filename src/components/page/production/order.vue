@@ -218,6 +218,7 @@ export default {
             this.seachinfo.endDate = moment(val[1]).format('YYYY-MM-DD')
         },
         seachinfo1(){
+            this.page.current = 1
             this.getorderpage(this.seachinfo)
         },
         //重置

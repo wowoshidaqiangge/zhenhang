@@ -47,7 +47,7 @@
              <p>
                  <span v-show='isshow'><img src="~@/assets/img/suc.png"/> 已保养</span>
                  <span v-show='isshow'><img src="~@/assets/img/error.png"/> 未保养</span>
-                 <span v-show='isshow'> <img src="~@/assets/img/repair.png"/> 待保养</span>
+                 <!-- <span v-show='isshow'> <img src="~@/assets/img/repair.png"/> 待保养</span> -->
              </p>
              <span class="tit"> 设备年度保养情况</span>
        </div>
@@ -82,10 +82,16 @@
                             align="center"
                             >
                             <template slot-scope="scope">
-                                <img  v-if="scope.row.deviceMaintainList[scope.column.index]&&(scope.row.deviceMaintainList[scope.column.index].state.split(',').findIndex(v=> v=='1')!==-1)" src="~@/assets/img/suc.png"/>
-                                <img  v-if="scope.row.deviceMaintainList[scope.column.index]&&(scope.row.deviceMaintainList[scope.column.index].state.split(',').findIndex(v=> v=='0')!==-1)" src="~@/assets/img/error.png"/>
+                                 <p> <img  v-if="scope.row.deviceMaintainList[scope.column.index]&&(scope.row.deviceMaintainList[scope.column.index].isMaintainCount !== 0)" src="~@/assets/img/suc.png"/>
+                                <span v-if="scope.row.deviceMaintainList[scope.column.index].isMaintainCount > 0"> X {{scope.row.deviceMaintainList[scope.column.index].isMaintainCount}}</span></p>
+                                <p>
+                                    <img  v-if="scope.row.deviceMaintainList[scope.column.index]&&(scope.row.deviceMaintainList[scope.column.index].unMaintainCount !== 0)" src="~@/assets/img/error.png" />
+                                <span v-if="scope.row.deviceMaintainList[scope.column.index].unMaintainCount > 0"> X {{scope.row.deviceMaintainList[scope.column.index].unMaintainCount}}</span>
+                                </p>
+                                <!-- <img  v-if="scope.row.deviceMaintainList[scope.column.index]&&(scope.row.deviceMaintainList[scope.column.index].state.split(',').findIndex(v=> v=='1')!==-1)" src="~@/assets/img/suc.png"/>
+                                <img  v-if="scope.row.deviceMaintainList[scope.column.index]&&(scope.row.deviceMaintainList[scope.column.index].state.split(',').findIndex(v=> v=='0')!==-1)" src="~@/assets/img/error.png"/> -->
                                 <!-- <img  v-if="scope.row.deviceMaintainList[scope.column.index]&&(scope.row.deviceMaintainList[scope.column.index].state.split(',').findIndex(v=> v=='')!==-1)" src="~@/assets/img/repair.png"/>  -->
-                                <span v-if="scope.row.deviceMaintainList[scope.column.index].maintainCount > 1"> X {{scope.row.deviceMaintainList[scope.column.index].maintainCount}}</span>
+                                <!-- <span v-if="scope.row.deviceMaintainList[scope.column.index].maintainCount > 1"> X {{scope.row.deviceMaintainList[scope.column.index].maintainCount}}</span> -->
                             </template>
                         </el-table-column>
                     </el-table>
@@ -203,6 +209,7 @@ export default {
                     })
                         arr.push({ ...item,...arr1})
                     });
+                    console.log(arr)
                     this.$nextTick(()=>{
                         
                         this.tableData = arr
@@ -320,6 +327,12 @@ export default {
             display: flex;
             align-items: center;
             justify-content: center;
+            flex-direction: column;
+            p{
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
             img{
                 width: 18px;
                 margin: 1px;

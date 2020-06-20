@@ -11,7 +11,7 @@
           <el-col :span="1">
             <el-form-item> </el-form-item>
           </el-col>
-          <el-col :span="4">
+          <el-col :span="5">
             <el-form-item label="车间设备:" label-width="80px">
               <el-cascader
                 v-model="value2"
@@ -113,8 +113,8 @@
               align="center"
             />
           </el-table>
-          <el-table
-            v-else
+            <el-table
+            v-if="formInline.selectType === 'run'&& !this.ismore"
             class="secondtab"
             :data="excellist"
             v-loading="isload"
@@ -130,6 +130,36 @@
             <el-table-column
               prop="state"
               label="状态"
+              align="center"
+            />
+          </el-table>
+          <el-table
+            v-if="formInline.selectType === 'run'&& this.ismore"
+            class="secondtab"
+            :data="excellist"
+            v-loading="isload"
+            element-loading-text="加载中..."
+            element-loading-spinner="el-icon-loading"
+            style="width: 100%"
+          >
+            <el-table-column
+              prop="time1"
+              label="时间"
+              align="center"
+            />
+            <el-table-column
+              prop="offLength"
+              label="关机时长(分钟)"
+              align="center"
+            />
+            <el-table-column
+              prop="onLength"
+              label="开机时长(分钟)"
+              align="center"
+            />
+            <el-table-column
+              prop="runLength"
+              label="运行时长(分钟)"
               align="center"
             />
           </el-table>
@@ -156,7 +186,7 @@ export default {
     return {
       value: '',
       value1: [],
-      value2: ['1', '1144426692996108301'],
+      value2: [],
       option: {},
       formLabelWidth: '60px',
       optionProps: {
@@ -183,11 +213,12 @@ export default {
         }
       ],
       devlist: [],
-      casarr: ['1', '1144426692996108301'],
+      casarr: [],
       echarttitle: '车间设备统计',
       echarttitlename: '',
       excellist: [], //表格数据
       optiontitle: '开市单轴高精密冲床产量',
+      optiontit:'',
       optiontname: '开市单轴高精密冲床',
       ismore: false,
       unit: '',
@@ -199,7 +230,7 @@ export default {
   mounted() {
     this.unit = '单位:件';
     this.getDate();
-    this.getselectDeviceRunData();
+    
     this.getdeviceListByType();
     //    this.getdeviceList()
     //    this.getdeviceTypeList()
@@ -286,14 +317,14 @@ export default {
       };
     },
     caschange(e) {
-      this.casarr = e;
+   
       let obj = {};
       obj = this.devlist.find(item => {
         return item.id === e[0];
       });
       obj.deviceList.map(item => {
         if (item.id === e[1]) {
-          this.optiontname = item.title;
+          this.optiontit = item.title;
         }
       });
     },
@@ -306,20 +337,20 @@ export default {
         deviceId: '',
         selectType: 'yield'
       };
-      this.casarr = ['1', '1144426692996108301'];
-      this.value2 = ['1', '1144426692996108301'];
+     
+      this.value2 = this.casarr
       this.ismore = false;
-      this.optiontname = '开市单轴高精密冲床';
-      this.optiontitle = '开市单轴高精密冲床产量';
+      this.optiontitle = this.optiontname
       this.unit = '单位:件';
       this.getDate();
     },
     seachinfo() {
       if (this.formInline.selectType === 'yield') {
-        this.optiontitle = this.optiontname + '产量';
+        this.optiontitle = this.optiontit + '产量';
+         this.unit = '单位:件';
       } else {
-        this.optiontitle = this.optiontname + '运行状态';
-        this.unit = '单位:小时';
+        this.optiontitle = this.optiontit + '运行状态';
+        this.unit = '单位:分钟';
       }
       this.getselectDeviceRunData();
     },
@@ -330,52 +361,52 @@ export default {
     },
     //表格导出
     excelexport() {
+      let nowtime = moment(new Date()).format('YYYYMMDDhhmmss')
       if (this.formInline.selectType === 'yield') {
         //选择产量
         let column = [
           { prop: 'yield', label: '产量' },
           { prop: 'dateList', label: '日期' }
         ];
-        export2Excel(column, this.excellist, '产量统计');
+        export2Excel(column, this.excellist, `产量统计_${nowtime}`);
       } else {
         //状态统计
         if (this.ismore) {
           //多日
-          let excellist = this.excellist[0].deviceRunList;
-          let dateArr = this.excellist[0].deviceRunTimeList;
-          excellist.forEach((item, index) => {
-            item.date = dateArr[index].dateTime;
-          });
+          let excellist = this.excellist
+          
           let column = [
-            { prop: 'date', label: '日期' },
+            { prop: 'time1', label: '日期' },
             { prop: 'offLength', label: '关机时长' },
             { prop: 'onLength', label: '开机时长' },
             { prop: 'runLength', label: '运行时长' }
           ];
-          export2Excel(column, excellist, '运行状态统计');
+          export2Excel(column, excellist, `运行状态统计_${nowtime}`);
         } else {
-          let excellist = this.excellist[0].deviceRunList;
-          if (excellist.length > 0) {
-            excellist.forEach(item => {
+          
+          let excellist1 = this.excellist;
+         
+          if (excellist1.length > 0) {
+            excellist1.forEach(item => {
               if (item.state === '0') {
-                item.stateText = '关机';
+                item.state = '关机';
               } else if (item.state === '1') {
-                item.stateText = '开机';
+                item.state = '开机';
               } else if (item.state === '2') {
-                item.stateText = '运行';
+                item.state = '运行';
               }
             });
             let column = [
               { prop: 'dateTime', label: '时间' },
-              { prop: 'stateText', label: '运行状态' }
+              { prop: 'state', label: '运行状态' }
             ];
-            export2Excel(column, excellist, '运行状态统计');
+            export2Excel(column, excellist1, `运行状态统计_${nowtime}`);
           }
         }
       }
     },
     timechange(e) {
-      console.log(e);
+     
       this.formInline.beginDate = moment(e[0]).format('YYYY-MM-DD');
       this.formInline.endDate = moment(e[1]).format('YYYY-MM-DD');
       if (this.formInline.beginDate !== this.formInline.endDate) {
@@ -389,11 +420,11 @@ export default {
       
       this.formInline.deviceId = '';
       this.formInline.deviceTye = '';
-      if (this.casarr.length > 1) {
-        let a = this.casarr[1];
+      if (this.value2.length > 1) {
+        let a = this.value2[1];
         this.formInline.deviceId = a;
-      } else if ((this.casarr.length = 1)) {
-        let b = this.casarr[0];
+      } else if ((this.value2.length = 1)) {
+        let b = this.value2[0];
         this.formInline.deviceTye = b;
       }
       selectDeviceRunData(this.formInline).then(res => {
@@ -443,42 +474,19 @@ export default {
               });
               this.getoption();
               let hour;
-              if (res.data[0].dateList.length > 0) {
-                  hour = res.data[0].dateList;
-              } else {
-                  // 不传日期时 默认为小时
-                  hour = [
-                      '0',
-                      '01',
-                      '02',
-                      '03',
-                      '04',
-                      '05',
-                      '06',
-                      '07',
-                      '08',
-                      '09',
-                      '10',
-                      '11',
-                      '12',
-                      '13',
-                      '14',
-                      '15',
-                      '16',
-                      '17',
-                      '18',
-                      '19',
-                      '20',
-                      '21',
-                      '22',
-                      '23'
-                  ];
-              }
+              hour = res.data[0].dateList;
+             
               this.option.xAxis.data = hour;
               this.option.series[0].name = '关机时长';
               this.option.series[0].data = this.hanld2(hour, nowtime, num);
               this.option.series[1].data = this.hanld2(hour, nowtime, num1);
               this.option.series[2].data = this.hanld2(hour, nowtime, num2);
+              let att = []
+              // att.push(...hour,...num,...num1,...num2)
+              hour.map((m,n)=>{
+                att.push({time1:m,offLength:this.hanld2(hour, nowtime, num)[n],onLength:this.hanld2(hour, nowtime, num1)[n],runLength:this.hanld2(hour, nowtime, num2)[n]})
+              })
+              this.excellist = att
             } else {
               // 图数据
               let state = [];
@@ -639,7 +647,7 @@ export default {
             barWidth: '100%',
             itemStyle: {
               color: function(params) {
-                debugger
+              
                 // build a color map as your need.
                 var colors = ['#000','#737172', '#0096ff', '#259B24'];
                 return colors[params.value * 100];
@@ -678,8 +686,18 @@ export default {
     getdeviceListByType() {
       deviceListByType().then(res => {
         if (res.code === '0') {
-          this.devlist = res.data;
+          if(res.data&&res.data[0].deviceList){
+            this.devlist = res.data;
+            this.casarr =[res.data[0].id,res.data[0].deviceList[0].id]
+            this.value2 = [res.data[0].id,res.data[0].deviceList[0].id]
+            this.optiontit = res.data[0].deviceList[0].title
+            this.optiontitle = res.data[0].deviceList[0].title+'产量'
+            this.optiontname = res.data[0].deviceList[0].title+'产量'
+          }
+        }else{
+          this.$message.error(res.msg)
         }
+        this.getselectDeviceRunData();
       });
     },
     // 获取设备列表

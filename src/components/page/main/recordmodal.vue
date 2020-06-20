@@ -1,5 +1,5 @@
 <template>
-    <div class="recordmodal">
+    <div class="recordmodal1">
         <el-dialog :title="tit" :destroy-on-close="isclose" :visible.sync="dialogFormVisible" width="50%" :before-close="beforclose" center>
             <el-row>
                 <el-form :model="form" :rules="rules" ref="form">
@@ -118,7 +118,7 @@
 import { mainrecordid, mainrecordput } from 'api/main';
 import moment from 'moment';
 export default {
-    name: 'recordmodal',
+    name: 'recordmodal1',
 
     props: {
         dialogFormVisible: {
@@ -215,7 +215,7 @@ export default {
 </script>
 
 <style lang="less">
-.recordmodal {
+.recordmodal1 {
     .el-dialog {
         border-radius: 5px;
     }

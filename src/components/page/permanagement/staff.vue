@@ -220,9 +220,13 @@ export default {
                 type: 'warning'
             }).then(() => {
                 userDelete(m).then(res=>{
-                    this.init()
+                    if(res.code==='0'){
+                        this.init()
                     this.getuserPage()
                     this.$message.success('删除成功');
+                    }else {
+                         this.$message.error(res.msg);
+                    }
                 })
             }).catch(() => {});
            
@@ -234,6 +238,8 @@ export default {
                 if(res.code==='0'){
                     this.$message.success(res.msg)
                     this.getuserPage()
+                }else{
+                    this.$message.error(res.msg)
                 }
             })
         },

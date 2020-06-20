@@ -24,7 +24,7 @@
                                 <span>累计运行:</span><span> {{ h.runLength ? h.runLength + ' h' : '--' }}</span>
                             </p>
                             <p>
-                                <span>当日产量:</span><span v-if='h.dva|| h.dva ===0'> {{  h.dva + '件' }}</span>
+                               <span v-if="h.yieldCollect===1"> <span >当日产量:</span><span v-if='h.dva|| h.dva ===0'> {{  h.dva + '件' }}</span></span> 
                             </p>
                         </div>
                         <div class="p1">
@@ -32,7 +32,7 @@
                                 <span>使用效率:</span><span style="color:#EB6F43 "> {{ h.useRate ? h.useRate : '--' }}</span>
                             </p>
                             <p>
-                                <span>累计产量:</span><span> {{ h.totalProduce ? h.totalProduce + '件' : '--' }}</span>
+                               <span  v-if="h.yieldCollect===1"><span>累计产量:</span><span> {{ h.totalProduce ? h.totalProduce + '件' : '--' }}</span></span> 
                             </p>
                         </div>
                     </div>
@@ -64,13 +64,15 @@ export default {
             this.runlist[`${val.index}`].deviceRunVo.map(item=>{
                     obj  = {apikey:item.apiKey,id:item.onenetId,datastream_id:item.streamId}
                     this.getnoet(obj,(res)=>{
-                        if(res.errno===0){
+                        if(res&&res.errno===0){
                             if(res.data&&res.data.datastreams.length>0){
                                 item.dva = res.data.datastreams[0].datapoints[0].value
                             }
                             this.$forceUpdate()
                         }else{
-                            this.$message.error(res.error)
+                            if(res&&res.error){
+                                this.$message.error(res.error)
+                            }   
                         }
                       })
                         arr.push(item)
@@ -96,6 +98,7 @@ export default {
                       })
                         arr.push(item)
                     })
+                    console.log(arr)
                     this.runlistinfo = arr;
                 }
             });

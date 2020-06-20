@@ -159,6 +159,7 @@ export default {
                         item.states = item.state ? '已保养' : '未保养';
                         item.periods = item.period === 'month' ? '月' : '年';
                         item.index = index + 1;
+                        item.dateTime = item.dateTime + ':00'
                     });
                     this.pagesize = parseInt(res.data.current);
                     this.totals = parseInt(res.data.total);

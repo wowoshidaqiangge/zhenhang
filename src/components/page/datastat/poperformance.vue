@@ -161,24 +161,29 @@ export default {
         this.isload = false;
         if (res.code === '0') {
           this.tableData = res.data;
-          res.data.map(item => {
-            a.push(item.taskNumber);
-            b.push(item.planDay);
-            c.push(item.realDay);
-          });
-          d.push(
-            { name: '计划天数', type: 'bar', data: b },
-            { name: '实际天数', type: 'bar', data: c }
-          );
-          this.$nextTick(() => {
-            this.$refs.charts1.getxAxis(a);
-            this.$refs.charts1.getseries(d);
-            this.$refs.charts1.getoption();
+          if(res&&res.data.length>0){
+            res.data.map(item => {
+              a.push(item.taskNumber);
+              b.push(item.planDay);
+              c.push(item.realDay);
+            });
+            d.push(
+              { name: '计划天数', type: 'bar', data: b },
+              { name: '实际天数', type: 'bar', data: c }
+            );
+            this.$nextTick(() => {
+              this.$refs.charts1.getxAxis(a);
+              this.$refs.charts1.getseries(d);
+              this.$refs.charts1.getoption();
 
-            if (this.echarttitlename) {
-              this.echarttitle = this.echarttitlename + '生产绩效';
-            }
-          });
+              if (this.echarttitlename) {
+                this.echarttitle = this.echarttitlename + '生产绩效';
+              }
+            });
+          }else{
+            this.$refs.charts1.chartclear()
+          }
+          
         }
       });
     },
@@ -200,12 +205,13 @@ export default {
     },
     //表格导出
     excelexport() {
+      let nowtime = moment(new Date()).format('YYYYMMDDhhmmss')
       let column = [
         { prop: 'taskNumber', label: '生产工单号' },
         { prop: 'planDay', label: '计划时长' },
         { prop: 'realDay', label: '完成时长' }
       ];
-      export2Excel(column, this.tableData, this.echarttitle);
+      export2Excel(column, this.tableData, `${this.echarttitle}_${nowtime}`);
     }
   }
 };
