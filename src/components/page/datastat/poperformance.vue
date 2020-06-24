@@ -103,7 +103,6 @@ export default {
             this.seachinfo.deptId = res.data[0].deptId
           }
         }
-
         this.getselectProduceWorkRate();
       });
     },

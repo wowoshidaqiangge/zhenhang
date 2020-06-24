@@ -5,7 +5,7 @@
                 <router-link :to="item.path" class="tags-li-title">
                     {{item.title}}
                 </router-link>
-                <span class="tags-li-icon" @click="closeTags(index)"><i class="el-icon-close"></i></span>
+                <span class="tags-li-icon" @click="closeTags(item,index)"><i class="el-icon-close"></i></span>
             </li>
         </ul>
         <div class="tags-close-box">
@@ -24,10 +24,12 @@
 
 <script>
     import bus from './bus';
+    import {refreshRouterSync} from './argu/util'
+    import {resetRouter,deleteLocalRouter} from './argu/deleteroute'
     export default {
         data() {
             return {
-                tagsList: []
+                tagsList: [],
             }
         },
         methods: {
@@ -35,7 +37,11 @@
                 return path === this.$route.fullPath;
             },
             // 关闭单个标签
-            closeTags(index) {
+            closeTags(info,index) {
+                // 设置动态路由时开启
+                // deleteLocalRouter(info);
+                // resetRouter(this);
+                // refreshRouterSync(this);
                 const delItem = this.tagsList.splice(index, 1)[0];
                 const item = this.tagsList[index] ? this.tagsList[index] : this.tagsList[index - 1];
                 if (item) {
@@ -44,6 +50,7 @@
                     this.$router.push('/');
                 }
                 sessionStorage.setItem('TagsList',JSON.stringify(this.tagsList))
+               
             },
             // 关闭全部标签
             closeAll(){
@@ -52,6 +59,7 @@
             },
             // 关闭其他标签
             closeOther(){
+
                 const curItem = this.tagsList.filter(item => {
                     return item.path === this.$route.fullPath;
                 })
@@ -70,7 +78,7 @@
                     this.tagsList.push({
                         title: route.meta.title,
                         path: route.fullPath,
-                        name: route.matched[1].components.default.name
+                        name: (route.matched[1].components.default&&route.matched[1].components.default.name) ?route.matched[1].components.default.name : route.name
                     })
                 }
                 sessionStorage.setItem('TagsList',JSON.stringify(this.tagsList))
@@ -94,6 +102,7 @@
            //  防止刷新使标签丢失
            if(sessionStorage.getItem('TagsList')){
                this.tagsList = JSON.parse(sessionStorage.getItem('TagsList'))
+             
            }
             this.setTags(this.$route);
             // 监听关闭当前页面的标签页

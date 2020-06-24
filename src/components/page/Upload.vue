@@ -1,42 +1,51 @@
 <template>
     <div class="charts">
-      <v-chart ref='chart' :options="option" :auto-resize="true" class="chart"/>
+      <el-button type="primary" @click="jump">添加路由</el-button>
   </div>
 </template>
 
 <script>
-   
+   import Router from 'vue-router';
+   import {insertRouter} from '@/components/common/argu/addroute'
     export default {
         name: 'upload',
-        data: function(){
+        data() {
             return {
-               option:{}
+               option:{},
+
             }
         },
         components: {
             
         },
         mounted(){
-            this.getop()
+    
         },
         methods:{
-              getop(){
-                  var hour = ['0', '01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23'];
-
-                this.option = {
-                    xAxis: {
-                        type: 'category',
-                        data: hour 
-                    },
-                    yAxis: {
-                        type: 'value'
-                    },
-                    series: [{
-                        data: [0,0,0,0,0,1,1,1,1,1,2,2,2,2,0,1,1,1,1,0,0,0,0,0],
-                        type: 'line'
-                    }]
-                };
-            }
+                // 用于手动配置动态路由
+                jump() {
+                    const o = parseInt(Math.random() * 10)
+                    const name = "listing" + o;
+                    /**
+                     * @param { 当前实例 } vm
+                     * @param { 当前动态路由模板名字 } component
+                     * @param { 临时缓存组件地址 } com
+                     * @param { 路由name } name 具体看业务是传订单号，还是name+时间戳 要求是不重复
+                     * @param { 具体传参数 } params
+                     * @param { 查询参数 } query
+                     */
+                    var obj = {
+                        vm: this,
+                        component: "params",
+                        com: "@/components/page/argu/params.vue",
+                        name: name,
+                        params: {
+                        id: o
+                        },
+                        query: {}
+                    };
+                    insertRouter(obj);
+                },
         },
         created(){
           

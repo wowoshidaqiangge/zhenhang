@@ -9,6 +9,7 @@ const store = new Vuex.Store({
   state: {
     userId: '',
     screenHeight: window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight,
+    newAddRoutes:[]
   },
   mutations: {
     setUserId (state, id) {
@@ -16,6 +17,9 @@ const store = new Vuex.Store({
     },
     changeScreenHeight (state, val) {
       state.screenHeight = val
+    },
+    setnewAddRoutes (state, val) {
+      state.newAddRoutes = val
     }
   },
   actions: {

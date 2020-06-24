@@ -317,6 +317,7 @@ const router = new Router({
 
             meta: { title: '领单报工', keepAlive: false }
         },
+        // 设置动态路由时需要注释
         {
             path: '*',
             redirect: '/404'

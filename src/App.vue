@@ -5,15 +5,21 @@
 </template>
 <script>
 import { mapMutations } from 'vuex'
+import {refreshRouterSync} from "@/components/common/argu/util";
+import router from './router';
 export default {
   name: 'App',
 
   data () {
     return {
-      
+    
     }
   },
-
+ beforeCreate() {
+   // 需要动态打开新的路由时开启
+    // refreshRouterSync(this);
+    // router.addRoutes([{ path: '*', redirect: '/404'}])
+  },
   watch: {
     /**
     * 侦听页面可视高度的变化,将底部tabbar display:block
@@ -22,7 +28,8 @@ export default {
   },
 
   methods: {
-    ...mapMutations(['changeScreenHeight'])
+    ...mapMutations(['changeScreenHeight']),
+   
   },
 
   mounted () {

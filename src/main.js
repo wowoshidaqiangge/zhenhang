@@ -45,6 +45,7 @@ router.beforeEach((to, from, next) => {
                 confirmButtonText: '确定'
             });
         } else {
+            
             next();
         }
     }
