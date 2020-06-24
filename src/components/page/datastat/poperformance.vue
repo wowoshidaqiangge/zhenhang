@@ -82,9 +82,10 @@ export default {
     this.seachinfo.beginDate = moment().subtract(1, "weeks").format('YYYY-MM-DD'),
       this.seachinfo.endDate = moment().format('YYYY-MM-DD'),
       this.value1 = [moment().subtract(1, "weeks").format('YYYY-MM-DD'), moment().format('YYYY-MM-DD')]
-    this.getselectProduceWorkRate();
+    // this.getselectProduceWorkRate();
     this.getProduceDeptList();
   },
+  mounted() { },
   methods: {
     changesel(val) {
       let obj = {};
@@ -98,7 +99,12 @@ export default {
       getProduceDeptList().then(res => {
         if (res.code === '0') {
           this.options = res.data;
+          if (res.data && res.data.length > 0) {
+            this.seachinfo.deptId = res.data[0].deptId
+          }
         }
+
+        this.getselectProduceWorkRate();
       });
     },
     getselectProduceWorkRate() {

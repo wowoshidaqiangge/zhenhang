@@ -3,7 +3,7 @@
     <el-dialog :title="tit" :visible.sync="dialogFormVisible" :before-close="beforclose" center>
       <p class="modaltit1">工单信息：</p>
       <el-row>
-        <el-form :model="form" ref="form">
+        <el-form :model="form" ref="form" :rules="rules">
           <div class="modalcont">
             <el-col :span="11">
               <el-form-item label="任务单号" :label-width="formLabelWidth" prop="taskNumber">
@@ -150,6 +150,10 @@ export default {
         label: 'title',
         value: 'id',
         children: 'deviceList'
+      },
+      rules: {
+        userId: [{ required: true, message: '请选择部门', trigger: 'blur' },],
+        deviceId: [{ required: true, message: '请选择设备', trigger: 'blur' },]
       }
     };
   },
@@ -314,6 +318,7 @@ export default {
               this.$message.success(res.msg);
               this.close('0');
             });
+
           }
         }
       });
