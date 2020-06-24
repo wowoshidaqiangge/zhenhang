@@ -41,8 +41,6 @@
                     <el-button type="add" icon="el-icon-search" @click="seachinfo1">搜索</el-button>
                     <el-button type="success" icon="el-icon-refresh-right" @click="resetting">重置</el-button>
                 </div>
-                            
-                   
               </el-row>
             </el-form>
           
@@ -54,7 +52,6 @@
                 :height='screenWidth'
                 border
                 style="width: 100%">
-
                 <el-table-column
                     v-for="(item,index) in columnlist"
                     :key="index"
@@ -239,7 +236,6 @@ export default {
                 if(res.code==='0'){
                     res.data.records.map((item,index)=>{
                         item.index = index + 1
-
                         item.createTime = item.createTime.split(' ')[0]
                     })
                     this.tableData = res.data.records
@@ -266,7 +262,6 @@ export default {
              this.tit = '编辑订单'
              this.$refs.ordermodal.getorderid(m)
              this.dialogFormVisible = true
-
         },
         handleDelete(h,m){
             this.$confirm('确定要删除吗？', '提示', {

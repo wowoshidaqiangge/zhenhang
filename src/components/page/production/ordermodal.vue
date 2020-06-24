@@ -14,7 +14,6 @@
                             <el-input v-model="form.productName" autocomplete="off"></el-input>
                     </el-form-item>
                 </el-col>
-              
                <el-col :span="24">
                         <el-col :span="11">
                             <el-form-item label="产品编码" :label-width="formLabelWidth" prop='productCode'>
@@ -38,10 +37,7 @@
                             <el-input v-model="form.planYield" type="number" autocomplete="off"></el-input>
                         </el-form-item>
                     </el-col>
-                    
                 </p>
-             
-                  
                  <el-col :span="11">
                     <el-form-item label="交货时间" :label-width="formLabelWidth" prop='planFinishTime'>
                            <el-date-picker
@@ -54,13 +50,11 @@
                 </el-col>
             </el-form> 
         </el-row>
-        
         <div slot="footer" class="dialog-footer">
             <el-button @click="close">取 消</el-button>
             <el-button type="primary" @click="marksure('form')">确 定</el-button>
         </div>
     </el-dialog>
-
   </div>
 </template>
 

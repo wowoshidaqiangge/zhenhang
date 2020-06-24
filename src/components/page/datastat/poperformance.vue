@@ -1,68 +1,33 @@
 <template>
   <div class="poper">
     <div class="top">
-      
-        <el-form
-          :model="seachinfo"
-          ref="seachinfo"
-          class="demo-ruleForm"
-        >
+
+      <el-form :model="seachinfo" ref="seachinfo" class="demo-ruleForm">
         <el-row type="flex" justify="end">
-          
+
           <el-col :span="3" style="margin:0 20px">
-            <el-form-item
-              label=""
-             
-              prop="deptId"
-            >
-              <el-select
-                v-model="seachinfo.deptId"
-                @change="changesel"
-                placeholder="请选择车间"
-              >
-                <el-option
-                  v-for="item in options"
-                  :key="item.deptId"
-                  :label="item.deptName"
-                  :value="item.deptId"
-                ></el-option>
+            <el-form-item label="" prop="deptId">
+              <el-select v-model="seachinfo.deptId" @change="changesel" placeholder="请选择车间">
+                <el-option v-for="item in options" :key="item.deptId" :label="item.deptName" :value="item.deptId">
+                </el-option>
               </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="5">
             <el-form-item label prop="value1">
-              <el-date-picker
-                v-model="value1"
-                type="daterange"
-                range-separator="至"
-                start-placeholder="开始日期"
-                @change="changedate"
-                class="datetime"
-                end-placeholder="结束日期"
-              ></el-date-picker>
+              <el-date-picker v-model="value1" type="daterange" range-separator="至" start-placeholder="开始日期"
+                @change="changedate" class="datetime" end-placeholder="结束日期"></el-date-picker>
             </el-form-item>
           </el-col>
 
           <div style="margin:0 15px">
-              <el-button
-                type="add"
-                icon="el-icon-search"
-                @click="seachinfo1"
-                >搜索</el-button
-              >
-              <el-button
-                type="success"
-                icon="el-icon-refresh-right"
-                @click="resetting"
-                >重置</el-button
-              >
-              <el-button type="add" @click="excelexport"
-                >EXCEL导出</el-button
-              >
+            <el-button type="add" icon="el-icon-search" @click="seachinfo1">搜索</el-button>
+            <el-button type="success" icon="el-icon-refresh-right" @click="resetting">重置</el-button>
+            <el-button type="add" @click="excelexport">EXCEL导出</el-button>
           </div>
-          </el-row>
-        </el-form>
-      
+        </el-row>
+      </el-form>
+
     </div>
     <div class="echarttit">{{ echarttitle }}</div>
     <div class="bot">
@@ -71,29 +36,11 @@
           <Charts ref="charts1" :unit="unit" />
         </el-tab-pane>
         <el-tab-pane label="表格" name="second">
-          <el-table
-            class="secondtab"
-            :data="tableData"
-            v-loading="isload"
-            element-loading-text="加载中..."
-            element-loading-spinner="el-icon-loading"
-            style="width: 100%"
-          >
-            <el-table-column
-              prop="taskNumber"
-              label="生产工单号"
-              align="center"
-            ></el-table-column>
-            <el-table-column
-              prop="planDay"
-              label="计划时长(天)"
-              align="center"
-            ></el-table-column>
-            <el-table-column
-              prop="realDay"
-              align="center"
-              label="完成时长(天)"
-            ></el-table-column>
+          <el-table class="secondtab" :data="tableData" v-loading="isload" element-loading-text="加载中..."
+            element-loading-spinner="el-icon-loading" style="width: 100%">
+            <el-table-column prop="taskNumber" label="生产工单号" align="center"></el-table-column>
+            <el-table-column prop="planDay" label="计划时长(天)" align="center"></el-table-column>
+            <el-table-column prop="realDay" align="center" label="完成时长(天)"></el-table-column>
           </el-table>
         </el-tab-pane>
       </el-tabs>
@@ -114,7 +61,7 @@ export default {
   },
   data() {
     return {
-      value1: '',
+      value1: [],
       formInline: {},
       formLabelWidth: '80px',
       seachinfo: {
@@ -132,6 +79,9 @@ export default {
     };
   },
   created() {
+    this.seachinfo.beginDate = moment().subtract(1, "weeks").format('YYYY-MM-DD'),
+      this.seachinfo.endDate = moment().format('YYYY-MM-DD'),
+      this.value1 = [moment().subtract(1, "weeks").format('YYYY-MM-DD'), moment().format('YYYY-MM-DD')]
     this.getselectProduceWorkRate();
     this.getProduceDeptList();
   },
@@ -161,7 +111,10 @@ export default {
         this.isload = false;
         if (res.code === '0') {
           this.tableData = res.data;
-          if(res&&res.data.length>0){
+          if (this.echarttitlename) {
+            this.echarttitle = this.echarttitlename + '生产绩效';
+          }
+          if (res && res.data.length > 0) {
             res.data.map(item => {
               a.push(item.taskNumber);
               b.push(item.planDay);
@@ -180,20 +133,20 @@ export default {
                 this.echarttitle = this.echarttitlename + '生产绩效';
               }
             });
-          }else{
+          } else {
             this.$refs.charts1.chartclear()
           }
-          
         }
       });
     },
     resetting() {
       this.seachinfo = {
-        beginDate: '',
-        endDate: '',
-        deptId: ''
+        beginDate: moment().subtract(1, "weeks").format('YYYY-MM-DD'),
+        endDate: moment().format('YYYY-MM-DD'),
+        deptId: this.options[0].deptId
       };
-      this.value1 = '';
+      this.changesel(this.seachinfo.deptId)
+      this.value1 = [moment().subtract(1, "weeks").format('YYYY-MM-DD'), moment().format('YYYY-MM-DD')];
       this.getselectProduceWorkRate();
     },
     seachinfo1() {
