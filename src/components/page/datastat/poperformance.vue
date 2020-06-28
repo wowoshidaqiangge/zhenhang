@@ -80,8 +80,8 @@ export default {
   },
   created() {
     this.seachinfo.beginDate = moment().subtract(1, "weeks").format('YYYY-MM-DD'),
-      this.seachinfo.endDate = moment().format('YYYY-MM-DD'),
-      this.value1 = [moment().subtract(1, "weeks").format('YYYY-MM-DD'), moment().format('YYYY-MM-DD')]
+    this.seachinfo.endDate = moment().format('YYYY-MM-DD'),
+    this.value1 = [moment().subtract(1, "weeks").format('YYYY-MM-DD'), moment().format('YYYY-MM-DD')]
     // this.getselectProduceWorkRate();
     this.getProduceDeptList();
   },
@@ -101,6 +101,7 @@ export default {
           this.options = res.data;
           if (res.data && res.data.length > 0) {
             this.seachinfo.deptId = res.data[0].deptId
+            this.echarttitlename = res.data[0].deptName;
           }
         }
         this.getselectProduceWorkRate();
@@ -116,9 +117,7 @@ export default {
         this.isload = false;
         if (res.code === '0') {
           this.tableData = res.data;
-          if (this.echarttitlename) {
-            this.echarttitle = this.echarttitlename + '生产绩效';
-          }
+         
           if (res && res.data.length > 0) {
             res.data.map(item => {
               a.push(item.taskNumber);
@@ -134,12 +133,13 @@ export default {
               this.$refs.charts1.getseries(d);
               this.$refs.charts1.getoption();
 
-              if (this.echarttitlename) {
-                this.echarttitle = this.echarttitlename + '生产绩效';
-              }
+             
             });
           } else {
             this.$refs.charts1.chartclear()
+          }
+          if (this.echarttitlename) {
+            this.echarttitle = this.echarttitlename + '生产绩效';
           }
         }
       });

@@ -1,5 +1,5 @@
 import axios from 'axios';
-const url = 'http://139.159.216.201:7000';
+const url = 'http://zhenhang.test.thingcom.com';
 
 export const api = {
     // 设备运行情况
