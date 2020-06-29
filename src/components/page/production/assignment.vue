@@ -97,34 +97,34 @@
                                
                                 <el-button
                                     type="success"
-                                    v-if="scope.row.state=='3'  "
+                                    v-if="scope.row.state=='3' && $_has('assignmentRepeat') "
                                     plain
                                     @click="handleagin(scope.$index, scope.row)"
                                 >重新派单</el-button>
                               
                                 <el-button
                                     type="warning"
-                                     v-if="scope.row.state=='3' || scope.row.state=='4' || scope.row.state=='5' "
+                                     v-if="(scope.row.state=='3' || scope.row.state=='4' || scope.row.state=='5')&& $_has('assignmentReport') "
                                     plain
                                     @click="handleUntie(scope.$index, scope.row)"
                                 >报工记录</el-button>
                                 <el-button
                                     type="add"
                                     plain
-                                     v-if="scope.row.state=='1' "
+                                     v-if="scope.row.state=='1' &&$_has('assignmentPlan') "
                                     class="red"
                                     @click="handlesplit(scope.$index, scope.row)"
                                 >工单分解</el-button>
                                  <el-button
                                     type="info"
-                                     v-if="scope.row.state=='2'"
+                                     v-if="scope.row.state=='2' && $_has('assignmentUpdate') "
                                     plain
                                     @click="handleEdit(scope.$index, scope.row)"
                                 >修改</el-button>
                                 <el-button
                                     type="danger"
                                     plain
-                                     v-if="scope.row.state=='1' "
+                                     v-if="scope.row.state=='1'&& $_has('assignmentAssign') "
                                     class="red"
                                     @click="handledistribute(scope.$index, scope.row)"
                                 >派单</el-button>

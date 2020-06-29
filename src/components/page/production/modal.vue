@@ -216,7 +216,7 @@ export default {
                    { required: true, message: '请输入', trigger: 'blur' },
                    {
                         validator(rule, value, callback) {
-                        var reg = /^[1-9][0-9]*$/
+                        var reg = /^[0-9][0-9]*$/
                         if (reg.test(value)) {
                             callback()
                         } else {

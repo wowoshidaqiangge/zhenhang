@@ -196,7 +196,7 @@ export default {
     },
     methods: {
         getuserListMenu(){
-            userListMenu({id:sessionStorage.getItem('userId')}).then(res=>{
+            userListMenu({userId:sessionStorage.getItem('userId'),type:'menu'}).then(res=>{
                 if(res.code==='0'){
                     var arr = []
                     this.items = res.data

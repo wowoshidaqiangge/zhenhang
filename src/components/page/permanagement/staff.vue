@@ -19,7 +19,7 @@
                 <el-form :model="seachinfo"  ref="seachinfo"  class="demo-ruleForm">
                     <el-row type="flex" justify="end">
                     <div style="flex:1">
-                            <el-button type="add" icon='el-icon-circle-plus-outline' @click="add">新增</el-button>
+                            <el-button type="add" v-if="$_has('staffAdd')" icon='el-icon-circle-plus-outline' @click="add">新增</el-button>
                     </div>
                    
                     <el-col :span="3" style="margin:0 20px">
@@ -72,29 +72,26 @@
                             <template slot-scope="scope">
                                 <el-button
                                     type="add"
-                                    v-if="scope.row.isValid ==0 "
+                                    v-if="scope.row.isValid ==0 && $_has('staffUnlock') "
                                     plain
-                                   
                                     @click="handle(1, scope.row)"
                                 >启用</el-button>
                                  <el-button
                                     type="error"
                                     plain
-                                     v-if="scope.row.isValid ==1 "
-                                   
+                                    v-if="scope.row.isValid ==1 && $_has('staffLock')"
                                     @click="handle(0, scope.row)"
                                 >禁用</el-button>
                                 <el-button
                                     type="success"
                                     plain
-                                     v-if="scope.row.isValid ==1 "
-                                  
+                                    v-if="scope.row.isValid ==1 && $_has('staffUpdate')"
                                     @click="handleEdit(scope.$index, scope.row)"
                                 >修改</el-button>
                                
                                 <el-button
                                     type="info"
-                                     v-if="scope.row.isValid ==1 "
+                                    v-if="scope.row.isValid ==1 && $_has('staffDelete')"
                                     plain
                                     class="red"
                                     @click="handleDelete(scope.$index, scope.row)"
@@ -170,6 +167,7 @@ export default {
     },
     methods: {
         seachinfo1(){
+            this.page.current = 1
             this.getuserPage()
         },
         resetting(){

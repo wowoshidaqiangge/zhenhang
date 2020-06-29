@@ -172,7 +172,7 @@ export default {
           this.$emit('close',false)
        },
        getuserListMenu(){
-            userListMenu({id:sessionStorage.getItem('userId')}).then(res=>{
+            userListMenu({userId:sessionStorage.getItem('userId'),type:'role'}).then(res=>{
                 if(res.code==='0'){
                     this.data = res.data
                 }

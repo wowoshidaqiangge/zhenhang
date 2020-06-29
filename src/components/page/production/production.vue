@@ -4,7 +4,7 @@
               <el-form :model="seachinfo"  ref="seachinfo"  class="demo-ruleForm">
               <el-row type="flex" justify="end">
                     <div style="flex:1">
-                        <el-button type="add" icon='el-icon-circle-plus-outline' @click="add">新增</el-button>
+                        <el-button type="add" v-if="$_has('productionAdd')" icon='el-icon-circle-plus-outline' @click="add">新增</el-button>
                     </div>
                     
                     <el-col :span="5">
@@ -99,26 +99,26 @@
                             <template slot-scope="scope">
                                 <el-button
                                     type="success"
-                                    v-if="scope.row.state=='3' || scope.row.state=='2' ||scope.row.state=='1' "
+                                    v-if="(scope.row.state=='3' || scope.row.state=='2' ||scope.row.state=='1') && $_has('productionLock') "
                                     plain
                                     @click="handleUntie(5, scope.row.id)"
                                 >锁定</el-button>
                                 <el-button
                                     type="warning"
-                                     v-if="scope.row.state=='5' "
+                                     v-if="scope.row.state=='5' && $_has('productionUnlock') "
                                     plain
                                     @click="handleUntie(6, scope.row.id)"
                                 >解锁</el-button>
                                  <el-button
                                     type="info"
-                                     v-if="scope.row.state=='1' || scope.row.state=='2' ||scope.row.state=='3'"
+                                     v-if="(scope.row.state=='1' || scope.row.state=='2' ||scope.row.state=='3') && $_has('productionDetail')"
                                     plain
                                     @click="handleEdit(scope.$index, scope.row)"
                                 >详情</el-button>
                                 <el-button
                                     type="danger"
                                     plain
-                                     v-if="scope.row.state=='1' || scope.row.state=='2'"
+                                     v-if="(scope.row.state=='1' || scope.row.state=='2') && $_has('productionDelete')"
                                     class="red"
                                     @click="handleDelete(scope.$index, scope.row)"
                                 >删除</el-button>

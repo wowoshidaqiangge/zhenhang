@@ -5,8 +5,8 @@
             <el-form :model="seachinfo"  ref="seachinfo"  class="demo-ruleForm">
                 <el-row type="flex" justify="end">
                 <div style="flex:1">
-                        <el-button type="add" icon='el-icon-circle-plus-outline' @click="add">新增</el-button>
-                        <el-button type="add"  @click="addexcel">EXCEL导入</el-button>
+                        <el-button type="add" v-if="$_has('recordAdd')" icon='el-icon-circle-plus-outline' @click="add">新增</el-button>
+                        <el-button type="add" v-if="$_has('recordAddList')"  @click="addexcel">EXCEL导入</el-button>
                 </div>
                 
                 <el-col :span="2" style="margin:0 20px">
@@ -49,19 +49,19 @@
                 </el-table-column>
                 <el-table-column label="操作" width="210">
                     <template slot-scope="scope">
-                        <el-button type="success" plain v-if="scope.row.manageState === 2" class="red" @click="handlesplit(1, scope.row)"
+                        <el-button type="success" plain v-if="scope.row.manageState === 2 && $_has('recordUnlock')" class="red" @click="handlesplit(1, scope.row)"
                             >启用</el-button
                         >
-                        <el-button type="add" plain v-if="scope.row.manageState === 1" class="red" @click="handlesplit(2, scope.row)"
+                        <el-button type="add" plain v-if="scope.row.manageState === 1&& $_has('recordLock')" class="red" @click="handlesplit(2, scope.row)"
                             >报废</el-button
                         >
-                        <el-button type="info" v-if="scope.row.manageState === 1" plain @click="handleEdit(scope.$index, scope.row)"
+                        <el-button type="info" v-if="scope.row.manageState === 1&& $_has('recordUpdate')" plain @click="handleEdit(scope.$index, scope.row)"
                             >修改</el-button
                         >
                         <el-button
                             type="danger"
                             plain
-                            v-if="scope.row.manageState === 1"
+                            v-if="scope.row.manageState === 1 && $_has('recordDelete')"
                             class="red"
                             @click="handledistribute(scope.$index, scope.row)"
                             >删除</el-button

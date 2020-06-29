@@ -186,7 +186,7 @@
                                         align="center"
                                 >
                                 </el-table-column>
-                                <el-table-column label="操作"  align="center">
+                                <el-table-column label="操作"  align="center" v-if="$_has('productionUpdate')">
                                 <template slot-scope="scope">
                                     <el-button
                                             type="info"

@@ -18,8 +18,9 @@ export const login = query => {
 
 export const userListMenu = query => {
   return request({
-      url: `/api/auth/user/listMenu/${query.id}`,
+      url: `/api/auth/user/listMenu`,
       method: 'get',
+      params:query
   });
 }
 

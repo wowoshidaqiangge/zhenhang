@@ -5,7 +5,7 @@
                 <el-form :model="seachinfo"  ref="seachinfo"  class="demo-ruleForm">
                 <el-row type="flex" justify="end">
                 <div style="flex:1">
-                    <el-button type="add" icon="el-icon-circle-plus-outline" @click="recordAdd()">新增</el-button>
+                    <el-button type="add"  v-if="$_has('repairrecordAdd')" icon="el-icon-circle-plus-outline" @click="recordAdd()">新增</el-button>
                 </div>
                 <el-col :span="6">
                     <el-form-item label="" prop="chosedTime">
@@ -56,9 +56,9 @@
 
                 <el-table-column label="操作" width="180" align="center">
                     <template slot-scope="scope">
-                        <el-button type="success" plain class="red" @click="recordEdit(scope.$index, scope.row)">修改</el-button>
+                        <el-button type="success" v-if="$_has('repairrecordUpdate')" plain class="red" @click="recordEdit(scope.$index, scope.row)">修改</el-button>
                         <el-button v-if="scope.row.state" type="success" plain @click="handleEdit(scope.$index, scope.row)">查看</el-button>
-                        <el-button type="danger" plain v-else class="red" @click="handledistribute(scope.$index, scope.row)"
+                        <el-button type="danger"  plain v-if="!scope.row.state&& $_has('repairrecordDelete')" class="red" @click="handledistribute(scope.$index, scope.row)"
                             >删除</el-button
                         >
                     </template>

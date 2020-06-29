@@ -53,8 +53,8 @@
 
                 <el-table-column label="操作" align="center">
                     <template slot-scope="scope">
-                        <el-button v-if="scope.row.state" type="success" plain @click="examine(scope.$index, scope.row)">查看</el-button>
-                        <el-button type="info" plain v-else class="red" @click="handledistribute(scope.$index, scope.row)">填报</el-button>
+                        <el-button v-if="scope.row.state" type="success"  plain @click="examine(scope.$index, scope.row)">查看</el-button>
+                        <el-button  type="info" plain v-else class="red" @click="handledistribute(scope.$index, scope.row)">填报</el-button>
                     </template>
                 </el-table-column>
             </el-table>

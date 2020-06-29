@@ -229,7 +229,7 @@ export default {
       this.$router.push({ path: `/${this.nextroute}` })
     },
     getuserListMenu() {
-      userListMenu({ id: sessionStorage.getItem('userId') }).then(res => {
+      userListMenu({ userId: sessionStorage.getItem('userId'),type:'menu' }).then(res => {
         if (res.code === '0') {
           if (Array.isArray(res.data) && res.data.length > 0) {
             this.nextroute = res.data[0].children[0].obj.index

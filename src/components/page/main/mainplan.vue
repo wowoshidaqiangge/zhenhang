@@ -1,7 +1,7 @@
 <template>
     <div class="mainplan">
         <div class="top">
-            <el-button type="add" icon="el-icon-circle-plus-outline" @click="add">新增</el-button>
+            <el-button type="add" v-if="$_has('mainplanAdd')" icon="el-icon-circle-plus-outline" @click="add">新增</el-button>
         </div>
         <div class="bot">
             <el-table :data="tableData" stripe :height="screenWidth" style="width: 100%">
@@ -10,8 +10,8 @@
 
                 <el-table-column label="操作" width="180" align="center">
                     <template slot-scope="scope">
-                        <el-button type="success" plain @click="handleEdit(scope.$index, scope.row)">修改</el-button>
-                        <el-button type="danger" plain class="red" @click="handledistribute(scope.$index, scope.row)">删除</el-button>
+                        <el-button type="success" plain v-if="$_has('mainplanUpdate')" @click="handleEdit(scope.$index, scope.row)">修改</el-button>
+                        <el-button type="danger" plain v-if="$_has('mainplanDelete')" class="red" @click="handledistribute(scope.$index, scope.row)">删除</el-button>
                     </template>
                 </el-table-column>
             </el-table>

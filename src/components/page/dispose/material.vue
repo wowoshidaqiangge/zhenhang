@@ -4,8 +4,8 @@
             <el-form :model="seachinfo"  ref="seachinfo"  class="demo-ruleForm">
               <el-row type="flex" justify="end">
                 <div style="flex:1">
-                      <el-button type="add" icon='el-icon-circle-plus-outline' @click="add">新增</el-button>
-                      <el-button type="add"  @click="addexcel">EXCEL导入</el-button>
+                      <el-button type="add" v-if="$_has('materialAdd')" icon='el-icon-circle-plus-outline' @click="add">新增</el-button>
+                      <el-button type="add" v-if="$_has('materialAddList')" @click="addexcel">EXCEL导入</el-button>
                 </div>
               
                 <el-col :span="2" style="margin:0 20px">
@@ -59,27 +59,27 @@
                                 <el-button
                                     type="success"
                                     plain
-                                    v-if='scope.row.state==1'
+                                    v-if="scope.row.state==1 && $_has('materialLock') "
                                     class="red"
                                     @click="handlesplit(0, scope.row)"
                                 >禁用</el-button>
                                 <el-button
                                     type="add"
                                     plain
-                                   v-if='scope.row.state==0'
+                                   v-if="scope.row.state==0 && $_has('materialUnlock')"
                                     class="red"
                                     @click="handlesplit(1, scope.row)"
                                 >启用</el-button>
                                  <el-button
                                     type="info"
-                                    v-if='scope.row.state==1'
+                                    v-if="scope.row.state==1 && $_has('materialUpdate')"
                                     plain
                                     @click="handleEdit(scope.$index, scope.row)"
                                 >修改</el-button>
                                 <el-button
                                     type="danger"
                                     plain
-                                    v-if='scope.row.state==1'
+                                    v-if="scope.row.state==1 && $_has('materialDelete')"
                                     class="red"
                                     @click="handledistribute(scope.$index, scope.row)"
                                 >删除</el-button>
@@ -187,6 +187,7 @@ export default {
             this.dialogFormVisible = true
         },
         seachinfo1(){
+          this.page.current = 1
            this.getproducetaskpage()
         },
         resetting(){
