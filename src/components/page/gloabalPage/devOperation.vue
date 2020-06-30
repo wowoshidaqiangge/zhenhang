@@ -45,37 +45,105 @@ export default {
             grid: {
               containLabel: true
             },
-            legend: {
-              show: true,
-              orient: 'vertical',
-              right: "10%",
-              top: "20%",
-              // data: [
-              //   '关机',
-              //   '开机',
-              //   '运行'
-              // ],
-              data: res.name,
-              formatter: function (name) {
-                // var total = 0;
-                var target;
-                for (var i = 0; i < res.value.length; i++) {
-                  // total += res.value[i].value;
-                  if (res.value[i].name === name) {
-                    target = res.value[i].rate;
-                  }
+            legend:[
+              {
+                    orient: 'vertical',
+                    x : '62%',
+                    y : '18%',
+                    align: 'left',
+                    data: ['关机'],
+                    formatter: function (name) {
+                        // var total = 0;
+                        var target;
+                        for (var i = 0; i < res.value.length; i++) {
+                          // total += res.value[i].value;
+                          if (res.value[i].name === name) {
+                            target = res.value[i].rate;
+                          }
+                        }
+                        return name + "： " + target;
+                    },
+                    textStyle:{
+                        color:'#fff'
+                    }
+
+                },
+                {
+                    orient: 'vertical',
+                    x : '62%',
+                    y : '38%',
+                    align: 'left',
+                    data: ['开机'],
+                    formatter: function (name) {
+                        // var total = 0;
+                        var target;
+                        for (var i = 0; i < res.value.length; i++) {
+                          // total += res.value[i].value;
+                          if (res.value[i].name === name) {
+                            target = res.value[i].rate;
+                          }
+                        }
+                        return name + "： " + target;
+                    },
+                    textStyle:{
+                      
+                        color:'#fff'
+                    }
+                },
+                {
+                    orient: 'vertical',
+                    x : '62%',
+                    y : '58%',
+                    align: 'left',
+                    data: ['运行'],
+                    formatter: function (name) {
+                        // var total = 0;
+                        var target;
+                        for (var i = 0; i < res.value.length; i++) {
+                          // total += res.value[i].value;
+                          if (res.value[i].name === name) {
+                            target = res.value[i].rate;
+                          }
+                        }
+                        return name + "： " + target;
+                    },
+                    textStyle:{
+                      
+                        color:'#fff'
+                    }
+
                 }
-                return name + "： " + target;
-              },
-              textStyle: {
-                color: "#fff"
-              }
-            },
+
+            ],
+            //  {
+            //   show: true,
+            //   orient: 'vertical',
+            //   right: "10%",
+            //   top: "20%",
+            //   // data: [
+            //   //   '关机',
+            //   //   '开机',
+            //   //   '运行'
+            //   // ],
+            //   data: res.name,
+            //   formatter: function (name) {
+            //     // var total = 0;
+            //     var target;
+            //     for (var i = 0; i < res.value.length; i++) {
+            //       // total += res.value[i].value;
+            //       if (res.value[i].name === name) {
+            //         target = res.value[i].rate;
+            //       }
+            //     }
+            //     return name + "： " + target;
+            //   }
+             
+            // },
             series: [
               {
                 name: '设备运行情况',
                 type: 'pie',
-                radius: '65%',
+                radius: ['45%', '70%'],
                 center: ['35%', '45%'],
                 label: {
                   position: 'inside',

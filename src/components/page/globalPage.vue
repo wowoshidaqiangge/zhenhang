@@ -393,48 +393,46 @@ div {
       // padding: 10px;
       .chartBox {
         // flex: 1;
+        display: flex;
+        flex-direction: column;
         height: 33%;
         background: url('~@/assets/img/globalPage/chartBox.png')
           no-repeat;
-        background-size: 100% 105%;
+        background-size: 100% 100%;
         position: relative;
         .chartTitle {
-          position: absolute;
-          background: url('~@/assets/img/globalPage/chartTitle.png')
-            no-repeat;
-          background-size: 65% 70%;
-          background-position-x: center;
-          background-position-y: 31px;
-          margin: 0px 5px 4px;
-          text-align: center;
-          padding: 30px 5px;
-          width: 100%;
-          height: 7.8vh;
-          line-height: 31px;
+         
+          margin: 0 7% 0;
+          height: 13%;
+          // padding: 30px 5px;
+          // width: 100%;
+          // height: 7.8vh;
+          display: flex;
+          align-items: flex-end;
           color: #00f6ff;
           font-size: 14px;
           letter-spacing: 2px;
         }
-        .chartText {
-          position: absolute;
-          left: 50%;
-          top: 70px;
-          transform: translate(-50%, 50%);
-          width: 80%;
-          height: 20px;
-          color: white;
-          font-size: 13px;
-          display: flex;
-          justify-content: space-around;
-          .textBox {
-            width: 10%;
-            height: 20px;
-          }
-        }
+        // .chartText {
+        //   position: absolute;
+        //   left: 50%;
+        //   top: 70px;
+        //   transform: translate(-50%, 50%);
+        //   width: 80%;
+        //   height: 20px;
+        //   color: white;
+        //   font-size: 13px;
+        //   display: flex;
+        //   justify-content: space-around;
+        //   .textBox {
+        //     width: 10%;
+        //     height: 20px;
+        //   }
+        // }
         .chartContent {
-          // flex: 1;
-          height: 100%;
-          padding-top: 70px;
+          flex: 1;
+         
+         
           text-align: center;
         }
       }
@@ -478,8 +476,10 @@ div {
         height: 79%;
         display: flex;
         flex-direction: column;
-        background: rgba(0, 203, 210, 0.25);
-        border-radius: 5px;
+        background: url('~@/assets/img/globalPage/middleBox.png')
+          no-repeat;
+        background-size: 100% 100%;
+        // border-radius: 5px;
         margin-top: 10px;
         .devTitle {
           height: 8%;
@@ -607,6 +607,7 @@ div {
                 width: 2.5vw;
                 height: 5.12vh;
                 border: 1px solid rgba(0, 246, 255, 0.6);
+                border-radius: 3px;
                 .greenIcon {
                   position: absolute;
                   top: 9%;

@@ -35,10 +35,10 @@ export default {
               {
                 type: 'gauge',
                 center: ['50%', '45%'],
-                radius: '65%',
+                radius: '60%',
                 startAngle: -Math.PI / 2,
                 endAngle: Math.PI * 1.5,
-                arcLineWidth: 15,
+                arcLineWidth: 22,
                 data: [
                   { name: 'itemA', value: rate, gradient: ['#03c2fd', '#1ed3e5', '#2fded6'] }
                 ],

@@ -211,7 +211,7 @@
             :visible.sync="innerVisible"
             append-to-body>
                 <el-row>
-                        <el-form :model="form1"  ref="form1">
+                        <el-form :model="form1"  :rules="rules1" ref="form1">
                             <el-col :span="11">
                                 <el-form-item label="物料名称" :label-width="formLabelWidth" class="formitem formitem1" prop="itemName">
                                         <el-input v-model="form1.itemName" disabled></el-input>
@@ -351,7 +351,37 @@ export default {
             prolist:[],
             yieid:'',
             produceTaskId:'',
-            isnow:false
+            isnow:false,
+            rules1:{
+                 planYield:[
+                     { required: true, message: '请输入', trigger: 'blur' },
+                     {
+                        validator(rule, value, callback) {
+                        var reg = /^[0-9][0-9]*$/
+                        if (reg.test(value)) {
+                            callback()
+                        } else {
+                            callback(new Error('数量必须为整数'))
+                        }
+                        },
+                        trigger: 'change'
+                    }
+                ],
+                 planBuyYield:[
+                     { required: true, message: '请输入', trigger: 'blur' },
+                     {
+                        validator(rule, value, callback) {
+                        var reg = /^[0-9][0-9]*$/
+                        if (reg.test(value)) {
+                            callback()
+                        } else {
+                            callback(new Error('数量必须为整数'))
+                        }
+                        },
+                        trigger: 'change'
+                    }
+                ],
+            }
         }
     },
     created(){

@@ -101,9 +101,13 @@ Vue.directive('otherRender',{
       }
     }
 })
+
 const hasPermission = userPermission => {
     // 当前按钮列表，我是用本地缓存存储
     let btnPermissionList = JSON.parse(sessionStorage.getItem('buttonpremissions'))
+    if (btnPermissionList === undefined || btnPermissionList == null) {
+          return false
+    }
     // 因为后台返回的不是以按钮名的数组，所以需要过滤
     let eglishPermission = btnPermissionList.map((v, i) => {
         return v

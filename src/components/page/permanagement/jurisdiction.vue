@@ -3,7 +3,7 @@
         <div class="crumbs">
             <el-breadcrumb separator="/">
                 <el-breadcrumb-item>
-                    <el-button type="add" plain icon="el-icon-circle-plus-outline" @click="add">新增</el-button>
+                    <el-button type="add" v-if="$_has('jurisdictionAdd')" plain icon="el-icon-circle-plus-outline" @click="add">新增</el-button>
                 </el-breadcrumb-item>
             </el-breadcrumb>
         </div>
@@ -17,12 +17,14 @@
                 <template slot-scope="scope">
                     <el-button
                         type="success"
+                        v-if="$_has('jurisdictionUpdate')"
                         plain
                         icon="el-icon-edit"
                         @click="handleEdit(scope.$index, scope.row)"
                     >编辑</el-button>
                     <el-button
                         type="info"
+                        v-if="$_has('jurisdictionDelete')"
                         plain
                         icon="el-icon-delete"
                         class="red"

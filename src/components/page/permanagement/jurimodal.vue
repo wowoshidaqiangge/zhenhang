@@ -96,18 +96,29 @@ export default {
     methods: {
         // 获取角色详情
         getauthroleid:async function(id){
+
            await authroleid(id).then(res=>{
                  if(res.code === '0'){
                     res.data.menuIds = res.data.menus
-                    var arr = []
+                    let arr = []
+                    let arr1 = []
                      res.data.menus.map(item=>{
                          item.children.map(v=>{
+                            if(v.children){
+                                v.children.map(m=>{
+                                     arr.push(m.id)
+                                     arr1.push(m.id)
+                                })
+                            }else{
+                                arr1.push(v.id)
+                            }
                              arr.push(v.id)
-                         })
-                            
+                        })
+                        arr.push(item.id)
                     })
                      this.ruleForm = res.data
-                     this.checklist = arr
+                     this.ruleForm.menuIds = arr
+                     this.checklist = arr1
                      // 重新渲染tree
                      this.getuserListMenu()
                  }
@@ -138,27 +149,30 @@ export default {
          
        },
        marksure(ruleForm){
-           
-            
             this.$refs[ruleForm].validate((valid) => {
-                
                 if (valid) {
                     this.sureload = true
                   if(!this.isedit){
                         authrole(this.ruleForm).then(res=>{
-                            this.$message.success(res.msg);   
-                            this.init()
+                           if(res.code==='0'){
+                                this.$message.success(res.msg);   
+                                this.init()
+                                this.$emit('close','0')
+                           }else{
+                               this.$message.error(res.msg)
+                           }
                             this.sureload = false
-                            this.$emit('close','0')
                         })
                   }else{
                       authputrole(this.ruleForm).then(res=>{
                           if(res.code==='0'){
                               this.$message.success(res.msg);   
                                 this.init()
-                                this.sureload = false
                                 this.$emit('close','0')
-                          }
+                          }else{
+                               this.$message.error(res.msg)
+                           }
+                            this.sureload = false
                       })
                   }
                 } else {

@@ -114,7 +114,20 @@ export default {
             icCard:sessionStorage.getItem('icCard'),
             formLabelWidth: '80px',
             rules: {
-               
+                produceCount:[
+                     { required: true, message: '请输入', trigger: 'blur' },
+                     {
+                        validator(rule, value, callback) {
+                        var reg = /^[0-9][0-9]*$/
+                        if (reg.test(value)) {
+                            callback()
+                        } else {
+                            callback(new Error('数量必须为整数'))
+                        }
+                        },
+                        trigger: 'change'
+                    }
+                ],
             }
         }
     },

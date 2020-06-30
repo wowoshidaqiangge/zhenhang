@@ -34,7 +34,7 @@
                     </el-col>
                     <el-col :span="11">
                         <el-form-item label="生产量" :label-width="formLabelWidth" prop='planYield'>
-                            <el-input v-model="form.planYield" type="number" autocomplete="off"></el-input>
+                            <el-input v-model="form.planYield"  autocomplete="off"></el-input>
                         </el-form-item>
                     </el-col>
                 </p>
@@ -97,6 +97,17 @@ export default {
                 ],
                  planYield:[
                      { required: true, message: '请输入', trigger: 'blur' },
+                     {
+                        validator(rule, value, callback) {
+                        var reg = /^[0-9][0-9]*$/
+                        if (reg.test(value)) {
+                            callback()
+                        } else {
+                            callback(new Error('数量必须为整数'))
+                        }
+                        },
+                        trigger: 'change'
+                    }
                 ],
                  planFinishTime:[
                      { required: true, message: '请输入', trigger: 'blur' },

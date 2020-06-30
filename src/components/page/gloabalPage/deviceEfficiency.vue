@@ -78,8 +78,8 @@ export default {
               left: '6%',
               right: '12%',
               // height: "100%",
-              top: '5%',
-              bottom: '20%',
+              top: '12%',
+              bottom: '10%',
               containLabel: true
             },
             series: [
@@ -123,7 +123,7 @@ export default {
   .chartText {
     position: absolute;
     left: 49.8%;
-    top: 70px;
+    top: 14%;
     transform: translate(-50%, 50%);
     width: 76.5%;
     height: 20px;
@@ -138,7 +138,7 @@ export default {
     }
   }
   .chart {
-    padding-top: 20px;
+   
     width: 100%;
     height: 100%;
   }
