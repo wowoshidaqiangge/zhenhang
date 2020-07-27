@@ -62,19 +62,20 @@
                     </el-col>
                     <el-col :span="11">
                         <el-form-item
-                            label="关联部门"
+                            label="来源"
                             :label-width="formLabelWidth"
                             class="formitem formitem1"
                             prop="deptId"
                         >
-                            <el-select v-model="form.deptId" placeholder="请选择">
+                            <el-input v-model="form.deptId"></el-input>
+                            <!-- <el-select v-model="form.deptId" placeholder="请选择">
                                 <el-option
                                     v-for="item in rolelist"
                                     :key="item.deptId"
                                     :label="item.deptName"
                                     :value="item.deptId"
                                 >{{item.deptName}}</el-option>
-                            </el-select>
+                            </el-select> -->
                         </el-form-item>
                     </el-col>
                     <el-col :span="11">
@@ -144,13 +145,13 @@ export default {
                 model: [{ required: true, message: '请输入规格型号', trigger: 'blur' }],
                 series: [{ required: true, message: '请输入系列', trigger: 'blur' }],
                 material: [{ required: true, message: '请输入材质', trigger: 'blur' }],
-                deptId: [{ required: true, message: '请选择关联部门', trigger: 'blur' }],
+                deptId: [{ required: true, message: '请选择', trigger: 'blur' }],
                 unit: [{ required: true, message: '请选择基本单位', trigger: 'blur' }]
             }
         };
     },
     created() {
-        this.getProduceDeptList();
+        // this.getProduceDeptList();
     },
     mounted() {},
     watch: {},

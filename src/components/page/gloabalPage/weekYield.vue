@@ -12,12 +12,16 @@ export default {
   data() {
     return {
       loading: false,
+      timer:null
     }
   },
   mounted() {
     this.weekYieldFunc()
   },
   created() { },
+  beforeDestroy(){
+    clearInterval(this.timer)
+  },
   methods: {
     // 一周产量趋势
     weekYieldFunc() {
@@ -114,6 +118,10 @@ export default {
             }]
           };
           myChart.setOption(option, (window.onresize = myChart.resize));
+          clearInterval(this.timer)
+          this.timer = setInterval(()=>{
+            this.weekYieldFunc()
+          },10000)
         })
         .catch(function (error) {
           console.log(error);

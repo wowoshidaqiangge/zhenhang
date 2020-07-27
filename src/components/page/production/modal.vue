@@ -21,21 +21,29 @@
                             <el-input v-model="form.taskNumber" disabled autocomplete="off"></el-input>
                     </el-form-item>
                 </el-col>
-               
+               <el-col :span="24">
+                    <el-col :span="11">
+                        <el-form-item label="产品编码" :label-width="formLabelWidth" prop='productId'>
+                            <el-select v-model="form.productId" filterable  @change='changeselect' placeholder="请选择">
+                                <el-option
+                                    v-for="item in prolist"
+                                    :key="item.id"
+                                    :label="item.productCode"
+                                    :value="item.id">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+                        
+                    </el-col>
+                    <el-col :span="11">
+                        <el-form-item label="包装工单" :label-width="formLabelWidth" >
+                            <el-switch
+                                v-model="value3"  @change="changeswitch">
+                            </el-switch>
+                        </el-form-item>
+                    </el-col>
+               </el-col>
               
-                <el-col :span="24">
-                    <el-form-item label="产品编码" :label-width="formLabelWidth" prop='productId'>
-                        <el-select v-model="form.productId" filterable  @change='changeselect' placeholder="请选择">
-                            <el-option
-                                v-for="item in prolist"
-                                :key="item.id"
-                                :label="item.productCode"
-                                :value="item.id">
-                            </el-option>
-                        </el-select>
-                    </el-form-item>
-                </el-col>
-                <p>
                     <el-col :span="11">
                         <el-form-item label="产品名称" :label-width="formLabelWidth" prop='productName'>
                                 <el-input v-model="form.productName" disabled autocomplete="off"></el-input>
@@ -46,7 +54,7 @@
                                 <el-input v-model="form.model" disabled autocomplete="off"></el-input>
                         </el-form-item>
                     </el-col>
-                </p>
+               
                 <el-col :span="24" v-if="tableData2.length>0">
                        <el-table
                             :data="tableData2"
@@ -59,7 +67,7 @@
                                 align="center"
                             >
                             </el-table-column>
-                            <el-table-column label="操作"  align="center">
+                          <el-table-column label="操作"  align="center">
                             <template slot-scope="scope">
                                  <el-button
                                     type="info"
@@ -164,6 +172,7 @@ export default {
     },
     data() {
         return {
+            value3:true,
             form: {
                 productName: '',
                 orderId: '',
@@ -235,6 +244,21 @@ export default {
         this.getproductlist()
     },
     methods: {
+        changeswitch(val){
+        
+            if(val&&this.tableData2.length>0){
+                let a = this.tableData2.filter(v=>v.itemCode==="包装")
+                if(a.length<1){
+                    this.tableData2.push({itemCode:'包装',planYield:this.yieid,yieid:this.yieid,planBuyYield:0,planStartTime:'',planEndTime:''})
+                }
+            }else if(!val&&this.tableData2.length>0){
+                this.tableData2.map((item,index)=>{
+                    if(item.itemCode==='包装'){
+                        this.tableData2.splice(index, 1)
+                    }
+                })
+            }
+        },
         //修改物料
         handleEdit(h,m){
             this.form1 = JSON.parse(JSON.stringify(m))
@@ -283,7 +307,9 @@ export default {
                         item.planStartTime = ''
                         item.planEndTime = ''
                     })
-                    res.data.push({itemCode:'包装',planYield:this.yieid,yieid:this.yieid,planBuyYield:0,planStartTime:'',planEndTime:''})
+                    if(this.value3){
+                        res.data.push({itemCode:'包装',planYield:this.yieid,yieid:this.yieid,planBuyYield:0,planStartTime:'',planEndTime:''})
+                    }
                     this.tableData2 = res.data
                 }
             })

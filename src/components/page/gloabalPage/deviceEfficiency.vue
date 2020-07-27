@@ -17,23 +17,28 @@ export default {
   data() {
     return {
       devEfficiencyList: [{ workpieceRate: '' }],
-      timer: ''
+      timer: null
     };
   },
   mounted() {
-    // this.timer = setInterval(() => {
     this.deviceEfficiencyFunc()
-    // }, 5000)
+   
   },
   created() { },
   computed: {
+  },
+  beforeDestroy(){
+    
+       clearInterval(this.timer)
+    
+   
   },
   methods: {
     // 设备工作效率排行
     deviceEfficiencyFunc() {
       api.deviceEfficiency()
         .then(response => {
-          console.log(response);
+        
           let res = response.data;
           this.devEfficiencyList = res;
           // console.log(this.devEfficiencyList);
@@ -78,7 +83,7 @@ export default {
               left: '6%',
               right: '12%',
               // height: "100%",
-              top: '12%',
+              top: '14%',
               bottom: '10%',
               containLabel: true
             },
@@ -110,6 +115,10 @@ export default {
             option,
             (window.onresize = myChart.resize)
           );
+           clearInterval(this.timer)
+           this.timer = setInterval(() => {
+             this.deviceEfficiencyFunc()
+           }, 10000)
         })
         .catch(function (error) {
           console.log(error);

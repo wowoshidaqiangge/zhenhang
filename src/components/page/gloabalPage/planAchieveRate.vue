@@ -1,6 +1,6 @@
 <template>
   <div class="chartContent" v-loading="loading">
-    <div class="chart" id="planAchieveRate"></div>
+    <div class="chart" id="planAchieveRate1"></div>
   </div>
 </template>
 <script>
@@ -12,21 +12,21 @@ export default {
   data() {
     return {
       loading: false,
+      timer:null,
+      rate:''
     }
   },
-  mounted() {
-    this.planAchieveRateFunc()
+  async  mounted() {
+   await this.planAchieveRateFunc()
+   await  this.getecharts()
   },
   created() { },
+  beforeDestroy(){
+    clearInterval(this.timer)
+  },
   methods: {
-    // 设备运行情况
-    planAchieveRateFunc() {
-      api.planAchieveRate()
-        .then(response => {
-          // console.log(response);
-          let rate = response.data.finishRate.replace("%", "");
-          // console.log(rate)
-          let myChart = new Charts(document.getElementById('planAchieveRate'));
+     getecharts (){
+       let myChart = new Charts(document.getElementById('planAchieveRate1'));
           const option = {
             grid: {
               containLabel: true
@@ -38,9 +38,9 @@ export default {
                 radius: '60%',
                 startAngle: -Math.PI / 2,
                 endAngle: Math.PI * 1.5,
-                arcLineWidth: 22,
+                arcLineWidth: 20,
                 data: [
-                  { name: 'itemA', value: rate, gradient: ['#03c2fd', '#1ed3e5', '#2fded6'] }
+                  { name: 'itemA', value: this.rate, gradient: ['#03c2fd', '#1ed3e5', '#2fded6'] }
                 ],
                 axisLabel: {
                   show: false
@@ -67,6 +67,19 @@ export default {
             ]
           }
           myChart.setOption(option, (window.onresize = myChart.resize));
+    },
+    // 设备运行情况
+   async planAchieveRateFunc() {
+     await api.planAchieveRate()
+        .then(response => {
+          // console.log(response);
+          this.rate =   response.data.finishRate.replace("%", "");
+          // console.log(rate)
+         
+          clearInterval(this.timer)
+          this.timer = setInterval(()=>{
+             this.planAchieveRateFunc()
+          },10000)
           // myChart.prototype.setOption = function(option,animationEnd = false);
         })
         .catch(function (error) {
@@ -76,7 +89,7 @@ export default {
   }
 }
 </script>
-<style lang="less" scoped>
+<style lang="less" scoped> 
 .chartContent {
   .chart {
     width: 100%;

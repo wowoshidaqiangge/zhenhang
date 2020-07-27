@@ -22,7 +22,7 @@
               ></el-cascader>
             </el-form-item>
           </el-col>
-          <el-col :span="4">
+          <el-col :span="5">
             <el-form-item
               label="统计:"
               :label-width="formLabelWidth"
@@ -782,7 +782,7 @@ export default {
       width: 100%;
       height: 100%;
       .el-tabs__content {
-        height: 90%;
+        height: 100%;
         .el-tab-pane {
           height: 100%;
         }

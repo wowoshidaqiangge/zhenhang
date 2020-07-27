@@ -11,13 +11,16 @@ import echarts from 'echarts';
 export default {
   data() {
     return {
-    
+      timer:null
     }
   },
   mounted() {
     this.workStatusFunc()
   },
   created() { },
+  beforeDestroy(){
+    clearInterval(this.timer)
+  },
   methods: {
     // 设备运行情况
     workStatusFunc() {
@@ -90,6 +93,10 @@ export default {
             ]
           }
           myChart.setOption(option, (window.onresize = myChart.resize));
+          clearInterval(this.timer)
+          this.timer = setInterval(()=>{
+            this.workStatusFunc()
+          },10000)
         })
         .catch(function (error) {
           console.log(error);

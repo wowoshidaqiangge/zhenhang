@@ -20,7 +20,8 @@ export default {
       useRateList: [
         { deviceName: '', useRate: '', useRateOrder: '' }
       ],
-      mTime: ''
+      mTime: '',
+      timer:null
     }
   },
   mounted() {
@@ -28,6 +29,9 @@ export default {
   },
   created() {
 
+  },
+  beforeDestroy(){
+     clearInterval(this.timer)
   },
   methods: {
     mouseOver() {
@@ -114,8 +118,12 @@ export default {
               }
             }]
           };
-          this.setCarouselTime(xarr, myChart)
+          // this.setCarouselTime(xarr, myChart)
           myChart.setOption(option, (window.onresize = myChart.resize));
+          clearInterval(this.timer)
+          this.timer = setInterval(()=>{
+             this.devUseRateFunc();
+          },10000)
         })
         .catch(function (error) {
           console.log(error);

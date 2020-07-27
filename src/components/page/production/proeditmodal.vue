@@ -416,17 +416,21 @@ export default {
             this.innerVisible = false
         },
         marksure1(){
-            this.tableData2.map((item,index)=>{
-               if(item.id ===this.form1.id){
-                  this.tableData2[index].planYield = this.form1.planYield
-                  this.tableData2[index].planBuyYield = this.form1.planBuyYield
-                  this.tableData2[index].planEndTime = this.form1.planEndTime
-                  this.tableData2[index].planStartTime = this.form1.planStartTime
-               }
-           })
-           
-            this.$forceUpdate()
-            this.innerVisible = false
+            this.$refs.form1.validate((valid) => {
+                 if (valid) {
+                     this.tableData2.map((item,index)=>{
+                        if(item.id ===this.form1.id){
+                                this.tableData2[index].planYield = this.form1.planYield
+                                this.tableData2[index].planBuyYield = this.form1.planBuyYield
+                                this.tableData2[index].planEndTime = this.form1.planEndTime
+                                this.tableData2[index].planStartTime = this.form1.planStartTime
+                            }
+                        })
+                        this.$forceUpdate()
+                        this.innerVisible = false
+                 }
+            })
+            
         },
        
         //查询物料列表

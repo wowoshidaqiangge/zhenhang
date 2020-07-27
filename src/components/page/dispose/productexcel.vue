@@ -59,11 +59,11 @@ export default {
           let arr = []
           val.map((item,index)=>{
             let obj = {}
-            obj.productCode = JSON.parse(JSON.stringify(item))["产品编码"]
+            obj.productCode = JSON.parse(JSON.stringify(item))["货品编码"]
             obj.productName = JSON.parse(JSON.stringify(item))["产品名称"]
             obj.model = JSON.parse(JSON.stringify(item))["规格型号"]
-            obj.itemCode = JSON.parse(JSON.stringify(item))["部件编码"]
-            obj.itemCount = JSON.parse(JSON.stringify(item))["数量"]
+            obj.itemCode = JSON.parse(JSON.stringify(item))["部件图号"]
+            obj.itemCount = JSON.parse(JSON.stringify(item))["单件用量"]
             arr[index] = obj
           })
           this.excelData = arr

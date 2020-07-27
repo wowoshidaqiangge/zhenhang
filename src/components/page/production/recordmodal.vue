@@ -44,11 +44,13 @@
             :data="tableData1"
             style="width: 100%">
             <el-table-column
+                show-overflow-tooltip
                 v-for='item in columlist'
                 :width='item.width'
                 :key='item.index'
                 :prop="item.prop"
                 :label="item.label"
+                align="center"
                 >
             </el-table-column>
         </el-table> 
@@ -78,7 +80,6 @@ export default {
     },
     data() {
         return {
-           
             formLabelWidth: '80px',
             tableData1:[],
             page:{
@@ -86,13 +87,13 @@ export default {
                 size:10
             },
             columlist:[{prop:'index',label:'序号',width:80},
-            {prop:'produceTaskId',label:'报工流水号'},
+            {prop:'produceTaskId',label:'生产工单号'},
             {prop:'reportUser',label:'生产员工'},
             {prop:'produceCount',label:'生产数量'},
             {prop:'totalCount',label:'累计产量'},
-            {prop:'createTime',label:'报工时间'},],
+            {prop:'createTime',label:'报工时间'},
+            {prop:'remark',label:'备注'}],
             form:{
-
             }
         }
     },

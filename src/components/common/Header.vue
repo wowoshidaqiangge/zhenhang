@@ -237,18 +237,22 @@ export default {
     },
     // 获得维保提醒（当日保养记录）
     getmainrecordpage() {
-      mainrecordpage(this.page).then(res => {
-        if (res.code === '0') {
-          res.data.records.map((item, index) => {
-            item.createTime = item.createTime.split(' ')[0];
-            item.states = item.state ? '已保养' : '未保养';
-            item.index = index + 1;
-          });
-          this.pagesize = parseInt(res.data.current);
-          this.totals = parseInt(res.data.total);
-          this.tableData = res.data.records;
-        }
-      });
+     
+      if(this.msgVis){
+        mainrecordpage(this.page).then(res => {
+          if (res.code === '0') {
+            res.data.records.map((item, index) => {
+              item.createTime = item.createTime.split(' ')[0];
+              item.states = item.state ? '已保养' : '未保养';
+              item.index = index + 1;
+            });
+            this.pagesize = parseInt(res.data.current);
+            this.totals = parseInt(res.data.total);
+            this.tableData = res.data.records;
+          }
+        });
+      }
+      
     },
     // 跳转到保养记录页面，并携带id，直接触发查看事件
     gotoRecords(e) {

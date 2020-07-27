@@ -12,7 +12,7 @@ export default {
   data() {
     return {
       loading: false,
-      timer: ''
+      timer: null
     }
   },
   mounted() {
@@ -21,12 +21,15 @@ export default {
     // }, 5000)
   },
   created() { },
+  beforeDestroy(){
+     clearInterval(this.timer)
+  },
   methods: {
     // 设备运行情况
     deviceOperationFunc() {
       api.deviceOperation()
         .then(response => {
-          console.log(response);
+        
           let myChart = echarts.init(document.getElementById('deviceOperation'));
           let res = {
             name: ["关机", "开机", "运行"],
@@ -163,9 +166,13 @@ export default {
                 // }
               }
             ],
-            color: ['#EB6F43', '#6BCAFA', '#FFFE7E']
+            color: ['#a4a3a3', '#408bff', '#48e345']
           };
           myChart.setOption(option, (window.onresize = myChart.resize));
+          clearInterval(this.timer)
+           this.timer = setInterval(() => {
+              this.deviceOperationFunc()
+         }, 10000)
           this.$emit('func', response.data)
         })
         .catch(function (error) {

@@ -132,7 +132,7 @@ export default {
                 {prop:'series',label:'系列'},
                 {prop:'material',label:'材质'},
                 {prop:'unit',label:'基本单位'},
-                {prop:'deptName',label:'关联部门'},
+                {prop:'itemSource',label:'来源'},
                 {prop:'createTime',label:'新增时间'}
             ],
             tableData:[],

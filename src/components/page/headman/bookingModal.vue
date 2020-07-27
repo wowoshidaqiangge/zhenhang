@@ -62,7 +62,18 @@
                             <el-input v-model="form.nowCount" disabled></el-input>
                         </el-form-item>
                     </el-col>
+                     <el-col :span="22">
+                        <el-form-item label="工单全部完成" :label-width="formLabelWidth" class="formitem formitem1" prop="reportState">
+                            <el-switch active-value='1' inactive-value='0' v-model="form.reportState"></el-switch>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="22">
+                        <el-form-item label="备注" :label-width="formLabelWidth" class="formitem formitem1" prop="remark">
+                            <el-input type="textarea" v-model="form.remark"></el-input>
+                        </el-form-item>
+                    </el-col>
                 </el-form>
+                
             </el-row>
         
             <div slot="footer" class="dialog-footer">
@@ -112,7 +123,7 @@ export default {
                 produceCount:''
             },
             icCard:sessionStorage.getItem('icCard'),
-            formLabelWidth: '80px',
+            formLabelWidth: '100px',
             rules: {
                 produceCount:[
                      { required: true, message: '请输入', trigger: 'blur' },

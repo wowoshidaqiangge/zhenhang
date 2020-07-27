@@ -194,7 +194,6 @@ export default {
         float: right;
       }
     }
-
     // .demo-form-inline{
     //     margin-top: 9px;
     // }
@@ -226,7 +225,7 @@ export default {
       width: 100%;
       height: 100%;
       .el-tabs__content {
-        height: 90%;
+        height: 100%;
         .el-tab-pane {
           height: 100%;
         }
