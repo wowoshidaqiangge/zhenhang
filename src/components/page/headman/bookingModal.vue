@@ -4,7 +4,7 @@
     title="报工" 
     :destroy-on-close='isclose'
     :visible.sync="dialogVisible1"
-    width='45%' 
+    width='48%' 
     :before-close='beforclose' 
     center>
         <div v-if='booking'>
@@ -57,11 +57,35 @@
                             <el-input v-model="form.produceCount" ></el-input>
                         </el-form-item>
                     </el-col>
-                <el-col :span="11">
+                    <el-col :span="11">
                         <el-form-item label="已生产数" :label-width="formLabelWidth" class="formitem formitem1" prop="nowCount">
                             <el-input v-model="form.nowCount" disabled></el-input>
                         </el-form-item>
                     </el-col>
+                     <el-col :span="11">
+                        <el-form-item label="返工数量" :label-width="formLabelWidth" class="formitem formitem1" prop="rework">
+                            <el-input v-model="form.rework" ></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="11">
+                        <el-form-item label="返工原因" :label-width="formLabelWidth" class="formitem formitem1" prop="reworkRemark">
+                            <el-input v-model="form.reworkRemark"  type="textarea" :rows="1"></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="24">
+                        <el-col :span="11">
+                            <el-form-item label="报废数量" :label-width="formLabelWidth" class="formitem formitem1" prop="scrap">
+                                <el-input v-model="form.scrap" ></el-input>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="11">
+                            <el-form-item label="报废原因" :label-width="formLabelWidth" class="formitem formitem1" prop="scrapRemark">
+                                <el-input v-model="form.scrapRemark"  type="textarea" :rows="1"></el-input>
+                            </el-form-item>
+                        </el-col>
+                    </el-col>
+                    
+                   
                      <el-col :span="22">
                         <el-form-item label="工单全部完成" :label-width="formLabelWidth" class="formitem formitem1" prop="reportState">
                             <el-switch active-value='1' inactive-value='0' v-model="form.reportState"></el-switch>

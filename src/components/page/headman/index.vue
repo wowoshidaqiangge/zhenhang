@@ -44,6 +44,11 @@
           <p>已生产数:</p>
           <p>{{ item.nowCount }}</p>
         </div>
+        <div class="p0">
+          <p>备    注:</p>
+          <p style="width:65%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"
+           :title="item.remark">{{item.remark}}</p>
+        </div>
         <div class="progre">
           <el-progress
             type="circle"
@@ -221,7 +226,7 @@ export default {
       position: absolute;
 
       right: 4%;
-      bottom: 25%;
+      bottom: 23%;
     }
     .p0 {
       display: flex;

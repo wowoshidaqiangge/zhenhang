@@ -1,7 +1,7 @@
 <template>
   <div class="recordmodal">
     
-    <el-dialog title="报工记录" :visible.sync="dialogFormVisible1" :before-close='beforclose' center>
+    <el-dialog title="报工记录" :visible.sync="dialogFormVisible1" width='68%'  :before-close='beforclose' center>
         <p class="modaltit1">工单信息：</p>
         <el-row>
            <el-form :model="form" ref='form'>
@@ -44,7 +44,7 @@
             :data="tableData1"
             style="width: 100%">
             <el-table-column
-                show-overflow-tooltip
+               
                 v-for='item in columlist'
                 :width='item.width'
                 :key='item.index'
@@ -91,6 +91,10 @@ export default {
             {prop:'reportUser',label:'生产员工'},
             {prop:'produceCount',label:'生产数量'},
             {prop:'totalCount',label:'累计产量'},
+            {prop:'scrap',label:'报废数'},
+            {prop:'scrapRemark',label:'报废原因'},
+            {prop:'rework',label:'返工数'},
+            {prop:'reworkRemark',label:'返工原因'},
             {prop:'createTime',label:'报工时间'},
             {prop:'remark',label:'备注'}],
             form:{

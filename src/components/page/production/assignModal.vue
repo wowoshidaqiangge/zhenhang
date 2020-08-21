@@ -4,7 +4,7 @@
       <p class="modaltit1">工单信息：</p>
       <el-row>
         <el-form :model="form" ref="form" :rules="rules">
-          <div class="modalcont">
+          <el-col :span="24" class="modalcont">
             <el-col :span="11">
               <el-form-item label="任务单号" :label-width="formLabelWidth" prop="taskNumber">
                 <el-input v-model="form.taskNumber" disabled autocomplete="off"></el-input>
@@ -31,7 +31,12 @@
                 <el-input v-model="form.planYield" disabled autocomplete="off"></el-input>
               </el-form-item>
             </el-col>
-          </div>
+            <el-col :span="11">
+              <el-form-item label="备注" :label-width="formLabelWidth" prop="remark">
+                <el-input v-model="form.remark" type="textarea" :rows="1" disabled autocomplete="off"></el-input>
+              </el-form-item>
+            </el-col>
+          </el-col>
           <el-col :span="24" class="upload-demo" v-if="tit !== '工单分解'">
             <span style="line-height:32px;font-size: 18px;color: #324170;">工艺文件上传:</span>
             <el-upload :action="host" :data="ossParams" ref="updata" :on-success="handleSuccess"
@@ -51,8 +56,8 @@
             </el-col>
 
             <el-col :span="12">
-              <el-form-item label="生产设备" :label-width="formLabelWidth" prop="deviceId">
-                <el-cascader v-model="form.deviceId" :options="devicelist" :props="casprops1">
+              <el-form-item label="生产设备" :label-width="formLabelWidth" prop="deviceListStr">
+                <el-cascader v-model="form.deviceListStr" :options="devicelist" :collapse-tags="true" :props="casprops1">
                 </el-cascader>
                 <!-- <el-select v-model="form.deviceId" placeholder="请选择">
                                     
@@ -128,7 +133,8 @@ export default {
         yieldList: [],
         userId: '',
         technologyName: '',
-        technology: ''
+        technology: '',
+        deviceListStr:[]
       },
       formLabelWidth: '80px',
       num: 0,
@@ -144,16 +150,18 @@ export default {
       casprops: {
         label: 'title',
         value: 'id',
-        children: 'userList'
+        children: 'userList',
+        
       },
       casprops1: {
         label: 'title',
         value: 'id',
-        children: 'deviceList'
+        children: 'deviceList',
+        multiple: true
       },
       rules: {
         userId: [{ required: true, message: '请选择部门', trigger: 'blur' },],
-        deviceId: [{ required: true, message: '请选择设备', trigger: 'blur' },]
+       
       }
     };
   },
@@ -260,6 +268,10 @@ export default {
         if (res.data.technologyName) {
           this.fileList.push({ name: res.data.technologyName, url: res.data.technology });
         }
+        if(res.data.deviceListStr){
+          res.data.deviceListStr = JSON.parse(res.data.deviceListStr)
+        }
+        
         this.form = res.data;
         console.log(this.form);
       });
@@ -311,12 +323,24 @@ export default {
               this.form.deptId = this.form.userId[0];
               this.form.userId = this.form.userId[1];
             }
-            if (Array.isArray(this.form.deviceId)) {
-              this.form.deviceId = this.form.deviceId[1]
+            if (Array.isArray(this.form.deviceListStr)) {
+              let arr = []
+              this.form.deviceListStr.map((item)=>{
+                arr.push(item[1])
+              })
+              this.form.deviceId = arr.toString()
+              this.form.deviceListStr = JSON.stringify(this.form.deviceListStr)
             }
+           
+            
+           
             produceTaskAssign(this.form).then(res => {
-              this.$message.success(res.msg);
-              this.close('0');
+              if(res.code==='0'){
+                this.$message.success(res.msg);
+                this.close('0');
+              }else{
+                this.$message.error(res.msg)
+              }
             });
 
           }
@@ -375,10 +399,10 @@ export default {
     text-align: end;
   }
   .modalcont {
-    padding: 25px 0;
+    padding: 20px 0;
     border: 1px dashed #aaa;
     margin-bottom: 25px;
-    height: 140px;
+   
   }
   .modaltit1 {
     padding: 10px 0;

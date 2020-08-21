@@ -11,7 +11,7 @@
                         areadonly
                         placeholder="请输入账号"
                         ref="getFocus"
-                        @keyup.enter.native="submitForm('0')"
+                        @keyup.enter.native="submitForm()"
                     >
                         <el-button slot="prepend" icon="el-icon-lx-people"></el-button>
                     </el-input>
@@ -23,7 +23,7 @@
                         auto-complete="new-password"
                         placeholder="请输入密码"
                         v-model="param.password"
-                        @keyup.enter.native="submitForm('1')"
+                        @keyup.enter.native="submitForm()"
                     >
                         <el-button slot="prepend" icon="el-icon-lx-lock"></el-button>
                     </el-input>
@@ -74,9 +74,9 @@ export default {
             this.$refs.login.validate(valid => {
                 if (valid) {
                     var obj = {};
-                    if (id === '0') {
-                        obj = { icCard: that.param.username };
-                    } else {
+                    if((/^00\d{8}$/.test(that.param.username))){ 
+                           obj = { icCard: that.param.username };
+                    }  else {
                         obj = { ...that.param };
                     }
                     this.handleLogin(obj).then(res => {

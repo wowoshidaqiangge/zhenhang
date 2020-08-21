@@ -264,20 +264,20 @@ export default {
             trigger: 'blur'
           }
         ],
-        productName: [
-          {
-            required: true,
-            message: '请输入产品名称',
-            trigger: 'blur'
-          }
-        ],
-        model: [
-          {
-            required: true,
-            message: '请输入规格型号',
-            trigger: 'blur'
-          }
-        ],
+        // productName: [
+        //   {
+        //     required: true,
+        //     message: '请输入产品名称',
+        //     trigger: 'blur'
+        //   }
+        // ],
+        // model: [
+        //   {
+        //     required: true,
+        //     message: '请输入规格型号',
+        //     trigger: 'blur'
+        //   }
+        // ],
         stuff: [{ message: '请选择物料', trigger: 'blur' }]
       },
       tableData1: [],

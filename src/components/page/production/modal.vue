@@ -44,17 +44,21 @@
                     </el-col>
                </el-col>
               
-                    <el-col :span="11">
-                        <el-form-item label="产品名称" :label-width="formLabelWidth" prop='productName'>
-                                <el-input v-model="form.productName" disabled autocomplete="off"></el-input>
+                <el-col :span="11">
+                    <el-form-item label="产品名称" :label-width="formLabelWidth" prop='productName'>
+                            <el-input v-model="form.productName" disabled autocomplete="off"></el-input>
+                    </el-form-item>
+                </el-col>
+                <el-col :span="11">
+                    <el-form-item label="规格型号" :label-width="formLabelWidth" prop='model'>
+                            <el-input v-model="form.model" disabled autocomplete="off"></el-input>
+                    </el-form-item>
+                </el-col>
+                <el-col :span="22">
+                        <el-form-item label="备注" :label-width="formLabelWidth" prop='remark'>
+                                <el-input v-model="form.remark" type="textarea"></el-input>
                         </el-form-item>
                     </el-col>
-                    <el-col :span="11">
-                        <el-form-item label="规格型号" :label-width="formLabelWidth" prop='model'>
-                                <el-input v-model="form.model" disabled autocomplete="off"></el-input>
-                        </el-form-item>
-                    </el-col>
-               
                 <el-col :span="24" v-if="tableData2.length>0">
                        <el-table
                             :data="tableData2"
@@ -80,6 +84,7 @@
                     </el-table-column>
                         </el-table> 
                 </el-col> 
+                 
             </el-form> 
         </el-row>
          <el-dialog
@@ -180,6 +185,7 @@ export default {
                 productId: '',
                 planYield:'',
                 model: '',
+                
                 taskItemList:[]
             },
             form1:{

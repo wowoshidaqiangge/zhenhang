@@ -176,7 +176,8 @@ import {
   deviceList,
   deviceListByType
 } from 'api/index';
-import { export2Excel } from '../../../utils/util.js';
+import { export2Excel } from '@/utils/util.js';
+import { renderOptions } from '@/utils/stateEcharts';
 import moment from 'moment';
 import Echarts from 'echarts';
 export default {
@@ -257,12 +258,16 @@ export default {
             fontSize: 14
           }
         },
+        
         tooltip: {
           trigger: 'axis',
           axisPointer: {
             // 坐标轴指示器，坐标轴触发有效
             type: 'line' // 默认为直线，可选为：'line' | 'shadow'
           }
+        },
+        legend: {
+            data: []
         },
         grid: {
           left: '5%',
@@ -288,29 +293,47 @@ export default {
           type: 'value',
           x: 'right'
         },
+        // dataZoom: [{
+        //   show: true,
+        //     type: 'slider',
+        //     start: 0,
+        //     end: 30
+        // }],
         series: [
           {
             name: '',
             data: [],
             type: 'line',
-            barWidth: 20,
-            stack: '时长',
+            itemStyle:{
+              normal:{
+               
+              }
+            },
+            // stack: '时长',
             smooth: true
           },
           {
             name: '开机时长',
             data: [],
             type: 'line',
-            barWidth: 20,
-            stack: '时长',
+            itemStyle:{
+              normal:{
+               
+              }
+            },
+            // stack: '时长',
             smooth: true
           },
           {
             name: '运行时长',
             data: [],
             type: 'line',
-            barWidth: 20,
-            stack: '时长',
+            itemStyle:{
+              normal:{
+               
+              }
+            },
+            // stack: '时长',
             smooth: true
           }
         ]
@@ -478,9 +501,15 @@ export default {
              
               this.option.xAxis.data = hour;
               this.option.series[0].name = '关机时长';
+              this.option.series[0].itemStyle.normal.color = '#c5c5c5'
+              
               this.option.series[0].data = this.hanld2(hour, nowtime, num);
+              this.option.series[1].itemStyle.normal.color = '#3aa1ff'
               this.option.series[1].data = this.hanld2(hour, nowtime, num1);
+              this.option.series[2].itemStyle.normal.color = '#9bd782'
               this.option.series[2].data = this.hanld2(hour, nowtime, num2);
+               this.option.legend.data=['关机时长','开机时长','运行时长']
+               debugger
               let att = []
               // att.push(...hour,...num,...num1,...num2)
               hour.map((m,n)=>{
@@ -492,15 +521,20 @@ export default {
               let state = [];
               let hour = [];
               let hou1 = [] // 辅助数据
+              let testinfo = []
               res.data[0].deviceRunList.map(item => {
                 state.push(Number(item.state)+1);
+                testinfo.push({time:item.dateTime,value:Number(item.state)+1})
               });
+              
               res.data[0].deviceRunList.map(item => {
                 hour.push(item.dateTime.split(' ')[1]);
                 hou1.push(item.dateTime.split(' ')[1]);
               });
               hou1.pop()
-              this.drawStateChart(hour, state,hou1);
+              // this.drawStateChart(hour, state,hou1);
+              this.drawStateChart(testinfo);
+              
               // 表数据：
               this.isload = true;
               this.excellist = res.data[0].deviceRunList;
@@ -521,143 +555,146 @@ export default {
     // 绘制阶梯状态图（柱状图模拟，无法切换折线/柱状）
 
     drawStateChart(hour, state,hour1) {
-    
+      debugger
       let myChart = Echarts.init(document.getElementById('chart'));
       // 使用 aidState做填充，fakeState显示小线条
-      myChart.showLoading({
-        text: '正在加载...'
-      });
-      var aidState = [];
-      var fakeState = [];
-      let yax = [];
-      for (let i = 0; i < state.length; i++) {
-        fakeState[i] = state[i] * 0.01;
-        aidState[i] = state[i] - fakeState[i];
-        yax[i] = 0.01;
-      }
-     console.log(fakeState,aidState)
-      let option1 = {
-        title: {
-          show: Object.keys(state).length === 0,
-          extStyle: {
-            color: 'grey',
-            fontSize: 20
-          },
-          text: '暂无数据',
-          left: 'center',
-          top: 'center'
-        },
-        tooltip: {
-          // trigger: 'axis'
-          show: false
-        },
-        toolbox: {
-          show: false,
+      // myChart.showLoading({
+      //   text: '正在加载...'
+      // });
+    //   var aidState = [];
+    //   var fakeState = [];
+    //   let yax = [];
+    //   for (let i = 0; i < state.length; i++) {
+    //     fakeState[i] = state[i] * 0.01;
+    //     aidState[i] = state[i] - fakeState[i];
+    //     yax[i] = 0.01;
+    //   }
+    //  console.log(fakeState,aidState)
+    //   let option1 = {
+    //     title: {
+    //       show: Object.keys(state).length === 0,
+    //       extStyle: {
+    //         color: 'grey',
+    //         fontSize: 20
+    //       },
+    //       text: '暂无数据',
+    //       left: 'center',
+    //       top: 'center'
+    //     },
+    //     tooltip: {
+    //       // trigger: 'axis'
+    //       show: false
+    //     },
+    //     legend: {
+    //         data: []
+    //     },
+    //     toolbox: {
+    //       show: false,
          
-        },
-        grid: {
-          bottom: '10%',
-          top: '10%',
-          containLabel: false
-        },
+    //     },
+    //     grid: {
+    //       bottom: '10%',
+    //       top: '10%',
+    //       containLabel: false
+    //     },
 
-        xAxis: [
-          {
-          type: 'category',
-          data: hour,
-          boundaryGap: false,
-          axisTick: {
-            show: false
+    //     xAxis: [
+    //       {
+    //       type: 'category',
+    //       data: hour,
+    //       boundaryGap: false,
+    //       axisTick: {
+    //         show: false
           
             
-          },
-          axisLabel: {
-            interval: 0,
-            align: 'center'
-          }
-        },
-          {
-          type: 'category',
-          data:  hour1,
-          boundaryGap: true,
-          axisTick: {
-            show: false
+    //       },
+    //       axisLabel: {
+    //         interval: 0,
+    //         align: 'center'
+    //       }
+    //     },
+    //       {
+    //       type: 'category',
+    //       data:  hour1,
+    //       boundaryGap: true,
+    //       axisTick: {
+    //         show: false
             
-          },
-          axisLabel: {
-            show: false
-          }
-        }
-        ],
+    //       },
+    //       axisLabel: {
+    //         show: false
+    //       }
+    //     }
+    //     ],
     
-        yAxis: 
+    //     yAxis: 
         
-          {
-            type: 'value',
-            interval: 1,
-            axisTick: {
-              show: false
-            },
-            axisLine: {
-              show: false
-            },
-            axisLabel: {
-              show: true,
-              interval: 0,
-              margin: 36,
-              align: 'left',
-              formatter: function(value) {
+    //       {
+    //         type: 'value',
+    //         interval: 1,
+    //         axisTick: {
+    //           show: false
+    //         },
+    //         axisLine: {
+    //           show: false
+    //         },
+    //         axisLabel: {
+    //           show: true,
+    //           interval: 0,
+    //           margin: 36,
+    //           align: 'left',
+    //           formatter: function(value) {
              
-                let stateMsg = ['状态','关机', '开机', '运行'];
-                return (value = stateMsg[value]);
-              }
-            },
-            splitLine: {
-              interval: 0
-            }
-          }
-          // {
-          //   type: 'value',
-          // },
-        ,
-        series: [
-          {
-              type: 'line',
-              data: '',
-          },
-          {
-            name: '辅助',
-            type: 'bar',
-            data: aidState,
-            stack: '设备状态值',
-            xAxisIndex: 1,
-            barWidth: '100%',
-            itemStyle: {
-              color: 'rgba(0,0,0,0)',
-              barBorderColor: 'rgba(0,0,0,0.2)',
-              borderType: 'dashed'
-            }
-          },
-          {
-            type: 'bar',
-            name: '状态',
-            data: fakeState,
-            stack: '设备状态值',
-            xAxisIndex: 1,
-            barWidth: '100%',
-            itemStyle: {
-              color: function(params) {
+    //             let stateMsg = ['状态','关机', '开机', '运行'];
+    //             return (value = stateMsg[value]);
+    //           }
+    //         },
+    //         splitLine: {
+    //           interval: 0
+    //         }
+    //       }
+    //       // {
+    //       //   type: 'value',
+    //       // },
+    //     ,
+    //     series: [
+    //       {
+    //           type: 'line',
+    //           data: '',
+    //       },
+    //       {
+    //         name: '辅助',
+    //         type: 'bar',
+    //         data: aidState,
+    //         stack: '设备状态值',
+    //         xAxisIndex: 1,
+    //         barWidth: '100%',
+    //         itemStyle: {
+    //           color: 'rgba(0,0,0,0)',
+    //           barBorderColor: 'rgba(0,0,0,0.2)',
+    //           borderType: 'dashed'
+    //         }
+    //       },
+    //       {
+    //         type: 'bar',
+    //         name: '状态',
+    //         data: fakeState,
+    //         stack: '设备状态值',
+    //         xAxisIndex: 1,
+    //         barWidth: '100%',
+    //         itemStyle: {
+    //           color: function(params) {
               
-                // build a color map as your need.
-                var colors = ['#000','#737172', '#0096ff', '#259B24'];
-                return colors[params.value * 100];
-              }
-            }
-          }
-        ]
-      };
-      myChart.hideLoading();
-      myChart.setOption(option1, (window.onresize = myChart.resize));
+    //             // build a color map as your need.
+    //             var colors = ['#000','#737172', '#0096ff', '#259B24'];
+    //             return colors[params.value * 100];
+    //           }
+    //         }
+    //       }
+    //     ]
+    //   };
+    //   myChart.hideLoading();
+      myChart.setOption(renderOptions(hour), (window.onresize = myChart.resize));
     },
     // 处理图表数据格式
     hanld2(hour, time, data) {

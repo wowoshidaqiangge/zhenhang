@@ -66,7 +66,11 @@ export default {
               }
             ]
           }
-          myChart.setOption(option, (window.onresize = myChart.resize));
+          myChart.setOption(option);
+          window.addEventListener("resize",function (){
+            myChart.resize();
+          });
+
     },
     // 设备运行情况
    async planAchieveRateFunc() {

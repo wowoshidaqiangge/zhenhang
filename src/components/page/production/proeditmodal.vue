@@ -48,6 +48,11 @@
                                 </el-form-item>
                             </el-col>
                     </p>
+                     <el-col :span="22" >
+                           <el-form-item label="备注" :label-width="formLabelWidth" prop='remark'>
+                                <el-input v-model="form.remark" type="textarea" disabled autocomplete="off"></el-input>
+                            </el-form-item>
+                    </el-col> 
                     <el-col :span="24" >
                             <el-table
                                 :data="tableData2"
@@ -111,6 +116,11 @@
                                 </el-form-item>
                             </el-col>
                     </p>
+                    <el-col :span="22" >
+                           <el-form-item label="备注" :label-width="formLabelWidth" prop='remark'>
+                                <el-input v-model="form.remark" type="textarea" disabled autocomplete="off"></el-input>
+                            </el-form-item>
+                    </el-col> 
                     <el-col :span="24" >
                             <el-table
                                 :data="tableData3"
@@ -174,6 +184,11 @@
                                 </el-form-item>
                             </el-col>
                     </p>
+                    <el-col :span="22" >
+                           <el-form-item label="备注" :label-width="formLabelWidth" prop='remark'>
+                                <el-input v-model="form.remark" type="textarea" disabled autocomplete="off"></el-input>
+                            </el-form-item>
+                    </el-col> 
                     <el-col :span="24" >
                             <el-table
                                 :data="tableData2"

@@ -7,7 +7,7 @@
         <div class="welcomeText">欢迎您，{{ userName }}</div>
       </div> -->
       <div class="centerTitle">
-        <div class="title" @click="goControl">臻航生产管理系统</div>
+        <div class="title" @click="goControl"><img src="~@/assets/logo.png" style="width:44px;height:44px;margin-right:10px"/>臻航生产管理系统</div>
       </div>
       <!-- <div class="rightTime">
         <div class="currentTime">{{ currentTmie }}</div>
@@ -135,7 +135,8 @@ export default {
   },
   data() {
     return {
-      loading: true, // 未加载完成动画
+      timer1:null,
+      loading: false, // 未加载完成动画
       userName: sessionStorage.getItem('ms_username'),
       currentTmie: '', //当前时间
       currentTimer: {}, // 实时日期时间的定时器
@@ -224,6 +225,9 @@ export default {
     this.getuserListMenu()
   },
   computed: {},
+  beforeDestroy(){
+    clearInterval(this.timer1)
+  },
   methods: {
     goControl() {
       this.$router.push({ path: `/${this.nextroute}` })
@@ -252,9 +256,9 @@ export default {
     },
     // 设备运行监控
     deviceMonitorFunc() {
-      this.loading = true
+      // this.loading = true
       api.deviceMonitor().then(response => {
-        this.loading = false
+        // this.loading = false
         console.log(response.data);
         let deviceType1 = []
         let deviceType2 = []
@@ -308,6 +312,10 @@ export default {
         // console.log(response.data);
         // 设备监控设备状态
         this.deviceTypeList1 = deviceType1
+        clearInterval(this.timer1)
+        this.timer1 = setInterval(()=>{
+          this.deviceMonitorFunc()
+        },10000)
         // this.deviceTypeList2 = deviceType2
         // console.log(this.deviceTypeList1)
       })

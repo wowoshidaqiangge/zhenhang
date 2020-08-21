@@ -16,7 +16,7 @@
                 </el-col>
                <el-col :span="24">
                         <el-col :span="11">
-                            <el-form-item label="产品编码" :label-width="formLabelWidth" prop='productCode'>
+                            <el-form-item label="臻航号" :label-width="formLabelWidth" prop='productCode'>
                                     <el-input v-model="form.productCode" autocomplete="off"></el-input>
                             </el-form-item>
                         </el-col>
@@ -48,6 +48,32 @@
                         </el-date-picker>
                     </el-form-item>
                 </el-col>
+                  <el-col :span="11">
+                        <el-form-item label="备注" :label-width="formLabelWidth" prop='remark'>
+                            <el-input v-model="form.remark"  autocomplete="off" type="textarea" :rows="1"></el-input>
+                        </el-form-item>
+                    </el-col>
+                     <el-col :span="24">
+                      <el-form-item label="工艺文件:" class="item" :label-width="formLabelWidth">
+                          <el-upload 
+                            :action="host" 
+                            :data="ossParams" 
+                            ref="updata" 
+                            :on-success="handleSuccess"
+                            :before-upload="beforeUpload"
+                            :before-remove="beforeRemove"
+                            :limit="limit" 
+                            class="upload-demo1" 
+                            multiple
+                            :on-exceed="exceed" 
+                            :file-list="fileList"
+                            >
+                              <el-button size="small" type="primary" >工艺文件上传</el-button>
+                          <!-- <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div> -->
+                          </el-upload>
+                          
+                      </el-form-item>
+                    </el-col>
             </el-form> 
         </el-row>
         <div slot="footer" class="dialog-footer">
@@ -60,6 +86,7 @@
 
 <script>
 import { produceTask,produceTaskid,produceTaskput } from 'api/index'
+import { onenet } from 'api/onenet';
 import {orderadd,orderid,orderput} from 'api/main'
 import moment from 'moment'
 export default {
@@ -75,6 +102,21 @@ export default {
     },
     data() {
         return {
+            limit: 5,
+            host: 'http://thingcom-dianliuji.oss-cn-hangzhou.aliyuncs.com',
+            ossParams: {
+                OSSAccessKeyId: '',
+                policy: '',
+                signature: '',
+                expire: '',
+                key: '', // key后面有用，先默认设空字符串
+                success_action_status: '200' // 默认200
+            },
+            fileList: [],
+             before:0,
+            after:0,
+            testbillList:[],
+            ossParamskey:[],
             form: {
                orderCode:'',
                productName:'',
@@ -119,6 +161,71 @@ export default {
        
     },
     methods: {
+      beforeRemove(file, fileList) {
+         this.testbillList.map((item,index)=>{
+             if(item.uid===file.uid || item.technology ===file.url){
+                 this.testbillList.splice(index,1)
+             }
+         })
+         console.log(this.testbillList)
+      },
+      handleSuccess(res, file) {
+        this.after++
+        this.testbillList.push({technologyName:file.name,uid:file.uid})
+        if(this.after ===this.before){
+          this.ossParamskey.map((item,index)=>{
+            this.testbillList[index].technology = this.host + '/' + item
+          })
+
+        }
+      },
+      beforeUpload: async function (file) {
+        this.before++
+        await this.backOssInfo(file);
+      },
+     
+      exceed(files, fileList) {
+      
+        this.$message.error('最多只能上传5个文件！');
+      },
+      // 获取oss签名数据
+     backOssInfo:async function (file) {
+        let fileName = file.name.substring(file.name.lastIndexOf('.') + 1);
+        return new Promise(
+          await function (resolve, reject) {
+          onenet.ossInfo().then(
+              function (response) {
+                if (response === undefined) {
+                  this.$message.error(response.error);
+                  reject();
+                } else {
+                  this.ossParams.OSSAccessKeyId = response.accessid;
+                  this.ossParams.policy = response.policy;
+                  this.ossParams.signature = response.signature;
+                  this.ossParams.key = sessionStorage.getItem('userId') + this.randomWord(true, 9, 12) + '.' + fileName;
+                  console.log(this.ossParams.key)
+                  this.ossParamskey.push(this.ossParams.key)
+                  resolve();
+                }
+              }.bind(this)
+            );
+          }.bind(this)
+        );
+      },
+      randomWord(randomFlag, min, max) {
+        let str = '';
+        let range = min;
+        let arr = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+        // 随机产生
+        if (randomFlag) {
+          range = Math.round(Math.random() * (max - min)) + min;
+        }
+        for (let i = 0; i < range; i++) {
+          let pos = Math.round(Math.random() * (arr.length - 1));
+          str += arr[pos];
+        }
+        return str;
+      },
        changetime(h){
            this.form.planFinishTime = moment(h).format('YYYY-MM-DD')
        },
@@ -130,6 +237,17 @@ export default {
            orderid(id).then(res=>{
                if(res.code==='0'){
                 //    this.value1 = [res.data.planStartTime,res.data.planEndTime]
+                debugger
+                let a = []
+                let b = []
+                if(res.data.technology){
+                    res.data.technology.split(";").map((item,index)=>{
+                        a.push({technology:item,technologyName:res.data.technologyName.split(";")[index],uid:res.data.technologyUuid.split(";")[index]})
+                        b.push({url:item,name:res.data.technologyName.split(";")[index]})
+                    })
+                }
+                   this.testbillList = a 
+                   this.fileList = b
                    this.form = res.data
                }
            })
@@ -137,6 +255,7 @@ export default {
        marksure(form){
           this.$refs[form].validate((valid) => {
                 if (valid) {
+                    this.form.technologyList  = this.testbillList
                     if(this.tit=='新增订单'){
                         orderadd(this.form).then(res=>{
                             if(res.code==='0'){
@@ -178,6 +297,11 @@ export default {
                 
             }
             this.value2 = []
+            this.testbillList = []
+            this.fileList = []
+            this.before = 0
+            this.after =0
+            this.ossParamskey=[]
        }
     }
 }
@@ -186,6 +310,17 @@ export default {
 
 <style lang='less'>
     .ordermodal{
+        .upload-demo1 {
+        
+          flex: 1;
+        }
+        .el-upload {
+        width: 104px;
+        height: 33px;
+        border: none;
+       
+        border-radius:3px ;
+        }
         .el-col{
             margin-bottom: 10px;
         }

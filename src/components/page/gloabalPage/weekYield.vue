@@ -117,7 +117,11 @@ export default {
               }
             }]
           };
-          myChart.setOption(option, (window.onresize = myChart.resize));
+          // myChart.setOption(option, (window.onresize = myChart.resize()));
+          myChart.setOption(option);
+         window.addEventListener("resize",function (){
+            myChart.resize();
+          });
           clearInterval(this.timer)
           this.timer = setInterval(()=>{
             this.weekYieldFunc()
