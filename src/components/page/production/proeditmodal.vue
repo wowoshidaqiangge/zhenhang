@@ -8,7 +8,7 @@
                 <el-form :model="form" ref='form'>
                     <el-col :span="11">
                             <el-form-item label="订单编号" :label-width="formLabelWidth" prop='orderCode'>
-                                    <el-select v-model="form.orderCode" disabled @change='changesel' placeholder="请选择">
+                                    <el-select v-model="form.orderCode" disabled  placeholder="请选择">
                                         <el-option
                                         v-for="item in options"
                                         :key="item.id"
@@ -26,7 +26,7 @@
                     
                     <el-col :span="24">
                             <el-form-item label="产品编码" :label-width="formLabelWidth" prop='productId'>
-                                <el-select v-model="form.productId" disabled @change='changeselect' placeholder="请选择">
+                                <el-select v-model="form.productId" disabled  placeholder="请选择">
                                     <el-option
                                         v-for="item in prolist"
                                         :key="item.id"
@@ -76,7 +76,7 @@
                 <el-form :model="formpro" ref='form'>
                     <el-col :span="11">
                             <el-form-item label="订单编号" :label-width="formLabelWidth" prop='orderCode'>
-                                    <el-select v-model="formpro.orderCode" disabled @change='changesel' placeholder="请选择">
+                                    <el-select v-model="formpro.orderCode" disabled  placeholder="请选择">
                                         <el-option
                                         v-for="item in options"
                                         :key="item.id"
@@ -94,7 +94,7 @@
                     
                     <el-col :span="24">
                             <el-form-item label="产品编码" :label-width="formLabelWidth" prop='productId'>
-                                <el-select v-model="formpro.productId" disabled @change='changeselect' placeholder="请选择">
+                                <el-select v-model="formpro.productId" disabled  placeholder="请选择">
                                     <el-option
                                         v-for="item in prolist"
                                         :key="item.id"
@@ -143,7 +143,7 @@
                 <el-form :model="form" ref='form'>
                     <el-col :span="11">
                             <el-form-item label="订单编号" :label-width="formLabelWidth" prop='orderCode'>
-                                    <el-select v-model="form.orderCode" disabled @change='changesel' placeholder="请选择">
+                                    <el-select v-model="form.orderCode" disabled  placeholder="请选择">
                                         <el-option
                                         v-for="item in options"
                                         :key="item.id"
@@ -160,9 +160,9 @@
                     </el-col>
                     
                     
-                    <el-col :span="24">
+                    <el-col :span="11">
                             <el-form-item label="产品编码" :label-width="formLabelWidth" prop='productId'>
-                                <el-select v-model="form.productId" disabled @change='changeselect' placeholder="请选择">
+                                <el-select v-model="form.productId" disabled  placeholder="请选择">
                                     <el-option
                                         v-for="item in prolist"
                                         :key="item.id"
@@ -171,6 +171,29 @@
                                     </el-option>
                                 </el-select>
                             </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-col :span="8">
+                            <el-form-item label="封边工单" :label-width="formLabelWidth" >
+                                <el-switch
+                                    v-model="value4"  @change="changeswitch1">
+                                </el-switch>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="8">
+                            <el-form-item label="喷塑工单" :label-width="formLabelWidth" >
+                                <el-switch
+                                    v-model="value5"  @change="changeswitch2">
+                                </el-switch>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="8">
+                            <el-form-item label="包装工单" :label-width="formLabelWidth" >
+                                <el-switch
+                                    v-model="value3"  @change="changeswitch">
+                                </el-switch>
+                            </el-form-item>
+                        </el-col>
                     </el-col>
                     <p>
                             <el-col :span="11">
@@ -311,6 +334,9 @@ export default {
     },
     data() {
         return {
+            value4:false,
+            value3:false,
+            value5:false,
             activeName:'first',
             form: {
                 productName: '',
@@ -396,7 +422,10 @@ export default {
                         trigger: 'change'
                     }
                 ],
-            }
+            },
+            bz:'',
+            fb:'',
+            ps:'',
         }
     },
     created(){
@@ -404,6 +433,63 @@ export default {
        this.getproductlist()
     },
     methods: {
+        changeswitch(val){
+             if(val&&this.tableData2.length>0){
+                let a = this.tableData2.filter(v=>v.itemCode==="包装")
+                if(a.length<1){
+                    if(this.bz){
+                        this.tableData2.push(this.bz)
+                    }else{
+                        this.tableData2.push({itemCode:'包装',id:'300',planYield:0,yieid:this.yieid,planBuyYield:0,planStartTime:'',planEndTime:''})
+                    }
+                    
+                }
+            }else if(!val&&this.tableData2.length>0){
+                this.tableData2.map((item,index)=>{
+                    if(item.itemCode==='包装'){
+                        this.tableData2.splice(index, 1)
+                    }
+                })
+            }
+        },
+        changeswitch1(val){
+            if(val&&this.tableData2.length>0){
+                let a = this.tableData2.filter(v=>v.itemCode==="封边")
+                if(a.length<1){
+                    if(this.fb){
+                        this.tableData2.push(this.fb)
+                    }else{
+                        this.tableData2.push({itemCode:'封边',id:'100',planYield:0,yieid:this.yieid,planBuyYield:0,planStartTime:'',planEndTime:''})
+                    }
+                    
+                }
+            }else if(!val&&this.tableData2.length>0){
+                this.tableData2.map((item,index)=>{
+                    if(item.itemCode==='封边'){
+                        this.tableData2.splice(index, 1)
+                    }
+                })
+            }
+        },
+        changeswitch2(val){
+            if(val&&this.tableData2.length>0){
+                let a = this.tableData2.filter(v=>v.itemCode==="喷塑")
+                if(a.length<1){
+                    if(this.ps){
+                        this.tableData2.push(this.ps)
+                    }else{
+                        this.tableData2.push({itemCode:'喷塑',id:'200',planYield:0,yieid:this.yieid,planBuyYield:0,planStartTime:'',planEndTime:''})
+                    }
+                    
+                }
+            }else if(!val&&this.tableData2.length>0){
+                this.tableData2.map((item,index)=>{
+                    if(item.itemCode==='喷塑'){
+                        this.tableData2.splice(index, 1)
+                    }
+                })
+            }
+        },
         // 生产进度进度
         getProduceProgress(id){
           
@@ -449,37 +535,37 @@ export default {
         },
        
         //查询物料列表
-        getItemListByProductId(id){
-            getItemListByProductId(id).then(res=>{
-                if(res.code==='0'){
-                    res.data.map((item,index)=>{
-                        if(!item.planYield){
-                            item.planYield = this.yieid
-                        }
-                        if(!item.planBuyYield){
-                            item.planBuyYield = 0
-                        }
-                        if(!item.planStartTime){
-                            item.planStartTime = ''
-                            item.planEndTime = ''
-                        }
-                        item.yieid = this.yieid
-                    })
-                    this.tableData2 = res.data
-                }
-            })
-        },
-        // 修改产品编码
-        changeselect(val){
-            let obj = {};
-            obj = this.prolist.find((item)=>{  
-                    return item.id === val;  
-                });
-            this.form.productName = obj.productName 
-            this.form.model = obj.model 
+        // getItemListByProductId(id){
+        //     getItemListByProductId(id).then(res=>{
+        //         if(res.code==='0'){
+        //             res.data.map((item,index)=>{
+        //                 if(!item.planYield){
+        //                     item.planYield = this.yieid
+        //                 }
+        //                 if(!item.planBuyYield){
+        //                     item.planBuyYield = 0
+        //                 }
+        //                 if(!item.planStartTime){
+        //                     item.planStartTime = ''
+        //                     item.planEndTime = ''
+        //                 }
+        //                 item.yieid = this.yieid
+        //             })
+        //             this.tableData2 = res.data
+        //         }
+        //     })
+        // },
+        // // 修改产品编码
+        // changeselect(val){
+        //     let obj = {};
+        //     obj = this.prolist.find((item)=>{  
+        //             return item.id === val;  
+        //         });
+        //     this.form.productName = obj.productName 
+        //     this.form.model = obj.model 
             
-            this.getItemListByProductId({productId:val,produceTaskId:this.produceTaskId})
-        },
+        //     this.getItemListByProductId({productId:val,produceTaskId:this.produceTaskId})
+        // },
         // 产品编号列表
         getproductlist(){
             productlist().then(res=>{
@@ -489,18 +575,18 @@ export default {
             })
         },
         // 自动生成任务单号
-        changesel(val){
-            let obj = {};
-            obj = this.options.find((item)=>{  
-                    return item.id === val;  
-                });
-            this.form.taskNumber = 'RW_' + obj.orderCode 
-            this.yieid = obj.planYield
-            this.form.planYield = obj.planYield
-             // 切换订单重置产品编码
-            this.form.productId = ''
-            this.tableData2 = []
-        },
+        // changesel(val){
+        //     let obj = {};
+        //     obj = this.options.find((item)=>{  
+        //             return item.id === val;  
+        //         });
+        //     this.form.taskNumber = 'RW_' + obj.orderCode 
+        //     this.yieid = obj.planYield
+        //     this.form.planYield = obj.planYield
+        //      // 切换订单重置产品编码
+        //     this.form.productId = ''
+        //     this.tableData2 = []
+        // },
        // 获取订单编号列表
        getorderlist(){
            orderlist().then(res=>{
@@ -529,7 +615,23 @@ export default {
                    res.data.planList.map((item)=>{
                        item.yieid = id.orderYield
                        item.createTime = item.createTime.split(' ')[0]
+                       if(item.itemCode==='包装'){
+                           this.value3 = true
+                           item.id= '300'
+                           this.bz = item
+                       }
+                       if(item.itemCode==='封边'){
+                           this.value4 = true
+                           item.id= '100'
+                           this.fb = item
+                       }
+                       if(item.itemCode==='喷塑'){
+                           this.value5 = true
+                           item.id= '200'
+                           this.ps = item
+                       }
                    })
+                   debugger
                    this.yieid = id.orderYield
                    this.produceTaskId = id.id
                    this.tableData2 = res.data.planList
@@ -554,6 +656,8 @@ export default {
                             if(res.code==='0'){
                                 this.$message.success(res.msg)
                                 this.close('0')
+                            }else{
+                                this.$message.error(res.msg)
                             }
                         })
                 }
@@ -574,6 +678,12 @@ export default {
                 planEndTime: '',
                 
             }
+            this.value3 = false
+            this.value4 = false
+            this.value5 = false
+             this.fb = ''
+            this.bz = ''
+            this.ps = ''
             this.produceTaskId = ''
             this.value2 = []
             this.activeName = 'first'

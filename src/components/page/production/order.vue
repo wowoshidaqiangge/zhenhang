@@ -174,7 +174,7 @@ export default {
             columnlist:[
                 {prop:'index',label:'序号',width:'50'},
                 {prop:'orderCode',label:'订单号'},
-                {prop:'productCode',label:'产品编码'},
+                {prop:'productCode',label:'臻航号'},
                 {prop:'productName',label:'产品名称'},
                 {prop:'model',label:'规格型号'},
                 {prop:'planYield',label:'订单量'},

@@ -184,7 +184,9 @@ export default {
             }
         },
        getform(info){
-           this.form = info
+           let res = JSON.parse(JSON.stringify(info))
+           delete res.remark
+           this.form = res
            this.$nextTick(function() {
                 if (this.timer) {
                     clearTimeout(this.timer);

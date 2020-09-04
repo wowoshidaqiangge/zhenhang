@@ -1,7 +1,7 @@
 <template>
   <div class="promoadl">
     
-    <el-dialog :title="tit" width="60%" :visible.sync="dialogFormVisible" :before-close='beforclose' center>
+    <el-dialog :title="tit" width="62%" :visible.sync="dialogFormVisible" :before-close='beforclose' center>
         <el-row>
            <el-form :model="form" ref='form' :rules="rules">
                 <el-col :span="11">
@@ -35,13 +35,30 @@
                         </el-form-item>
                         
                     </el-col>
-                    <el-col :span="11">
-                        <el-form-item label="包装工单" :label-width="formLabelWidth" >
-                            <el-switch
-                                v-model="value3"  @change="changeswitch">
-                            </el-switch>
-                        </el-form-item>
+                    <el-col :span="12">
+                        <el-col :span="8">
+                            <el-form-item label="封边工单" :label-width="formLabelWidth" >
+                                <el-switch
+                                    v-model="value4"  @change="changeswitch1">
+                                </el-switch>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="8">
+                            <el-form-item label="喷塑工单" :label-width="formLabelWidth" >
+                                <el-switch
+                                    v-model="value5"  @change="changeswitch2">
+                                </el-switch>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="8">
+                            <el-form-item label="包装工单" :label-width="formLabelWidth" >
+                                <el-switch
+                                    v-model="value3"  @change="changeswitch">
+                                </el-switch>
+                            </el-form-item>
+                        </el-col>
                     </el-col>
+                    
                </el-col>
               
                 <el-col :span="11">
@@ -178,6 +195,8 @@ export default {
     data() {
         return {
             value3:true,
+            value4:true,
+            value5:true,
             form: {
                 productName: '',
                 orderId: '',
@@ -250,12 +269,39 @@ export default {
         this.getproductlist()
     },
     methods: {
+        changeswitch1(val){
+            if(val&&this.tableData2.length>0){
+                let a = this.tableData2.filter(v=>v.itemCode==="封边")
+                if(a.length<1){
+                    this.tableData2.push({itemCode:'封边',id:'100',planYield:this.yieid,yieid:this.yieid,planBuyYield:0,planStartTime:'',planEndTime:''})
+                }
+            }else if(!val&&this.tableData2.length>0){
+                this.tableData2.map((item,index)=>{
+                    if(item.itemCode==='封边'){
+                        this.tableData2.splice(index, 1)
+                    }
+                })
+            }
+        },
+        changeswitch2(val){
+             if(val&&this.tableData2.length>0){
+                let a = this.tableData2.filter(v=>v.itemCode==="喷塑")
+                if(a.length<1){
+                    this.tableData2.push({itemCode:'喷塑',id:'200',planYield:this.yieid,yieid:this.yieid,planBuyYield:0,planStartTime:'',planEndTime:''})
+                }
+            }else if(!val&&this.tableData2.length>0){
+                this.tableData2.map((item,index)=>{
+                    if(item.itemCode==='喷塑'){
+                        this.tableData2.splice(index, 1)
+                    }
+                })
+            }
+        },
         changeswitch(val){
-        
             if(val&&this.tableData2.length>0){
                 let a = this.tableData2.filter(v=>v.itemCode==="包装")
                 if(a.length<1){
-                    this.tableData2.push({itemCode:'包装',planYield:this.yieid,yieid:this.yieid,planBuyYield:0,planStartTime:'',planEndTime:''})
+                    this.tableData2.push({itemCode:'包装',id:'300',planYield:this.yieid,yieid:this.yieid,planBuyYield:0,planStartTime:'',planEndTime:''})
                 }
             }else if(!val&&this.tableData2.length>0){
                 this.tableData2.map((item,index)=>{
@@ -285,7 +331,6 @@ export default {
                 if (valid) {
                     this.tableData2.map((item,index)=>{
                         if(item.id ===this.form1.id){
-                            
                             this.tableData2[index].planYield = this.form1.planYield
                             this.tableData2[index].planBuyYield = this.form1.planBuyYield
                             this.tableData2[index].planEndTime = this.form1.planEndTime
@@ -313,8 +358,14 @@ export default {
                         item.planStartTime = ''
                         item.planEndTime = ''
                     })
+                    if(this.value4){
+                        res.data.push({itemCode:'封边',id:'100',planYield:this.yieid,yieid:this.yieid,planBuyYield:0,planStartTime:'',planEndTime:''})
+                    }
+                    if(this.value5){
+                        res.data.push({itemCode:'喷塑',id:'200',planYield:this.yieid,yieid:this.yieid,planBuyYield:0,planStartTime:'',planEndTime:''})
+                    }
                     if(this.value3){
-                        res.data.push({itemCode:'包装',planYield:this.yieid,yieid:this.yieid,planBuyYield:0,planStartTime:'',planEndTime:''})
+                        res.data.push({itemCode:'包装',id:'300',planYield:this.yieid,yieid:this.yieid,planBuyYield:0,planStartTime:'',planEndTime:''})
                     }
                     this.tableData2 = res.data
                 }

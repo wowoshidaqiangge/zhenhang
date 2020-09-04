@@ -53,6 +53,7 @@
                 :height="screenWidth"
                >
                  <el-table-column
+                    show-overflow-tooltip
                     v-for="(item,index) in columnlist"
                     :key="index"
                     :width="item.width"
@@ -184,7 +185,7 @@ export default {
             columnlist:[{prop:'index',label:'序号',width:'50'},
                 {prop:'taskNumber',label:'工单号'},
                 {prop:'deptName',label:'部门'},
-                {prop:'itemName',label:'物料名称'},
+                {prop:'itemName',label:'物料名称/工艺'},
                 {prop:'itemCode',label:'物料编码'},
                 {prop:'model',label:'规格型号',},
                 {prop:'planYield',label:'计划生产量',width:'95'},
