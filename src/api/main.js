@@ -281,6 +281,14 @@ export const producetasklist = query => {
     });
 };
 
+
+export const producetasklistTreet = query => {
+    return request({
+        url: `/api/producetask/item/listTree`,
+        method: 'get',
+        params: query
+    });
+};
 //产品导入
 export const productaddExcel = query => {
     return request({

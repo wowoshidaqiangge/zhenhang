@@ -130,12 +130,11 @@ export default {
             tableData:[],
             columnlist:[
                 {prop:'index',label:'序号'},
-                {prop:'productCode',label:'产品编码'},
-                {prop:'productName',label:'产品名称'},
-                {prop:'model',label:'规格型号'},
+                {prop:'productCode',label:'臻航号'},
+                {prop:'productName',label:'货品编码'},
+                {prop:'model',label:'发料工序'},
                  {prop:'itemCodes',label:'关联物料',width:250},
                 {prop:'unit',label:'基本单位'},
-               
                 {prop:'createTime',label:'创建时间'}
             ],
             screenWidth:(document.body.clientHeight-215) + 'px',

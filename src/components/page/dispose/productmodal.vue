@@ -1,3 +1,4 @@
+
 <template>
   <div class="productmodal">
     <el-dialog
@@ -55,16 +56,19 @@
               prop="stuff"
             >
               <el-cascader
-                :props="casprops"
+                :props="casprops1"
                 v-model="infolist"
-                :show-all-levels="false"
-                multiple
-                @change="changesel"
+                @change='changesel'
+                 collapse-tags
+                :options="filteroption"
                 @remove-tag="removetag"
+                filterable
               ></el-cascader>
               <!-- <el-select v-model="itemIds" @change='changesel' @remove-tag='removetag' multiple  placeholder="请选择">
                         <el-option
                             v-for="item in rolelist"
+                              :key="isResouceShow"
+                              :filter-method ="dataFilter"
                             :key="item.id"
                             :label="item.itemName"
                             :value="item.id">
@@ -218,6 +222,7 @@
 <script>
 import {
   producetasklist,
+  producetasklistTreet,
   getListByIds,
   productadd,
   productid,
@@ -293,74 +298,102 @@ export default {
       caslist2: [],
       caslist0: [],
       innerVisible: false,
+       isResouceShow: "0",
       itemIds: [],
       infolist: [],
-      productId: '' //修改时根据id 查询数量
+      filteroption:[],
+      copy:[],
+      seachval:'',
+      productId: '' ,//修改时根据id 查询数量，
+      casprops1:{
+        multiple: true,
+        value: 'id',
+        label: 'itemName',
+      },
+      casprops:{},
+      a:0
     };
   },
   created() {
-    this.getproducetasklist();
-    let that = this;
-    this.casprops = {
-      multiple: true,
-      lazy: true,
-      lazyLoad(node, resolve) {
-        if (node.level == 0) {
-          producetasklist().then(res => {
-            if (res.code === '0') {
-              const cities = res.data.itemList.map((value, i) =>
-                value.dataIsEmpty == 'true'
-                  ? {
-                      value: value.id,
-                      label: value.itemName,
-                      leaf: node.level >= 2
-                    }
-                  : {
-                      value: value.id,
-                      label: value.itemName,
-                      leaf: node.level >= 0
-                    }
-              );
-              resolve(cities);
-            }
-          });
-        } else if (node.level == 1) {
-          producetasklist({ itemName: node.label }).then(res => {
-            if (res.code === '0') {
-              const cities = res.data.itemList.map((value, i) =>
-                value.dataIsEmpty == 'true'
-                  ? {
-                      value: value.id,
-                      label: value.material,
-                      leaf: node.level >= 2
-                    }
-                  : {
-                      value: value.id,
-                      label: value.material,
-                      leaf: node.level >= 1
-                    }
-              );
-              resolve(cities);
-            }
-          });
-        } else if (node.level == 2) {
-          producetasklist({ material: node.label }).then(res => {
-            if (res.code === '0') {
-              const cities = res.data.itemList.map((value, i) => ({
-                value: value.id,
-                label: value.model,
-                leaf: node.level >= 2
-              }));
-              resolve(cities);
-            }
-          });
-        }
-      }
-    };
+    // this.getproducetasklist();
+    //  this.getload()
+    this.getData();
   },
   mounted() {},
   watch: {},
   methods: {
+    
+    getload(val){
+      let that =this
+     this.casprops = {
+        multiple: true,
+        lazy: true,
+        lazyLoad(node, resolve) {
+         
+          if (node.level == 0) {
+         
+            producetasklist({itemNameOrCode:that.seachval}).then(res => {
+              if (res.code === '0') {
+                const cities = res.data.itemList.map((value, i) =>
+                  value.dataIsEmpty == 'true'
+                    ? {
+                        value: value.id,
+                        label: value.itemName,
+                        leaf: node.level >= 2
+                      }
+                    : {
+                        value: value.id,
+                        label: value.itemName,
+                        leaf: node.level >= 0
+                      }
+                );
+                resolve(cities);
+              }
+            });
+          } else if (node.level == 1) {
+            producetasklist({ itemName: node.label }).then(res => {
+              if (res.code === '0') {
+                const cities = res.data.itemList.map((value, i) =>
+                  value.dataIsEmpty == 'true'
+                    ? {
+                        value: value.id,
+                        label: value.material,
+                        leaf: node.level >= 2
+                      }
+                    : {
+                        value: value.id,
+                        label: value.material,
+                        leaf: node.level >= 0
+                      }
+                );
+                resolve(cities);
+              }
+            });
+          } else if (node.level == 2) {
+            producetasklist({ material: node.label }).then(res => {
+              if (res.code === '0') {
+                const cities = res.data.itemList.map((value, i) => ({
+                  value: value.id,
+                  label: value.model,
+                  leaf: node.level >= 2
+                }));
+                resolve(cities);
+              }
+            });
+          }
+        }
+      }
+     
+    },
+    getData(data) {
+      //  这里写获取数据的方法然后让options_cascader等于返回来的值
+      // this.filteroption=data
+      producetasklistTreet().then(res=>{
+        if(res.code==='0'){
+          this.filteroption = res.data
+        }
+      })
+    },
     changesel(val) {
       let arr = [];
       val.map(item => {
@@ -386,9 +419,12 @@ export default {
       productid(id).then(res => {
         if (res.code == '0') {
           let arr = [];
+          let arr1 = []
           res.data.itemList.map(item => {
             arr.push(item.id);
+            arr1.push([1,2,item.id])
           });
+          this.infolist = arr1
           this.form = res.data;
           this.itemIds = arr;
           this.tableData1 = res.data.itemList;
@@ -460,6 +496,7 @@ export default {
       this.productId = '';
       this.tableData1 = [];
       this.itemIds = [];
+      this.infolist = ''
     },
     marksure(form) {
       let arr = [];

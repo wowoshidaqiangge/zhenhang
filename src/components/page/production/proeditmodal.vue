@@ -173,21 +173,35 @@
                             </el-form-item>
                     </el-col>
                     <el-col :span="12">
-                        <el-col :span="8">
+                        <el-col :span="6">
+                            <el-form-item label="冲压工单" :label-width="formLabelWidth" >
+                                <el-switch
+                                    v-model="value6"  @change="changeswitch3">
+                                </el-switch>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="6">
+                            <el-form-item label="纸芯工单" :label-width="formLabelWidth" >
+                                <el-switch
+                                    v-model="value7"  @change="changeswitch4">
+                                </el-switch>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="6">
                             <el-form-item label="封边工单" :label-width="formLabelWidth" >
                                 <el-switch
                                     v-model="value4"  @change="changeswitch1">
                                 </el-switch>
                             </el-form-item>
                         </el-col>
-                        <el-col :span="8">
+                        <el-col :span="6">
                             <el-form-item label="喷塑工单" :label-width="formLabelWidth" >
                                 <el-switch
                                     v-model="value5"  @change="changeswitch2">
                                 </el-switch>
                             </el-form-item>
                         </el-col>
-                        <el-col :span="8">
+                        <el-col :span="6">
                             <el-form-item label="包装工单" :label-width="formLabelWidth" >
                                 <el-switch
                                     v-model="value3"  @change="changeswitch">
@@ -337,6 +351,8 @@ export default {
             value4:false,
             value3:false,
             value5:false,
+            value6:false,
+            value7:false,
             activeName:'first',
             form: {
                 productName: '',
@@ -426,6 +442,8 @@ export default {
             bz:'',
             fb:'',
             ps:'',
+            cy:'',
+            zx:'',
         }
     },
     created(){
@@ -447,6 +465,44 @@ export default {
             }else if(!val&&this.tableData2.length>0){
                 this.tableData2.map((item,index)=>{
                     if(item.itemCode==='包装'){
+                        this.tableData2.splice(index, 1)
+                    }
+                })
+            }
+        },
+        changeswitch3(val){
+            if(val&&this.tableData2.length>0){
+                let a = this.tableData2.filter(v=>v.itemCode==="冲压")
+                if(a.length<1){
+                    if(this.cy){
+                        this.tableData2.push(this.cy)
+                    }else{
+                        this.tableData2.push({itemCode:'冲压',id:'400',planYield:0,yieid:this.yieid,planBuyYield:0,planStartTime:'',planEndTime:''})
+                    }
+                    
+                }
+            }else if(!val&&this.tableData2.length>0){
+                this.tableData2.map((item,index)=>{
+                    if(item.itemCode==='冲压'){
+                        this.tableData2.splice(index, 1)
+                    }
+                })
+            }
+        },
+        changeswitch4(val){
+            if(val&&this.tableData2.length>0){
+                let a = this.tableData2.filter(v=>v.itemCode==="纸芯")
+                if(a.length<1){
+                    if(this.zx){
+                        this.tableData2.push(this.zx)
+                    }else{
+                        this.tableData2.push({itemCode:'纸芯',id:'500',planYield:0,yieid:this.yieid,planBuyYield:0,planStartTime:'',planEndTime:''})
+                    }
+                    
+                }
+            }else if(!val&&this.tableData2.length>0){
+                this.tableData2.map((item,index)=>{
+                    if(item.itemCode==='纸芯'){
                         this.tableData2.splice(index, 1)
                     }
                 })
@@ -630,8 +686,18 @@ export default {
                            item.id= '200'
                            this.ps = item
                        }
+                       if(item.itemCode==='冲压'){
+                           this.value6 = true
+                           item.id= '400'
+                           this.cy = item
+                       }
+                       if(item.itemCode==='纸芯'){
+                           this.value7 = true
+                           item.id= '500'
+                           this.zx = item
+                       }
                    })
-                   debugger
+                
                    this.yieid = id.orderYield
                    this.produceTaskId = id.id
                    this.tableData2 = res.data.planList
