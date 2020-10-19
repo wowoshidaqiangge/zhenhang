@@ -64,7 +64,7 @@ export default {
     },
     methods: {
         handleDelete(h, m) {
-            debugger;
+         
             this.$confirm('确定要删除吗？', '提示', {
                 type: 'warning'
             })

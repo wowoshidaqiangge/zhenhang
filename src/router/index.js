@@ -35,6 +35,34 @@ const router = new Router({
                         ),
                     meta: { title: '系统首页' }
                 },
+                // 订单管理
+                {
+                    path: '/orderAddMenu',
+                    component: () =>
+                        import (
+                            /* webpackChunkName: "table" */
+                            '../components/page/order/orderAddMenu.vue'
+                        ),
+                    meta: { title: '订单新增', keepAlive: false }
+                },
+                {
+                    path: '/orderCheckMenu',
+                    component: () =>
+                        import (
+                            /* webpackChunkName: "table" */
+                            '../components/page/order/orderCheckMenu.vue'
+                        ),
+                    meta: { title: '订单审核', keepAlive: false }
+                },
+                {
+                    path: '/orderQueryMenu',
+                    component: () =>
+                        import (
+                            /* webpackChunkName: "table" */
+                            '../components/page/order/orderQueryMenu.vue'
+                        ),
+                    meta: { title: '订单查询', keepAlive: false }
+                },
                 // 设备管理
                 {
                     path: '/control',
@@ -92,15 +120,7 @@ const router = new Router({
                         ),
                     meta: { title: '采购信息', keepAlive: false }
                 },
-                {
-                    path: '/order',
-                    component: () =>
-                        import (
-                            /* webpackChunkName: "table" */
-                            '../components/page/production/order.vue'
-                        ),
-                    meta: { title: '订单管理', keepAlive: false }
-                },
+               
                 //数据统计
                 {
                     path: '/mainstatistics',
@@ -207,7 +227,7 @@ const router = new Router({
                             /* webpackChunkName: "table" */
                             '../components/page/dispose/material.vue'
                         ),
-                    meta: { title: '物料管理', keepAlive: false }
+                    meta: { title: '部件管理', keepAlive: false }
                 },
                 {
                     path: '/product',
@@ -216,7 +236,7 @@ const router = new Router({
                             /* webpackChunkName: "table" */
                             '../components/page/dispose/product.vue'
                         ),
-                    meta: { title: '产品管理', keepAlive: false }
+                    meta: { title: '技术BOM', keepAlive: false }
                 },
                 {
                     path: '/record',

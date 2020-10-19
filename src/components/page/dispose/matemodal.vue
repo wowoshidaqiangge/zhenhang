@@ -12,7 +12,7 @@
                 <el-form :model="form" :rules="rules" ref="form">
                     <el-col :span="11">
                         <el-form-item
-                            label="物料名称"
+                            label="部件名称"
                             :label-width="formLabelWidth"
                             class="formitem formitem1"
                             prop="itemName"
@@ -22,7 +22,7 @@
                     </el-col>
                     <el-col :span="11">
                         <el-form-item
-                            label="物料编码"
+                            label="部件编码"
                             :label-width="formLabelWidth"
                             class="formitem formitem1"
                             prop="itemCode"
@@ -93,6 +93,16 @@
                                     :value="item.id"
                                 >{{item.name}}</el-option>
                             </el-select>
+                        </el-form-item>
+                    </el-col>
+                     <el-col :span="11">
+                        <el-form-item
+                            label="发料工序"
+                            :label-width="formLabelWidth"
+                            class="formitem formitem1"
+                            prop="stWorkprocess"
+                        >
+                            <el-input v-model="form.stWorkprocess"></el-input>
                         </el-form-item>
                     </el-col>
                 </el-form>

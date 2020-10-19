@@ -509,7 +509,7 @@ export default {
               this.option.series[2].itemStyle.normal.color = '#9bd782'
               this.option.series[2].data = this.hanld2(hour, nowtime, num2);
                this.option.legend.data=['关机时长','开机时长','运行时长']
-               debugger
+              
               let att = []
               // att.push(...hour,...num,...num1,...num2)
               hour.map((m,n)=>{
@@ -555,7 +555,7 @@ export default {
     // 绘制阶梯状态图（柱状图模拟，无法切换折线/柱状）
 
     drawStateChart(hour, state,hour1) {
-      debugger
+   
       let myChart = Echarts.init(document.getElementById('chart'));
       // 使用 aidState做填充，fakeState显示小线条
       // myChart.showLoading({

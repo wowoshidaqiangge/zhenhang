@@ -5,7 +5,7 @@
         <p class="modaltit1">工单信息：</p>
         <el-row>
            <el-form :model="form" ref='form'>
-               <div class="modalcont">
+               <el-col class="modalcont">
                    <el-col :span="11">
                         <el-form-item label="工单号" :label-width="formLabelWidth" prop='taskNumber'>
                                 <el-input v-model="form.taskNumber" disabled autocomplete="off"></el-input>
@@ -17,18 +17,23 @@
                         </el-form-item>
                     </el-col>
                     <el-col :span="11">
-                        <el-form-item label="物料名称" :label-width="formLabelWidth" prop='itemName'>
-                                <el-input v-model="form.itemName" disabled autocomplete="off"></el-input>
+                        <el-form-item label="元件编号" :label-width="formLabelWidth" prop='partNumber'>
+                                <el-input v-model="form.partNumber" disabled autocomplete="off"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="11">
-                        <el-form-item label="物料编码" :label-width="formLabelWidth" prop='itemCode'>
-                                <el-input v-model="form.itemCode" disabled autocomplete="off"></el-input>
+                        <el-form-item label="部件编码" :label-width="formLabelWidth" prop='partCode'>
+                                <el-input v-model="form.partCode" disabled autocomplete="off"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="11">
-                        <el-form-item label="规格型号" :label-width="formLabelWidth" prop='model'>
-                                <el-input v-model="form.model" disabled autocomplete="off"></el-input>
+                        <el-form-item label="元件名称" :label-width="formLabelWidth" prop='partName'>
+                                <el-input v-model="form.partName" disabled autocomplete="off"></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="11">
+                        <el-form-item label="发料工序" :label-width="formLabelWidth" prop='stWorkprocess'>
+                                <el-input v-model="form.stWorkprocess" disabled autocomplete="off"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="11">
@@ -36,7 +41,7 @@
                                 <el-input v-model="form.planYield" disabled autocomplete="off"></el-input>
                         </el-form-item>
                     </el-col>
-               </div>
+               </el-col>
            </el-form>
         </el-row>
 
@@ -87,16 +92,17 @@ export default {
                 size:10
             },
             columlist:[{prop:'index',label:'序号',width:80},
-            {prop:'produceTaskId',label:'生产工单号'},
+            {prop:'produceTaskId',label:'报工流水号'},
             {prop:'reportUser',label:'生产员工'},
             {prop:'produceCount',label:'生产数量'},
             {prop:'totalCount',label:'累计产量'},
-            {prop:'scrap',label:'报废数'},
-            {prop:'scrapRemark',label:'报废原因'},
-            {prop:'rework',label:'返工数'},
-            {prop:'reworkRemark',label:'返工原因'},
+            // {prop:'scrap',label:'报废数'},
+            // {prop:'scrapRemark',label:'报废原因'},
+            // {prop:'rework',label:'返工数'},
+            // {prop:'reworkRemark',label:'返工原因'},
             {prop:'createTime',label:'报工时间'},
-            {prop:'remark',label:'备注'}],
+            // {prop:'remark',label:'备注'}
+            ],
             form:{
             }
         }
@@ -159,7 +165,7 @@ export default {
           padding: 25px 0;
           border: 1px dashed #aaa;
           margin-bottom: 25px;
-          height: 140px;
+        //   height: 140px;
 
         }
         .modaltit1{

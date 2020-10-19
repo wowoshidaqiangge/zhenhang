@@ -2,28 +2,47 @@
   <div class="assignmodal">
     <el-dialog :title="tit" :visible.sync="dialogFormVisible" :before-close="beforclose" center>
       <p class="modaltit1">工单信息：</p>
-      <el-row>
-        <el-form :model="form" ref="form" :rules="rules">
-          <el-col :span="24" class="modalcont">
+      <el-row >
+        <el-form :model="form" ref="form" :rules="rules" >
+          <el-col :span="24" v-if="tit === '批量派单'" style="margin-bottom:20px">
+            <el-table
+                  :data="tableData1"
+                  stripe
+                  border
+                >
+                  <el-table-column
+                      show-overflow-tooltip
+                      v-for="(item,index) in columnlist1"
+                      :key="index"
+                      :width="item.width"
+                      :prop="item.prop"
+                      :label="item.label"
+                      align="center"
+                  >
+                  </el-table-column>
+            </el-table>
+          </el-col>
+          <el-col v-if="tit !== '批量派单'">
+             <el-col :span="24" class="modalcont">
             <el-col :span="11">
-              <el-form-item label="任务单号" :label-width="formLabelWidth" prop="taskNumber">
+              <el-form-item label="生产任务单" :label-width="formLabelWidth" prop="taskNumber">
                 <el-input v-model="form.taskNumber" disabled autocomplete="off"></el-input>
               </el-form-item>
             </el-col>
 
             <el-col :span="11">
-              <el-form-item label="物料名称" :label-width="formLabelWidth" prop="itemName">
-                <el-input v-model="form.itemName" disabled autocomplete="off"></el-input>
+              <el-form-item label="元件编号" :label-width="formLabelWidth" prop="partNumber">
+                <el-input v-model="form.partNumber" disabled autocomplete="off"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="11">
-              <el-form-item label="物料编码" :label-width="formLabelWidth" prop="itemCode">
-                <el-input v-model="form.itemCode" disabled autocomplete="off"></el-input>
+              <el-form-item label="部件编码" :label-width="formLabelWidth" prop="partCode">
+                <el-input v-model="form.partCode" disabled autocomplete="off"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="11">
-              <el-form-item label="规格型号" :label-width="formLabelWidth" prop="model">
-                <el-input v-model="form.model" disabled autocomplete="off"></el-input>
+              <el-form-item label="元件名称" :label-width="formLabelWidth" prop="partName">
+                <el-input v-model="form.partName" disabled autocomplete="off"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="11">
@@ -32,8 +51,8 @@
               </el-form-item>
             </el-col>
             <el-col :span="11">
-              <el-form-item label="备注" :label-width="formLabelWidth" prop="remark">
-                <el-input v-model="form.remark" type="textarea" :rows="1" disabled autocomplete="off"></el-input>
+              <el-form-item label="发料工序" :label-width="formLabelWidth" prop="stWorkprocess">
+                <el-input v-model="form.stWorkprocess" disabled autocomplete="off"></el-input>
               </el-form-item>
             </el-col>
           </el-col>
@@ -45,6 +64,38 @@
               <el-button size="small" type="primary">点击上传</el-button>
               <!-- <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div> -->
             </el-upload>
+          </el-col>
+          </el-col>
+          <el-col v-if="tit === '派单' || tit === '修改'">
+              <el-form-item label="关联部件：" :label-width="formLabelWidth" prop="planYield">
+                  <div style="border:2px solid #ccc;padding:6px;font-weight:600;min-height:30px">{{parts}}</div>
+              </el-form-item>
+          </el-col>
+          <el-col style="margin-bottom:20px" v-if="tit === '派单' || tit === '修改'">
+             <el-table
+                  :data="tableData2"
+                  stripe
+                  border
+                  ref="dataTable"
+                   @selection-change="handleSelectionChange"
+                  :height="300"
+                >
+                   <el-table-column
+                    type="selection"
+                    align="center"
+                    width="50">
+                 </el-table-column>   
+                  <el-table-column
+                    
+                      v-for="(item,index) in columnlist2"
+                      :key="index"
+                      :width="item.width"
+                      :prop="item.prop"
+                      :label="item.label"
+                      align="center"
+                  >
+                  </el-table-column>
+            </el-table>
           </el-col>
           <div v-if="tit !== '工单分解'">
             <p style="line-height:32px;font-size: 18px;color: #324170;padding:10px 0">请选择派单设备和人员:</p>
@@ -67,7 +118,7 @@
             </el-col>
           </div>
         </el-form>
-
+        
         <el-col :span="24" v-if="tit === '工单分解'">
           <span>分解工单数:</span>
           <el-input-number v-model="num" @change="handleChange" :min="0" :max="5" style="margin:10px 0 20px 23px">
@@ -95,7 +146,7 @@
 </template>
 
 <script>
-import { produceTaskPlanid, saveProduceTaskPlan, deviceList, userListByDept, produceTaskAssign, deviceListByType } from 'api/index';
+import { produceTaskPlanid, saveProduceTaskPlan, deviceList, userListByDept, produceTaskAssign, deviceListByType,getPartListByZhNumber,getPartListByTaskPlanId } from 'api/index';
 import { onenet } from 'api/onenet';
 import moment from 'moment';
 export default {
@@ -136,7 +187,7 @@ export default {
         technology: '',
         deviceListStr:[]
       },
-      formLabelWidth: '80px',
+      formLabelWidth: '105px',
       num: 0,
       numlist: [],
       value0: '',
@@ -162,7 +213,30 @@ export default {
       rules: {
         userId: [{ required: true, message: '请选择部门', trigger: 'blur' },],
        
-      }
+      },
+      tableData1:[],
+      columnlist1:[
+        {prop:'index1',label:'序号'},
+       
+        {prop:'taskNumber',label:'工单号'},
+        {prop:'zhNumber',label:'臻航号'},
+        {prop:'partName',label:'元件名称'},
+        {prop:'partNumber',label:'元件编码'},
+        {prop:'partCode',label:'部件编码'},
+        {prop:'stWorkprocess',label:'发料工序'},
+        {prop:'planYield',label:'计划生产量'},
+      ],
+      tableData2:[],
+      columnlist2:[
+        {prop:'index',label:'序号',width:'60'},
+        {prop:'partNumber',label:'元件编码'},
+        {prop:'partCode',label:'部件编号'},
+        {prop:'partName',label:'元件名称'},
+        {prop:'unit',label:'单位'},
+        
+      ],
+      multipleSelection:[],
+      parts:''
     };
   },
   created() {
@@ -173,6 +247,18 @@ export default {
   watch: {},
 
   methods: {
+    handleSelectionChange(val){
+           
+           
+            let arr = []
+            // let at = []
+            val.map((item)=>{
+              arr.push(item.partNumber)
+              delete item.id
+            })
+             this.multipleSelection  = val
+            this.parts = arr.toString().replace(/,/g,'、')
+    },
     // 所有设备
     getdeviceListByType() {
       deviceListByType().then(res => {
@@ -261,20 +347,78 @@ export default {
       this[`value${index}`] = value.toString();
     },
     // 获取详情
-    getproduceTaskPlanid(id, m) {
-      var obj = { id: id.produceTaskPlanId };
-      produceTaskPlanid(obj).then(res => {
-        res.data.userId = res.data.executeUserId;
-        if (res.data.technologyName) {
-          this.fileList.push({ name: res.data.technologyName, url: res.data.technology });
+    getproduceTaskPlanid( m) {
+     
+      let pro = ''
+      if(Array.isArray(m)){
+        m.map((item,index)=>{
+          item.index1 = index +1
+        })
+        this.tableData1 = m
+      }else{
+        // pro = JSON.parse(JSON.stringify(m))
+       
+        // if (pro.technologyName) {
+        //   this.fileList.push({ name: pro.technologyName, url: pro.technology });
+        // }
+        // if(pro.deviceListStr){
+        //   pro.deviceListStr = JSON.parse(pro.deviceListStr)
+        // }
+        // this.getPartListByZhNumber(pro.zhNumber)
+        // pro.userId = pro.executeUserId;
+        // this.form = pro
+        this.getPartListByZhNumber(m.zhNumber)
+        setTimeout(()=>{
+          this.getPartListByTaskPlanId(m.produceTaskPlanId)
+        },0)
+         var obj = { id: m.produceTaskPlanId };
+          produceTaskPlanid(obj).then(res => {
+            res.data.userId = res.data.executeUserId;
+            if (res.data.technologyName) {
+              this.fileList.push({ name: res.data.technologyName, url: res.data.technology });
+            }
+            if(res.data.deviceListStr){
+              res.data.deviceListStr = JSON.parse(res.data.deviceListStr)
+            }
+            this.form = res.data;
+          });
+      }
+    },
+    // 根据臻航号查询部件
+    getPartListByZhNumber(val){
+      let obj = {zhNumber:val}
+      getPartListByZhNumber(obj).then(res=>{
+        if(res.code==='0'){
+          res.data.map((item,index)=>{
+            item.index = index +1 
+          })
+          this.tableData2 = res.data
         }
-        if(res.data.deviceListStr){
-          res.data.deviceListStr = JSON.parse(res.data.deviceListStr)
+      })
+    },
+    // 查询选择部件
+    getPartListByTaskPlanId(val){
+      let obj = {produceTaskPlanId:val}
+      let that =this
+      getPartListByTaskPlanId(obj).then(res=>{
+        if(res.code==='0'){
+   
+          that.$nextTick(()=>{
+              this.toggleRowSelection(res.data)
+              // this.$forceUpdate()
+          })
         }
-        
-        this.form = res.data;
-        console.log(this.form);
-      });
+      })
+    },
+    toggleRowSelection(rows){
+           rows.forEach(row => {
+              let a = this.tableData2.filter(v=>v.partCode===row.partCode)
+              console.log(rows.indexOf(row.partCode))
+                if(a.length> 0){
+                  this.$refs.dataTable.toggleRowSelection(a[0],true);
+                 
+                }
+          })
     },
     handleChange(val) {
       this.getmath(this.form.planYield, val);
@@ -318,23 +462,50 @@ export default {
                 this.$message.error(res.msg);
               }
             });
-          } else if (this.tit === '派单' || this.tit === '修改') {
-            if (Array.isArray(this.form.userId)) {
-              this.form.deptId = this.form.userId[0];
-              this.form.userId = this.form.userId[1];
-            }
-            if (Array.isArray(this.form.deviceListStr)) {
-              let arr = []
-              this.form.deviceListStr.map((item)=>{
-                arr.push(item[1])
+          } else if (this.tit === '派单' || this.tit === '修改' || this.tit==='批量派单') {
+            
+             let at = []
+            if(this.tableData1.length>0){
+              this.tableData1.map((v)=>{
+                  if (Array.isArray(this.form.userId)) {
+                    v.deptId = this.form.userId[0];
+                    v.userId = this.form.userId[1];
+                  }
+                  if (Array.isArray(this.form.deviceListStr)) {
+                    let arr = []
+                    this.form.deviceListStr.map((item)=>{
+                      arr.push(item[1])
+                    })
+                    v.deviceId = arr.toString()
+                    v.deviceListStr = JSON.stringify(this.form.deviceListStr)
+                  }
+                 
               })
-              this.form.deviceId = arr.toString()
-              this.form.deviceListStr = JSON.stringify(this.form.deviceListStr)
+              at = this.tableData1
+            }else{
+              if (Array.isArray(this.form.userId)) {
+                this.form.deptId = this.form.userId[0];
+                this.form.userId = this.form.userId[1];
+              }
+              if (Array.isArray(this.form.deviceListStr)) {
+                let arr = []
+                this.form.deviceListStr.map((item)=>{
+                  arr.push(item[1])
+                })
+                this.form.deviceId = arr.toString()
+                this.form.deviceListStr = JSON.stringify(this.form.deviceListStr)
+
+              }
+              //  this.form.deptId = this.form.userId[0];
+              //   this.form.userId = this.form.userId[1];
+              //   this.form.deviceId = '1144426692996108331'
+              this.form.partList = this.multipleSelection
+              at.push(this.form)
             }
-           
+            
             
            
-            produceTaskAssign(this.form).then(res => {
+            produceTaskAssign(at).then(res => {
               if(res.code==='0'){
                 this.$message.success(res.msg);
                 this.close('0');
@@ -370,6 +541,9 @@ export default {
       this.value5 = '';
       this.num = 0;
       this.numlist = [];
+      this.tableData1 = []
+      this.multipleSelection = []
+      this.parts = ''
       this.fileList = [];
       if (this.$refs.updata) {
         this.$refs.updata.clearFiles();

@@ -1,6 +1,6 @@
 <template>
   <div class="production">
-      <div class="top">
+      <div class="top" >
               <el-form :model="seachinfo"  ref="seachinfo"  class="demo-ruleForm">
               <el-row type="flex" justify="end">
                     <div style="flex:1">
@@ -34,8 +34,8 @@
                         </el-form-item>
                     </el-col>
                     <el-col :span="3">
-                        <el-form-item label=""  prop="productNameOrCode" >
-                            <el-input  placeholder="产品名称或编码" v-model="seachinfo.productNameOrCode" class="elinput"> </el-input>
+                        <el-form-item label=""  prop="zhNumberOrTaskNumber" >
+                            <el-input  placeholder="臻航号或任务单号" v-model="seachinfo.zhNumberOrTaskNumber" class="elinput"> </el-input>
                         </el-form-item>
                         
                     </el-col>
@@ -47,7 +47,10 @@
                 </el-form>
                 
             </div>
-     <div>
+            <div  v-loading="loading"
+    element-loading-text="拼命加载中"
+    element-loading-spinner="el-icon-loading"
+    element-loading-background="rgba(0, 0, 0, 0.8)">
              <el-table
                 :data="tableData"
                 stripe
@@ -101,13 +104,13 @@
                                     type="success"
                                     v-if="(scope.row.state=='3' || scope.row.state=='2' ||scope.row.state=='1') && $_has('productionLock') "
                                     plain
-                                    @click="handleUntie(5, scope.row.id)"
+                                    @click="handleUntie(5, scope.row)"
                                 >锁定</el-button>
                                 <el-button
                                     type="warning"
                                      v-if="scope.row.state=='5' && $_has('productionUnlock') "
                                     plain
-                                    @click="handleUntie(6, scope.row.id)"
+                                    @click="handleUntie(6, scope.row)"
                                 >解锁</el-button>
                                  <el-button
                                     type="info"
@@ -165,6 +168,7 @@ export default {
     },
     data() {
         return {
+            loading:false,
             dialogFormVisible:false,
             dialogFormVisibledit:false,
             value:'',
@@ -177,10 +181,11 @@ export default {
             tableData:[],
             columnlist:[
                 {prop:'index',label:'序号',width:'50'},
-                {prop:'taskNumber',label:'任务单'},
-                {prop:'productName',label:'产品名称'},
-                {prop:'productCode',label:'产品编码'},
-                {prop:'model',label:'规格型号'},
+                {prop:'taskNumber',label:'任务单号'},
+                {prop:'zhNumber',label:'臻航号'},
+                {prop:'productCode',label:'货品编码'},
+                {prop:'customerModel',label:'客户型号'},
+                {prop:'orderCount',label:'订单量'},
                 {prop:'planYield',label:'计划生产量',width:'95'},
                 {prop:'planStartTime',label:'开始时间',width:'90'},
                 {prop:'planEndTime',label:'结束时间',width:'90'},
@@ -194,12 +199,11 @@ export default {
                 beginDate:'',
                 endDate:'',
                 state:'',
-                productNameOrCode:''
+                zhNumberOrTaskNumber:''
             },
             orderlist:[]
         }
     },
-   
     created(){
         this.getproduceTaskpage()
         this.getproduceTaskStateList()
@@ -219,7 +223,7 @@ export default {
                 beginDate:'',
                 endDate:'',
                 state:'',
-                productNameOrCode:''
+                zhNumberOrTaskNumber:''
             }
             this.page={
                 current:1,
@@ -240,6 +244,7 @@ export default {
         // 获取列表
         getproduceTaskpage(){
             let  obj = {...this.seachinfo,...this.page}
+            this.loading = true
             produceTaskpage(obj).then(res=>{
                 if(res.code==='0'){
                     res.data.records.map((item,index)=>{
@@ -252,6 +257,7 @@ export default {
                     this.pagesize = parseInt(res.data.current)
                     this.totals = parseInt(res.data.total)
                 }
+                this.loading = false
             })
         },
         handleCurrentChange(val){
@@ -294,7 +300,8 @@ export default {
         },
         // 锁定解锁
         handleUntie(h,m){
-            var obj = {id:m,state:h}
+            var obj = {id:m.id,state:h}
+      
             updateProduceTaskLockById(obj).then(res=>{
                 if(res.code==='0'){
                     this.$message.success(res.msg)

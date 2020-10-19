@@ -298,6 +298,16 @@ export const productaddExcel = query => {
     });
 };
 
+// 新增产品中 查询部件编码
+
+export const partInfoByProductCodeAndPartCode = query => {
+    return request({
+        url: `/api/producetask/product/partInfoByPartCode`,
+        method: 'get',
+        params: query
+    });
+};
+
 // 根据物料列表查询
 export const getListByIds = query => {
     return request({
@@ -399,6 +409,17 @@ export const orderput = query => {
     });
 };
 
+// 添加订单中工艺文件
+export const updateTechnologyByOrderNumber = query => {
+    return request({
+        url: `/api/producetask/order/updateTechnologyByOrderNumber`,
+        method: 'put',
+        data: query,
+        headers: { userId: sessionStorage.getItem('userId') }
+    });
+};
+
+
 // 删除
 export const orderdelete = query => {
     return request({
@@ -407,14 +428,46 @@ export const orderdelete = query => {
         method: 'delete'
     });
 };
-// d订单编号列表
-export const orderlist = query => {
+
+// 新版订单新增 导入
+export const producetaskorderExcel = query => {
     return request({
-        url: `/api/producetask/order/list`,
+        url: `/api/producetask/order/saveList`,
+        data: query,
+        method: 'post',
+        // headers: { createUser: sessionStorage.getItem('userId') }
+    });
+};
+
+// 订单审核
+export const checkOrderByIds = query => {
+    return request({
+        url: `/api/producetask/order/checkOrderByIds`,
+        method: 'put',
+        data: query,
+        headers: { userId: sessionStorage.getItem('userId') }
+    });
+};
+
+// 根据订单号查询详情
+export const getDetailListByOrderNumber = query => {
+    return request({
+        url: `/api/producetask/order/getDetailListByOrderNumber`,
         params: query,
         method: 'get'
     });
 };
+
+// d订单编号列表
+export const orderlist = query => {
+    return request({
+        url: `/api/producetask/order/getOrderNumberListForTask`,
+        params: query,
+        method: 'get'
+    });
+};
+
+// 订单列表  新
 
 // 产品编码列表
 export const productlist = query => {
@@ -439,6 +492,31 @@ export const getItemListByProductId = query => {
 export const orderTypeList = query => {
     return request({
         url: `/api/producetask/order/orderTypeList`,
+        params: query,
+        method: 'get'
+    });
+};
+//根据订单号查询臻航号
+export const getZhNumberListByOrderNumber = query => {
+    return request({
+        url: `/api/producetask/order/getZhNumberListByOrderNumber`,
+        params: query,
+        method: 'get'
+    });
+};
+
+//根据臻航号查询货品编码
+export const getProductCodeListByZhNumber = query => {
+    return request({
+        url: `/api/producetask/product/getProductCodeListByZhNumber`,
+        params: query,
+        method: 'get'
+    });
+};
+//根据货品编码查询清单
+export const getPartListByPorductCode = query => {
+    return request({
+        url: `/api/producetask/product/getPartListByPorductCode`,
         params: query,
         method: 'get'
     });

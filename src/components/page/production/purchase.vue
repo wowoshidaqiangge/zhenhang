@@ -21,10 +21,9 @@
               </el-col>
              
               <el-col :span="3" style="margin:0 20px">
-                  <el-form-item label=""  prop="itemNameOrCode" >
-                     <el-input  placeholder="物料名称或编码" v-model="seachinfo.itemNameOrCode" class="elinput"> </el-input>
+                  <el-form-item label=""  prop="zhNumberOrTaskNumber" >
+                     <el-input  placeholder="请输入臻航号或任务单号" v-model="seachinfo.zhNumberOrTaskNumber" class="elinput"> </el-input>
                  </el-form-item>
-                  
               </el-col>
               <div style="margin:0 15px">
                       <el-button type="add" icon="el-icon-search" @click="seachinfo1">搜索</el-button>
@@ -32,7 +31,6 @@
               </div>
               </el-row>
             </el-form>
-         
      </div>
      <div>
          <el-table
@@ -77,7 +75,7 @@ export default {
           seachinfo:{
             beginDate:'',
             endDate:'',
-            itemNameOrCode:''
+            zhNumberOrTaskNumber:''
           },
           value1:'',
             page:{
@@ -87,11 +85,11 @@ export default {
             tableData:[],
             columnlist:[
               {prop:'index',label:'序号'},
-              {prop:'deptName',label:'生产部门'},
+              {prop:'stWorkprocess',label:'加工工序'},
               {prop:'taskNumber',label:'工单号'},
-              {prop:'itemName',label:'物料名称'},
-              {prop:'itemCode',label:'物料编码'},
-              {prop:'model',label:'规格型号'},
+              {prop:'partCode',label:'部件编号'},
+              {prop:'partName',label:'元件名称'},
+              {prop:'partNumber',label:'元件编号'},
               {prop:'planBuyYield',label:'计划采购量'},
               {prop:'planStartTime',label:'计划开始时间'},
                {prop:'planEndTime',label:'计划结束时间'},
@@ -122,7 +120,7 @@ export default {
           this.seachinfo={
             beginDate:'',
             endDate:'',
-            itemNameOrCode:''
+            zhNumberOrTaskNumber:''
           }
           this.value1 =''
           this.page.current =1
@@ -138,6 +136,8 @@ export default {
                   this.pagesize = parseInt(res.data.current)
                   this.totals = parseInt(res.data.total)
                   this.tableData = res.data.records
+              }else{
+                this.$message.error(res.msg)
               }
           })
         },

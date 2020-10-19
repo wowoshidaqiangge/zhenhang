@@ -23,30 +23,38 @@
           </p>
         </div>
         <div class="p2 p0">
-          <span>{{ item.itemName }}&nbsp;</span>
-          <span v-if="item.itemCode">
+          <span>{{ item.partNumber }}&nbsp;</span>
+          <!-- <span v-if="item.itemCode">
             ({{ item.itemCode }}，{{ item.material }})</span
-          >
+          > -->
+        </div>
+         <div class="p0">
+          <p>单号及状态:</p>
+          <p>{{ item.taskNumber }} ({{ item.taskPlanState }})</p>
         </div>
         <div class="p0">
-          <p>规格型号:</p>
-          <p>{{ item.model }}</p>
+          <p>元件名称:</p>
+          <p>{{ item.partName }}</p>
         </div>
+        
         <div class="p0">
           <p>计划产量:</p>
           <p>{{ item.planYield }}</p>
         </div>
-        <div class="p0">
-          <p>生产车间:</p>
-          <p>{{ item.deptName }}</p>
-        </div>
+       
         <div class="p0">
           <p>已生产数:</p>
           <p>{{ item.nowCount }}</p>
         </div>
         <div class="p0">
           <p>备    注:</p>
-          <p style="width:65%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"
+          <p style="width:65%;height:44px;
+overflow: hidden;
+text-overflow: ellipsis;
+display: -webkit-box;
+-webkit-line-clamp: 2;
+-webkit-box-orient: vertical;
+"
            :title="item.remark">{{item.remark}}</p>
         </div>
         <div class="progre">
@@ -57,6 +65,13 @@
           ></el-progress>
         </div>
         <div class="sub">
+          <el-button
+            type="success"
+            size="mini"
+           
+            @click="lookfile(item)"
+            >关联部件</el-button
+          >
           <el-button
             type="info"
             size="mini"
@@ -104,6 +119,7 @@
       :modalinfo="modalinfo"
       ref="bookmodal"
     />
+    <fileModel :dialogFormVisiblefile='dialogFormVisiblefile' @closefile='closefile' :titfile='titfile' ref="filemodel"/>
   </div>
 </template>
 
@@ -111,11 +127,12 @@
 import { listByUserId, updateTaskPlanClaimById } from 'api/index';
 import vHead from 'components/common/Header.vue';
 import bookingModal from './bookingModal';
+import fileModel from './taskmodel'
 export default {
   name: 'headman',
   components: {
     vHead,
-    bookingModal
+    bookingModal,fileModel
   },
   data() {
     return {
@@ -125,7 +142,9 @@ export default {
       dialogVisible1: false,
       modalinfo: {},
       goToPayinfo: '',
-      icCard: sessionStorage.getItem('icCard')
+      icCard: sessionStorage.getItem('icCard'),
+      dialogFormVisiblefile:false,
+      titfile:'关联部件'
     };
   },
   computed: {
@@ -142,6 +161,13 @@ export default {
     this.getlistByUserId();
   },
   methods: {
+    closefile(){
+      this.dialogFormVisiblefile= false
+    },
+    lookfile(val){
+      this.dialogFormVisiblefile= true
+      this.$refs.filemodel.getall(val)
+    },
     search() {
       if (this.icCard === this.input) {
         updateTaskPlanClaimById(this.goToPayinfo).then(res => {
@@ -232,7 +258,7 @@ export default {
       display: flex;
       padding: 2px 4%;
       p {
-        height: 22px;
+        
         line-height: 22px;
         font-size: 15px;
       }

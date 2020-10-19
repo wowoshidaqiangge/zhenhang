@@ -130,11 +130,15 @@ export default {
             tableData:[],
             columnlist:[
                 {prop:'index',label:'序号'},
-                {prop:'productCode',label:'臻航号'},
-                {prop:'productName',label:'货品编码'},
-                {prop:'model',label:'发料工序'},
-                 {prop:'itemCodes',label:'关联物料',width:250},
-                {prop:'unit',label:'基本单位'},
+                {prop:'productCode',label:'货品编码'},
+                {prop:'zhNumber',label:'臻航号'},
+                {prop:'stWorkprocess',label:'发料工序'},
+                {prop:'partCode',label:'部件编码'},
+                {prop:'partNumber',label:'元件编码(内部)'},
+                {prop:'partName',label:'元件名(名称)'},
+                {prop:'useCount',label:'单件用量'},
+                 {prop:'source',label:'来源'},
+                {prop:'unit',label:'单位'},
                 {prop:'createTime',label:'创建时间'}
             ],
             screenWidth:(document.body.clientHeight-215) + 'px',
@@ -196,7 +200,7 @@ export default {
            this.getproductpage()
         },
         close(num){
-            debugger
+         
             this.dialogFormVisible = false
             this.dialogFormVisible1 = false
             if(num==='0'){

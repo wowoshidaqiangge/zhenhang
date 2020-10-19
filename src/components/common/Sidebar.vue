@@ -39,8 +39,8 @@
                     </el-submenu>
                 </template>
                 <template v-else>
-                    <el-menu-item :index="item.index" :key="item.index">
-                        <i :class="item.icon"></i>
+                    <el-menu-item :index="item.obj.index" :key="item.obj.index">
+                        <i :class="item.obj.icon"></i>
                         <span slot="title">{{ item.label }}</span>
                     </el-menu-item>
                 </template>

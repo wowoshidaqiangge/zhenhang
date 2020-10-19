@@ -22,7 +22,7 @@
                 </el-col>
                 <el-col :span="3" >
                     <el-form-item label=""  prop="itemNameOrCode" >
-                      <el-input  placeholder="物料名称或编码" v-model="seachinfo.itemNameOrCode" class="elinput"> </el-input>
+                      <el-input  placeholder="部件名称或编码" v-model="seachinfo.itemNameOrCode" class="elinput"> </el-input>
                   </el-form-item>
                     
                 </el-col>
@@ -126,10 +126,11 @@ export default {
             screenWidth:(document.body.clientHeight-215) + 'px',
             columnlist:[
                 {prop:'index',label:'序号'},
-                {prop:'itemCode',label:'物料编码'},
-                {prop:'itemName',label:'物料名称'},
+                {prop:'itemCode',label:'部件编码'},
+                {prop:'itemName',label:'部件名称'},
                 {prop:'model',label:'规格型号'},
                 {prop:'series',label:'系列'},
+                {prop:'stWorkprocess',label:'发料工序'},
                 {prop:'material',label:'材质'},
                 {prop:'unit',label:'基本单位'},
                 {prop:'itemSource',label:'来源'},

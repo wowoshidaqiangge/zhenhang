@@ -1,5 +1,5 @@
 export function renderOptions(ary) {
- debugger
+
     let colorAry = ['#fff','#ccc', '#3f51b5', '#259b24', '#ff9800'];
     
     let arr = rendPoint(ary)
@@ -29,7 +29,7 @@ export function renderOptions(ary) {
         // trigger: 'axis'
         show: true,
         formatter: function (params) {
-            debugger
+        
         //   if (params.componentIndex == 1) {
         //     return ''
         //   }

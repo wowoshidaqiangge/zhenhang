@@ -56,15 +56,24 @@ export default {
     methods: {
        // 处理excel数据
         childByValue(val){
+           
           let arr = []
           val.map((item,index)=>{
-            let obj = {}
-            obj.productCode = JSON.parse(JSON.stringify(item))["货品编码"]
-            obj.productName = JSON.parse(JSON.stringify(item))["产品名称"]
-            obj.model = JSON.parse(JSON.stringify(item))["规格型号"]
-            obj.itemCode = JSON.parse(JSON.stringify(item))["部件图号"]
-            obj.itemCount = JSON.parse(JSON.stringify(item))["单件用量"]
-            arr[index] = obj
+           if(index>2){
+                let obj = {}
+                obj.productCode = JSON.parse(JSON.stringify(item))["__EMPTY_1"]
+                obj.zhNumber = JSON.parse(JSON.stringify(item))["__EMPTY_2"]
+                obj.stWorkprocess = JSON.parse(JSON.stringify(item))["__EMPTY_3"]
+                obj.partNumber = JSON.parse(JSON.stringify(item))["__EMPTY_4"]
+                obj.partCode = JSON.parse(JSON.stringify(item))["__EMPTY_5"]
+                obj.partName = JSON.parse(JSON.stringify(item))["物料清单（BOM表）"]
+                obj.unit = JSON.parse(JSON.stringify(item))["__EMPTY_8"]
+                obj.source = JSON.parse(JSON.stringify(item))["__EMPTY_10"]
+                obj.useCount = JSON.parse(JSON.stringify(item))["__EMPTY_11"]
+                // obj.itemCode = JSON.parse(JSON.stringify(item))["部件图号"]
+                // obj.itemCount = JSON.parse(JSON.stringify(item))["单件用量"]
+                arr.push(obj)
+            }
           })
           this.excelData = arr
           console.log(this.excelData)
@@ -72,7 +81,7 @@ export default {
         UpData () {
            productaddExcel(this.excelData).then(res=>{
                if(res.code==='0'){
-                   this.close(0)
+                   this.close('0')
                    this.$message({
                         message: '上传成功',
                         type: 'success'

@@ -56,16 +56,18 @@ export default {
     methods: {
        // 处理excel数据
         childByValue(val){
+         
           let arr = []
           val.map((item,index)=>{
             let obj = {}
-            obj.itemName = JSON.parse(JSON.stringify(item))["货品名称"]
-            obj.itemCode = JSON.parse(JSON.stringify(item))["货品编码"]
-            obj.model = JSON.parse(JSON.stringify(item))["货品规格"]
+            obj.itemName = JSON.parse(JSON.stringify(item))["部件名称"]
+            obj.itemCode = JSON.parse(JSON.stringify(item))["部件编码"]
+            obj.model = JSON.parse(JSON.stringify(item))["规格型号"]
             obj.series = JSON.parse(JSON.stringify(item))["系列"]
             obj.material = JSON.parse(JSON.stringify(item))["材质"]
-            obj.unit = JSON.parse(JSON.stringify(item))["单位"]
+            obj.unit = JSON.parse(JSON.stringify(item))["基本单位"]
             obj.itemSource = JSON.parse(JSON.stringify(item))["来源"]
+            obj.stWorkprocess = JSON.parse(JSON.stringify(item))["发料工序"]
             arr[index] = obj
           })
           this.excelData = arr
@@ -78,7 +80,7 @@ export default {
                         message: '上传成功',
                         type: 'success'
                     });
-                   this.close(0)
+                   this.close('0')
                } else {
                    this.$message.error('上传失败');
                }

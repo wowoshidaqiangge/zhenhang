@@ -4,7 +4,9 @@
           
               <el-form :model="seachinfo"  ref="seachinfo"  class="demo-ruleForm">
               <el-row type="flex" justify="end">
-                
+                <div style="flex:1">
+                        <el-button type="add"  icon='el-icon-circle-plus-outline' @click="add">批量派单</el-button>
+                    </div>
                 <el-col :span="5">
                     <el-form-item label="" prop="value1">
                             <el-date-picker
@@ -32,8 +34,8 @@
                     </el-form-item>
                 </el-col>
                 <el-col :span="3" style="margin-right:10px">
-                    <el-form-item label=""  prop="itemNameOrCode" >
-                        <el-input  placeholder="物料名称或编码" v-model="seachinfo.itemNameOrCode"> </el-input>
+                    <el-form-item label=""  prop="zhNumberOrTaskNumber" >
+                        <el-input  placeholder="臻航号或工单号" v-model="seachinfo.zhNumberOrTaskNumber"> </el-input>
                     </el-form-item>
                     
                 </el-col>
@@ -50,8 +52,15 @@
                 :data="tableData"
                 stripe
                 border
+                 @selection-change="handleSelectionChange"
                 :height="screenWidth"
                >
+                 <el-table-column
+                    type="selection"
+                    :selectable='selectEnable'
+                    align="center"
+                    width="50">
+                 </el-table-column>   
                  <el-table-column
                     show-overflow-tooltip
                     v-for="(item,index) in columnlist"
@@ -183,11 +192,18 @@ export default {
             },
             tableData:[],
             columnlist:[{prop:'index',label:'序号',width:'50'},
-                {prop:'taskNumber',label:'工单号'},
+               
                 {prop:'deptName',label:'部门'},
-                {prop:'itemName',label:'物料名称/工艺'},
-                {prop:'itemCode',label:'物料编码'},
-                {prop:'model',label:'规格型号',},
+                {prop:'taskNumber',label:'工单号'},
+                {prop:'zhNumber',label:'臻航号'},
+                {prop:'productCode',label:'货品编码'},
+                {prop:'partNumber',label:'元件编码'},
+                {prop:'partCode',label:'部件编码'},
+                {prop:'stWorkprocess',label:'发料工序'},
+            
+                // {prop:'itemName',label:'物料名称/工艺'},
+                // {prop:'itemCode',label:'物料编码'},
+                // {prop:'model',label:'规格型号',},
                 {prop:'planYield',label:'计划生产量',width:'95'},
                 {prop:'planStartTime',label:'开始时间',width:'90'},
                 {prop:'planEndTime',label:'结束时间',width:'90'},
@@ -202,9 +218,10 @@ export default {
                 beginDate:'',
                 endDate:'',
                 state:'',
-                itemNameOrCode:''
+                zhNumberOrTaskNumber:''
             },
-            orderlist:[]
+            orderlist:[],
+            multipleSelection:[]
             
         }
     },
@@ -213,6 +230,18 @@ export default {
         this.getproduceTaskStateList()
     },
     methods: {
+        selectEnable(row, rowIndex) {
+         
+            if (row.state=='1') {
+                return true
+            } else {
+                return false// 不禁用
+            }
+        },
+        handleSelectionChange(val){
+           
+            this.multipleSelection  = val
+        },
          // 查询状态
         getproduceTaskStateList(){
             produceTaskStateList().then(res=>{
@@ -236,7 +265,7 @@ export default {
                 beginDate:'',
                 endDate:'',
                 state:'',
-                itemNameOrCode:''
+                zhNumberOrTaskNumber:''
             }
             this.value1=[]
             this.page.current = 1
@@ -281,9 +310,22 @@ export default {
          this.$refs.assignmodal.getproduceTaskPlanid(m)
          this.dialogFormVisible = true
      },
+
+    // 批量派单
+
+    add(){
+        if(this.multipleSelection.length<1){
+            this.$message.error('请选择工单')
+        }else{
+            this.tit = '批量派单'
+            this.$refs.assignmodal.getproduceTaskPlanid(this.multipleSelection)
+            this.dialogFormVisible = true
+        }
+        
+    },
      // 派单
      handledistribute(h,m){
-          this.tit = '派单'
+         this.tit = '派单'
          this.$refs.assignmodal.getproduceTaskPlanid(m)
          this.dialogFormVisible = true
      },

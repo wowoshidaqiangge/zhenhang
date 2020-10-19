@@ -9,7 +9,7 @@
       :before-close="beforclose"
       center
     >
-      <el-row>
+      <el-row v-if="tit==='新增产品'">
         <el-form
           id="addProduct"
           :model="form"
@@ -18,7 +18,7 @@
         >
           <el-col :span="11">
             <el-form-item
-              label="产品编码"
+              label="货品编码"
               :label-width="formLabelWidth"
               class="formitem formitem1"
               prop="productCode"
@@ -28,15 +28,15 @@
           </el-col>
           <el-col :span="11">
             <el-form-item
-              label="产品名称"
+              label="臻航号"
               :label-width="formLabelWidth"
               class="formitem formitem1"
-              prop="productName"
+              prop="zhNumber"
             >
-              <el-input v-model="form.productName"></el-input>
+              <el-input v-model="form.zhNumber"></el-input>
             </el-form-item>
           </el-col>
-          <el-col :span="11">
+          <!-- <el-col :span="11">
             <el-form-item
               label="规格型号"
               :label-width="formLabelWidth"
@@ -45,17 +45,18 @@
             >
               <el-input v-model="form.model"></el-input>
             </el-form-item>
-          </el-col>
-          <el-col :span="11"></el-col>
+          </el-col> -->
+        
 
           <el-col :span="11">
             <el-form-item
-              label="物料选择"
+              label="部件编码"
               :label-width="formLabelWidth"
               class="formitem formitem1"
-              prop="stuff"
+              prop="partCode"
             >
-              <el-cascader
+             <el-input v-model="form.partCode"></el-input>
+              <!-- <el-cascader
                 :props="casprops1"
                 v-model="infolist"
                 @change='changesel'
@@ -63,7 +64,7 @@
                 :options="filteroption"
                 @remove-tag="removetag"
                 filterable
-              ></el-cascader>
+              ></el-cascader> -->
               <!-- <el-select v-model="itemIds" @change='changesel' @remove-tag='removetag' multiple  placeholder="请选择">
                         <el-option
                             v-for="item in rolelist"
@@ -119,9 +120,115 @@
           </el-col>
         </el-form>
       </el-row>
+      <el-row v-if="tit==='修改产品'">
+        <el-form
+          id="addProduct"
+          :model="form"
+          ref="form"
+          :rules="rules"
+        >
+          <el-col :span="11">
+            <el-form-item
+              label="货品编码"
+              :label-width="formLabelWidth"
+              class="formitem formitem1"
+              prop="productCode"
+            >
+              <el-input v-model="form.productCode"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="11">
+            <el-form-item
+              label="臻航号"
+              :label-width="formLabelWidth"
+              class="formitem formitem1"
+              prop="zhNumber"
+            >
+              <el-input v-model="form.zhNumber"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="11">
+            <el-form-item
+              label="部件编码"
+              :label-width="formLabelWidth"
+              class="formitem formitem1"
+              prop="partCode"
+            >
+             <el-input v-model="form.partCode"></el-input>
+            
+            </el-form-item>
+          </el-col>
+          <el-col :span="11">
+            <el-form-item
+              label="元件编码"
+              :label-width="formLabelWidth"
+              class="formitem formitem1"
+              prop="partNumber"
+            >
+             <el-input v-model="form.partNumber"></el-input>
+            
+            </el-form-item>
+          </el-col>
+          <el-col :span="11">
+            <el-form-item
+              label="元件名称"
+              :label-width="formLabelWidth"
+              class="formitem formitem1"
+              prop="partName"
+            >
+             <el-input v-model="form.partName"></el-input>
+            
+            </el-form-item>
+          </el-col>
+          <el-col :span="11">
+            <el-form-item
+              label="发料工序"
+              :label-width="formLabelWidth"
+              class="formitem formitem1"
+              prop="stWorkprocess"
+            >
+             <el-input v-model="form.stWorkprocess"></el-input>
+            
+            </el-form-item>
+          </el-col>
+          <el-col :span="11">
+            <el-form-item
+              label="来源"
+              :label-width="formLabelWidth"
+              class="formitem formitem1"
+              prop="source"
+            >
+             <el-input v-model="form.source"></el-input>
+            
+            </el-form-item>
+          </el-col>
+          <el-col :span="11">
+            <el-form-item
+              label="单件用量"
+              :label-width="formLabelWidth"
+              class="formitem formitem1"
+              prop="useCount"
+            >
+             <el-input v-model="form.useCount"></el-input>
+            
+            </el-form-item>
+          </el-col>
+          <el-col :span="11">
+            <el-form-item
+              label="基本单位"
+              :label-width="formLabelWidth"
+              class="formitem formitem1"
+              prop="unit"
+            >
+             <el-input v-model="form.unit"></el-input>
+            
+            </el-form-item>
+          </el-col>
+        </el-form>
+      </el-row>
       <el-dialog
         width="50%"
-        title="物料修改"
+        title="部件修改"
         :visible.sync="innerVisible"
         append-to-body
       >
@@ -129,51 +236,61 @@
           <el-form :model="form1" ref="form1">
             <el-col :span="11">
               <el-form-item
-                label="物料名称"
+                label="部件编号"
                 :label-width="formLabelWidth"
                 class="formitem formitem1"
-                prop="itemName"
+                prop="partCode"
               >
                 <el-input
-                  v-model="form1.itemName"
+                  v-model="form1.partCode"
                   disabled
                 ></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="11">
               <el-form-item
-                label="物料编码"
+                label="发料工序"
                 :label-width="formLabelWidth"
                 class="formitem formitem1"
-                prop="itemCode"
+                prop="stWorkprocess"
               >
                 <el-input
-                  v-model="form1.itemCode"
-                  disabled
+                  v-model="form1.stWorkprocess"
+                  
                 ></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="11">
               <el-form-item
-                label="规格型号"
+                label="元件编码"
                 :label-width="formLabelWidth"
                 class="formitem formitem1"
-                prop="model"
+                prop="partNumber"
               >
-                <el-input v-model="form1.model" disabled></el-input>
+                <el-input v-model="form1.partNumber" ></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="11">
               <el-form-item
-                label="材质"
+                label="元件名称"
                 :label-width="formLabelWidth"
                 class="formitem formitem1"
-                prop="material"
+                prop="partName"
               >
                 <el-input
-                  v-model="form1.material"
-                  disabled
+                  v-model="form1.partName"
+                  
                 ></el-input>
+              </el-form-item>
+            </el-col>
+              <el-col :span="11">
+              <el-form-item
+                label="来源"
+                :label-width="formLabelWidth"
+                class="formitem formitem1"
+                prop="source"
+              >
+                <el-input v-model="form1.source"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="11">
@@ -181,9 +298,9 @@
                 label="数量"
                 :label-width="formLabelWidth"
                 class="formitem formitem1"
-                prop="itemCount"
+                prop="useCount"
               >
-                <el-input v-model="form1.itemCount"></el-input>
+                <el-input v-model="form1.useCount"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="11">
@@ -193,7 +310,15 @@
                 class="formitem formitem1"
                 prop="unit"
               >
-                <el-input v-model="form1.unit" disabled></el-input>
+                <!-- <el-input v-model="form1.unit" ></el-input> -->
+                <el-select v-model="form1.unit" placeholder="请选择">
+                                <el-option
+                                    v-for="item in deptlist"
+                                    :key="item.id"
+                                    :label="item.name"
+                                    :value="item.id"
+                                >{{item.name}}</el-option>
+                            </el-select>
               </el-form-item>
             </el-col>
           </el-form>
@@ -226,7 +351,9 @@ import {
   getListByIds,
   productadd,
   productid,
-  productput
+  productput,
+  partInfoByProductCodeAndPartCode,
+  productaddExcel
 } from 'api/main';
 import { deviceTypeList } from 'api/index';
 
@@ -252,20 +379,26 @@ export default {
         model: '',
         productItemList: []
       },
+       deptlist: [
+                { name: '个', id: '个' },
+                { name: '只', id: '只' },
+                { name: '件', id: '件' }
+            ],
       form1: {
-        itemCode: '',
-        itemName: '',
-        model: '',
-        material: '',
-        itemCount: '',
-        unit: ''
+        stWorkprocess: '',
+        partCode: '',
+        partNumber: '',
+        partName: '',
+        useCount: '',
+        unit: '',
+        source:''
       },
       formLabelWidth: '90px',
       rules: {
         productCode: [
           {
             required: true,
-            message: '请输入产品编码',
+            message: '请输入货品编码',
             trigger: 'blur'
           }
         ],
@@ -283,16 +416,23 @@ export default {
         //     trigger: 'blur'
         //   }
         // ],
-        stuff: [{ message: '请选择物料', trigger: 'blur' }]
+        zhNumber: [{ required: true,message: '请输入', trigger: 'blur' }],
+        stWorkprocess: [{ required: true,message: '请输入', trigger: 'blur' }],
+        partNumber: [{ required: true,message: '请输入', trigger: 'blur' }],
+        partName: [{ required: true,message: '请输入', trigger: 'blur' }],
+        useCount: [{ required: true,message: '请输入', trigger: 'blur' }],
+        source: [{ required: true,message: '请输入', trigger: 'blur' }],
+        unit: [{ required: true,message: '请输入', trigger: 'blur' }],
       },
       tableData1: [],
       columnList: [
-        { prop: 'itemCode', label: '物料编码' },
-        { prop: 'itemName', label: '物料名称' },
-        { prop: 'model', label: '规格型号' },
-        { prop: 'material', label: '材质' },
-        { prop: 'itemCount', label: '数量' },
-        { prop: 'unit', label: '单位' }
+          {prop:'stWorkprocess',label:'发料工序'},
+          {prop:'partCode',label:'部件编码'},
+          {prop:'partNumber',label:'元件编码(内部)'},
+          {prop:'partName',label:'元件名(名称)'},
+          {prop:'useCount',label:'单件用量'},
+          {prop:'source',label:'来源'},
+          {prop:'unit',label:'单位'},
       ],
       caslist1: [],
       caslist2: [],
@@ -323,68 +463,7 @@ export default {
   watch: {},
   methods: {
     
-    getload(val){
-      let that =this
-     this.casprops = {
-        multiple: true,
-        lazy: true,
-        lazyLoad(node, resolve) {
-         
-          if (node.level == 0) {
-         
-            producetasklist({itemNameOrCode:that.seachval}).then(res => {
-              if (res.code === '0') {
-                const cities = res.data.itemList.map((value, i) =>
-                  value.dataIsEmpty == 'true'
-                    ? {
-                        value: value.id,
-                        label: value.itemName,
-                        leaf: node.level >= 2
-                      }
-                    : {
-                        value: value.id,
-                        label: value.itemName,
-                        leaf: node.level >= 0
-                      }
-                );
-                resolve(cities);
-              }
-            });
-          } else if (node.level == 1) {
-            producetasklist({ itemName: node.label }).then(res => {
-              if (res.code === '0') {
-                const cities = res.data.itemList.map((value, i) =>
-                  value.dataIsEmpty == 'true'
-                    ? {
-                        value: value.id,
-                        label: value.material,
-                        leaf: node.level >= 2
-                      }
-                    : {
-                        value: value.id,
-                        label: value.material,
-                        leaf: node.level >= 0
-                      }
-                );
-                resolve(cities);
-              }
-            });
-          } else if (node.level == 2) {
-            producetasklist({ material: node.label }).then(res => {
-              if (res.code === '0') {
-                const cities = res.data.itemList.map((value, i) => ({
-                  value: value.id,
-                  label: value.model,
-                  leaf: node.level >= 2
-                }));
-                resolve(cities);
-              }
-            });
-          }
-        }
-      }
-     
-    },
+   
     getData(data) {
       //  这里写获取数据的方法然后让options_cascader等于返回来的值
       // this.filteroption=data
@@ -414,22 +493,25 @@ export default {
       this.itemIds = arr;
     },
     //产品详情
-    getproductid(id) {
-      this.productId = id.id;
-      productid(id).then(res => {
-        if (res.code == '0') {
-          let arr = [];
-          let arr1 = []
-          res.data.itemList.map(item => {
-            arr.push(item.id);
-            arr1.push([1,2,item.id])
-          });
-          this.infolist = arr1
-          this.form = res.data;
-          this.itemIds = arr;
-          this.tableData1 = res.data.itemList;
-        }
-      });
+    getproductid(val) {
+ 
+      let res = JSON.parse(JSON.stringify(val))
+      this.form = res
+      // this.productId = id.id;
+      // productid(id).then(res => {
+      //   if (res.code == '0') {
+      //     let arr = [];
+      //     let arr1 = []
+      //     res.data.itemList.map(item => {
+      //       arr.push(item.id);
+      //       arr1.push([1,2,item.id])
+      //     });
+      //     this.infolist = arr1
+      //     this.form = res.data;
+      //     this.itemIds = arr;
+      //     this.tableData1 = res.data.itemList;
+      //   }
+      // });
     },
     // 物料列表
     getproducetasklist() {
@@ -442,25 +524,45 @@ export default {
     // 添加
     addpro() {
       if (this.tit === '新增产品') {
-        this.getListByIds({ itemIds: this.itemIds.toString() });
-      } else {
-        this.getListByIds({
-          itemIds: this.itemIds.toString(),
-          productId: this.productId
-        });
-      }
+        if(!this.form.productCode){
+          this.$message.error('请先输入货品编号')
+          return
+        }
+        this.getListByIds();
+      } 
     },
     getListByIds(ids) {
-      getListByIds(ids).then(res => {
-        if (res.code === '0') {
-          res.data.map(item => {
-            if (!item.itemCount) {
-              item.itemCount = 1;
+      // getListByIds(ids).then(res => {
+      //   if (res.code === '0') {
+      //     res.data.map(item => {
+      //       if (!item.itemCount) {
+      //         item.itemCount = 1;
+      //       }
+      //     });
+      //     this.tableData1 = res.data;
+      //   }
+      // });
+      let obj = {
+        productCode:this.form.productCode,
+        partCode:this.form.partCode
+      }
+      partInfoByProductCodeAndPartCode(obj).then(res=>{
+        if(res.code==='0'){
+         
+          this.form.partCode = ''
+          if(res.data.length>0){
+            let result = this.tableData1.filter(v=>v.id===res.data[0].id)
+            if(result&&result.length>0){
+              this.$message.error('该部件已存在')
+            }else{
+              this.tableData1 = [...this.tableData1,...res.data];
             }
-          });
-          this.tableData1 = res.data;
+          }else{
+            this.$message.error('暂无数据')
+          }
+          
         }
-      });
+      })
     },
     // 修改
     handleEdit1(h, m) {
@@ -475,7 +577,7 @@ export default {
     marksure1() {
       this.tableData1.map((item, index) => {
         if (item.id === this.form1.id) {
-          this.tableData1[index].itemCount = this.form1.itemCount;
+          this.tableData1[index].useCount = this.form1.useCount;
         }
       });
       this.$forceUpdate();
@@ -501,23 +603,36 @@ export default {
     marksure(form) {
       let arr = [];
       console.log(this.tableData1);
-      this.tableData1.map(item => {
-        arr.push({
-          itemCode: item.itemCode,
-          itemCount: item.itemCount
-        });
-      });
-      this.form.productItemList = arr;
+       this.tableData1.map((item,index)=>{
+              item.productCode = this.form.productCode
+              item.zhNumber = this.form.zhNumber
+      })
+      // this.tableData1.map(item => {
+      //   arr.push({
+      //     itemCode: item.itemCode,
+      //     useCount: item.useCount
+      //   });
+      // });
+      // this.form.productItemList = arr;
       this.$refs[form].validate(valid => {
         if (valid) {
           if (this.tit == '新增产品') {
-            productadd(this.form).then(res => {
-              if (res.code == '0') {
-                this.$message.success(res.msg);
-                this.close('0');
-              }
-            });
+            // productadd(this.form).then(res => {
+            //   if (res.code == '0') {
+            //     this.$message.success(res.msg);
+            //     this.close('0');
+            //   }
+            // });
+            productaddExcel(this.tableData1).then(res=>{
+                 if (res.code == '0') {
+                  this.$message.success(res.msg);
+                  this.close('0');
+                }
+            })
           } else {
+            if(this.form.createTime){
+              delete this.form.createTime
+            }
             productput(this.form).then(res => {
               if (res.code == '0') {
                 this.$message.success(res.msg);
@@ -560,7 +675,7 @@ export default {
           });
           this.infolist = arr1;
           this.$forceUpdate();
-          console.log(arr1);
+         
         })
         .catch(() => {});
     }

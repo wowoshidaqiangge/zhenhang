@@ -408,6 +408,23 @@ export const pageByProduceTaskPlanId = query => {
   });
 }
 
+// 根据臻航号查询部件清单
+
+export const getPartListByZhNumber = query => {
+  return request({
+      url: `/api/producetask/product/getPartListByZhNumber`,
+      method: 'get',
+      params:query
+  });
+}
+//查询已选择部件
+export const getPartListByTaskPlanId = query => {
+  return request({
+      url: `/api/producetask/taskPlanPart/getPartListByTaskPlanId`,
+      method: 'get',
+      params:query
+  });
+}
 
 
 //数据统计

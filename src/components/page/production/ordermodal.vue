@@ -237,7 +237,7 @@ export default {
            orderid(id).then(res=>{
                if(res.code==='0'){
                 //    this.value1 = [res.data.planStartTime,res.data.planEndTime]
-                debugger
+             
                 let a = []
                 let b = []
                 if(res.data.technology){
