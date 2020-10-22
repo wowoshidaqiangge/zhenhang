@@ -399,7 +399,7 @@ export const orderid = query => {
     });
 };
 
-// 修改订单
+// 批量修改订单
 export const orderput = query => {
     return request({
         url: `/api/producetask/order`,
@@ -408,6 +408,17 @@ export const orderput = query => {
         headers: { userId: sessionStorage.getItem('userId') }
     });
 };
+// 单个修改订单
+export const orderupdateById = query => {
+    return request({
+        url: `/api/producetask/order/updateById`,
+        method: 'put',
+        data: query,
+        headers: { userId: sessionStorage.getItem('userId') }
+    });
+};
+
+
 
 // 添加订单中工艺文件
 export const updateTechnologyByOrderNumber = query => {

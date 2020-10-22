@@ -22,18 +22,18 @@
                         </el-form-item>
                     </el-col>
                     <el-col :span="11">
-                        <el-form-item label="物料名称" :label-width="formLabelWidth" class="formitem formitem1" prop="itemName">
-                                <el-input v-model="form.itemName" disabled></el-input>
+                        <el-form-item label="货品编码" :label-width="formLabelWidth" class="formitem formitem1" prop="productCode">
+                                <el-input v-model="form.productCode" disabled></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="11">
-                        <el-form-item label="物料编码" :label-width="formLabelWidth" class="formitem formitem1" prop="itemCode">
-                                <el-input v-model="form.itemCode" disabled></el-input>
+                        <el-form-item label="元件编号" :label-width="formLabelWidth" class="formitem formitem1" prop="partNumber">
+                                <el-input v-model="form.partNumber" disabled></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="11">
-                        <el-form-item label="规则型号" :label-width="formLabelWidth" class="formitem formitem1" prop="model">
-                                <el-input v-model="form.model" disabled></el-input>
+                        <el-form-item label="部件编码" :label-width="formLabelWidth" class="formitem formitem1" prop="partCode">
+                                <el-input v-model="form.partCode" disabled></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="11">
@@ -54,7 +54,7 @@
                     
                     <el-col :span="11">
                         <el-form-item label="生产数量" :label-width="formLabelWidth" class="formitem formitem1" prop="produceCount">
-                            <el-input v-model="form.produceCount" ></el-input>
+                            <el-input v-model="form.produceCount" @keyup.native='form.produceCount=form.produceCount.replace(/[^\d]/g,"")'></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="11">
@@ -64,7 +64,7 @@
                     </el-col>
                      <el-col :span="11">
                         <el-form-item label="返工数量" :label-width="formLabelWidth" class="formitem formitem1" prop="rework">
-                            <el-input v-model="form.rework" ></el-input>
+                            <el-input v-model="form.rework" @keyup.native='form.rework=form.rework.replace(/[^\d]/g,"")'></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="11">
@@ -75,7 +75,7 @@
                     <el-col :span="24">
                         <el-col :span="11">
                             <el-form-item label="报废数量" :label-width="formLabelWidth" class="formitem formitem1" prop="scrap">
-                                <el-input v-model="form.scrap" ></el-input>
+                                <el-input v-model="form.scrap" @keyup.native='form.scrap = form.scrap.replace(/[^\d]/g,"")'></el-input>
                             </el-form-item>
                         </el-col>
                         <el-col :span="11">
@@ -151,18 +151,24 @@ export default {
             rules: {
                 produceCount:[
                      { required: true, message: '请输入', trigger: 'blur' },
-                     {
-                        validator(rule, value, callback) {
-                        var reg = /^[0-9][0-9]*$/
-                        if (reg.test(value)) {
-                            callback()
-                        } else {
-                            callback(new Error('数量必须为整数'))
-                        }
-                        },
-                        trigger: 'change'
-                    }
+                    //  {
+                    //     validator(rule, value, callback) {
+                    //     var reg = /^[0-9][0-9]*$/
+                    //     if (reg.test(value)) {
+                    //         callback()
+                    //     } else {
+                    //         callback(new Error('数量必须为整数'))
+                    //     }
+                    //     },
+                    //     trigger: 'change'
+                    // }
                 ],
+                rework:[
+                    { required: true, message: '请输入', trigger: 'blur' },
+                ],
+                scrap:[
+                    { required: true, message: '请输入', trigger: 'blur' },
+                ]
             }
         }
     },

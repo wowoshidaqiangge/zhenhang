@@ -300,7 +300,7 @@ export default {
         },
         // 锁定解锁
         handleUntie(h,m){
-            var obj = {id:m.id,state:h}
+            var obj = {id:m.id,state:h,orderId:m.orderId}
       
             updateProduceTaskLockById(obj).then(res=>{
                 if(res.code==='0'){

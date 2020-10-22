@@ -65,7 +65,7 @@
                 </el-table-column>
                 <el-table-column
                     label="状态"
-                    fixed="right"
+                  
                     align="center"
                     >
                     <template slot-scope="scope">
@@ -102,7 +102,7 @@
                 </el-table-column>
                 <el-table-column
                     label="工艺文件"
-                    fixed="right"
+                  
                      width="160" 
                      align="center"
                     >
@@ -126,6 +126,7 @@
                           </el-upload>
                      <el-button
                          type="warning"
+                         style="margin-top:6px"
                          @click="lookfile(scope.row)"
                          plain
                      >查看</el-button>
@@ -154,7 +155,7 @@
                                 <el-button
                                     type="danger"
                                     plain
-                                     v-if="(scope.row.state=='1' || scope.row.state=='2' || scope.row.state=='0') && $_has('orderDelete') "
+                                     v-if="( userId=='1') && $_has('orderDelete') "
                                     class="red"
                                     @click="handleDelete(scope.$index, scope.row)"
                                 >删除</el-button>
@@ -263,7 +264,8 @@ export default {
                 type:"orderQuery"
             },
             orderlist:[],
-            spanArr:[]
+            spanArr:[],
+            userId:sessionStorage.getItem('userId')
         }
     },
 
@@ -365,16 +367,23 @@ export default {
         return str;
        },
         lookfile(val){
-           
-            let pro = JSON.parse(val.fileList)
-            if(pro&&pro.length<2){
+        
+            let pro = ''
+            if(val.fileList){
+                pro = JSON.parse(val.fileList)
+            }
+            
+            if(pro&&pro.length==1){
+                
                 getBlob(pro[0].technology).then(blob => {
                     saveAs(blob, pro[0].technologyName);
                 });
-            }else{
+            }else if(pro&&pro.length>1){
                 this.titfile = '查看工艺'
                 this.$refs.filemodel.getall(pro)
                 this.dialogFormVisiblefile = true
+            }else if(!pro || pro.length<1){
+                this.$message.error('暂无文艺文件')
             }
         },
         getSpanArr(data) {　
@@ -474,21 +483,21 @@ export default {
         //      this.$refs.ordermodal.getorderid(m)
         //      this.dialogFormVisible = true
         // },
-        // handleDelete(h,m){
-        //     this.$confirm('确定要删除吗？', '提示', {
-        //         type: 'warning'
-        //     })
-        //     .then(() => {
-        //              orderdelete(m).then(res=>{
-        //                     if(res.code==='0'){
-        //                         this.$message.success(res.msg)
-        //                         this.getorderpage()
-        //                     }
-        //                 })
-        //     })
-        //     .catch(() => {});
+        handleDelete(h,m){
+            this.$confirm('确定要删除吗？', '提示', {
+                type: 'warning'
+            })
+            .then(() => {
+                     orderdelete(m).then(res=>{
+                            if(res.code==='0'){
+                                this.$message.success(res.msg)
+                                this.getorderpage()
+                            }
+                        })
+            })
+            .catch(() => {});
 
-        // },
+        },
         // 锁定解锁
         handleUntie(h,m){
             var obj = {id:m,state:h}
@@ -508,6 +517,7 @@ export default {
         .upload-demo1 {
           float:left;
           flex: 1;
+          margin-top:6px
         }
         .el-upload {
         width: 60px;

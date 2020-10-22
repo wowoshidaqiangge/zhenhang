@@ -96,12 +96,12 @@ export default {
             {prop:'reportUser',label:'生产员工'},
             {prop:'produceCount',label:'生产数量'},
             {prop:'totalCount',label:'累计产量'},
-            // {prop:'scrap',label:'报废数'},
-            // {prop:'scrapRemark',label:'报废原因'},
-            // {prop:'rework',label:'返工数'},
-            // {prop:'reworkRemark',label:'返工原因'},
+            {prop:'scrap',label:'报废数'},
+            {prop:'scrapRemark',label:'报废原因'},
+            {prop:'rework',label:'返工数'},
+            {prop:'reworkRemark',label:'返工原因'},
             {prop:'createTime',label:'报工时间'},
-            // {prop:'remark',label:'备注'}
+            {prop:'remark',label:'备注'}
             ],
             form:{
             }

@@ -221,7 +221,7 @@ export default {
         {prop:'taskNumber',label:'工单号'},
         {prop:'zhNumber',label:'臻航号'},
         {prop:'partName',label:'元件名称'},
-        {prop:'partNumber',label:'元件编码'},
+        {prop:'partNumber',label:'元件编号'},
         {prop:'partCode',label:'部件编码'},
         {prop:'stWorkprocess',label:'发料工序'},
         {prop:'planYield',label:'计划生产量'},
@@ -229,7 +229,7 @@ export default {
       tableData2:[],
       columnlist2:[
         {prop:'index',label:'序号',width:'60'},
-        {prop:'partNumber',label:'元件编码'},
+        {prop:'partNumber',label:'元件编号'},
         {prop:'partCode',label:'部件编号'},
         {prop:'partName',label:'元件名称'},
         {prop:'unit',label:'单位'},
@@ -508,7 +508,12 @@ export default {
             produceTaskAssign(at).then(res => {
               if(res.code==='0'){
                 this.$message.success(res.msg);
-                this.close('0');
+                if(this.tit==='批量派单'){
+                  this.close('1');
+                }else{
+                  this.close('0');
+                }
+                
               }else{
                 this.$message.error(res.msg)
               }

@@ -243,7 +243,8 @@ export default {
   .headnum {
     width: 23%;
     margin: 1%;
-    float: left;
+    // float: left;
+    display: inline-block;
     padding: 5px 0;
     background-color: #fff;
     position: relative;

@@ -22,8 +22,8 @@
                   </el-form-item>
                 </el-col>
                 <el-col :span="3" >
-                    <el-form-item label=""  prop="productNameOrCode" >
-                      <el-input  placeholder="产品名称或编码" v-model="seachinfo.productNameOrCode" class="elinput"> </el-input>
+                    <el-form-item label=""  prop="zhNumberOrProductCode" >
+                      <el-input  placeholder="请输入臻航号或货品编码" v-model="seachinfo.zhNumberOrProductCode" class="elinput"> </el-input>
                   </el-form-item>
                     
                 </el-col>
@@ -119,7 +119,7 @@ export default {
     data() {
         return {
             seachinfo:{
-                productNameOrCode:'',
+                zhNumberOrProductCode:'',
                 state:''
             },
             value1:'',
@@ -134,7 +134,7 @@ export default {
                 {prop:'zhNumber',label:'臻航号'},
                 {prop:'stWorkprocess',label:'发料工序'},
                 {prop:'partCode',label:'部件编码'},
-                {prop:'partNumber',label:'元件编码(内部)'},
+                {prop:'partNumber',label:'元件编号(内部)'},
                 {prop:'partName',label:'元件名(名称)'},
                 {prop:'useCount',label:'单件用量'},
                  {prop:'source',label:'来源'},
@@ -166,7 +166,7 @@ export default {
             this.dialogFormVisible1 = true
         },
         resetting(){
-            this.seachinfo={ productNameOrCode:'',state:''}
+            this.seachinfo={ zhNumberOrProductCode:'',state:''}
             this.page.current = 1
             this.getproductpage()
         },

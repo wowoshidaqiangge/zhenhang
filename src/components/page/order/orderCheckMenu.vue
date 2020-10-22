@@ -4,7 +4,7 @@
               <el-form :model="seachinfo"  ref="seachinfo"  class="demo-ruleForm">
               <el-row type='flex' justify="end">
                 <div style="flex:1">
-                    <el-button type="add" v-if="$_has('orderAdd')" icon='el-icon-circle-plus-outline' @click="add">批量审核</el-button>
+                    <el-button type="add" v-if="$_has('orderAdd')" icon='el-icon-circle-plus-outline' @click="add">选中审核</el-button>
                     
                 </div>
                 <el-col :span="5">
@@ -49,15 +49,19 @@
      <div>
              <el-table
                 :data="tableData"
+                ref="table"
                 stripe
                 :height='screenWidth'
                 :span-method="objectSpanMethod"
+               :row-key="getRowKeys"
                  @selection-change="handleSelectionChange"
+              
                 border
                 style="width: 100%">
                 <el-table-column
                     type="selection"
                     :selectable='selectEnable'
+                    :reserve-selection="true"
                     align="center"
                     width="50">
                 </el-table-column>
@@ -73,7 +77,7 @@
                 </el-table-column>
                 <el-table-column
                     label="状态"
-                    fixed="right"
+                   
                     >
                     <template slot-scope="scope">
                         <div slot="reference" class="name-wrapper">
@@ -110,7 +114,7 @@
                 </el-table-column>
                 <el-table-column
                     label="工艺文件"
-                    fixed="right"
+                   
                      width="160" 
                      align="center"
                     >
@@ -134,6 +138,7 @@
                           </el-upload>
                      <el-button
                          type="warning"
+                         style="margin-top:6px"
                          @click="lookfile(scope.row)"
                          plain
                      >查看</el-button>
@@ -153,11 +158,16 @@
                                     plain
                                     @click="handleUntie(6, scope.row.id)"
                                 >解锁</el-button>
-                                
+                                <el-button
+                                    type="info"
+                                     v-if="scope.row.state=='0'"
+                                    plain
+                                    @click="handleedit(scope.row)"
+                                >修改</el-button>
                                 <el-button
                                     type="danger"
                                     plain
-                                     v-if="(scope.row.state=='8'  || scope.row.state=='0') && $_has('orderDelete') "
+                                     v-if="(scope.row.state=='8'  || scope.row.state=='0' || userId=='1') && $_has('orderDelete') "
                                     class="red"
                                     @click="handleDelete(scope.$index, scope.row)"
                                 >删除</el-button>
@@ -183,6 +193,8 @@
           </div>
           <checkModal :dialogFormVisible='dialogFormVisible' @close='close' :tit='tit' ref='checkModal'/>
           <fileModel :dialogFormVisiblefile='dialogFormVisiblefile' @closefile='closefile' :titfile='titfile' ref="filemodel"/>
+           <editModel :dialogFormVisibleedit='dialogFormVisibleedit' @closeedit='closeedit' :titfile='titedit' ref="editmodel"/>
+          
   </div>
 </template>
 
@@ -190,6 +202,7 @@
 import { produceTaskdelete } from 'api/index'
 import {orderpage,orderdelete,orderTypeList,orderupdateState} from 'api/main'
 import moment from 'moment'
+import editModel from './editmodel'
 import fileModel from './filemodel'
 import { getBlob, saveAs, } from '@/utils/util';
 import checkModal from './checkmodel'
@@ -198,7 +211,8 @@ export default {
     name: 'ordercheck',
     components:{
         checkModal,
-        fileModel
+        fileModel,
+        editModel
     },
     computed:{
         ...mapState(['screenHeight'])
@@ -213,6 +227,8 @@ export default {
     },
     data() {
         return {
+            dialogFormVisibleedit:false,
+            titedit:'修改',
             dialogFormVisiblefile:false,
             titfile:'',
             limit: 1,
@@ -273,7 +289,10 @@ export default {
             },
             orderlist:[],
             spanArr:[],
-            multipleSelection :[]
+            multipleSelection :[],
+            multipleSelectionAll:[],
+            
+            userId:sessionStorage.getItem('userId')
         }
     },
 
@@ -282,6 +301,26 @@ export default {
         this.getorderTypeList()
     },
     methods: {
+        handleSelectionChange(val) {
+    // 获取勾选的全部数据 
+         this.multipleSelection  = val
+        
+           
+        },
+        getRowKeys(row){
+          
+            return row.id
+        },
+        handleedit(val){
+            this.dialogFormVisibleedit = true
+            this.$refs.editmodel.getall(val)
+        },
+        closeedit(num){
+            this.dialogFormVisibleedit = false
+            if(num==='0'){
+                 this.getorderpage()
+            }
+        },
         closefile(){
             this.dialogFormVisiblefile = false
         },
@@ -374,17 +413,24 @@ export default {
         }
         return str;
        },
-        lookfile(val){
-           
-            let pro = JSON.parse(val.fileList)
-            if(pro&&pro.length<2){
+       lookfile(val){
+        
+            let pro = ''
+            if(val.fileList){
+                pro = JSON.parse(val.fileList)
+            }
+            
+            if(pro&&pro.length==1){
+                
                 getBlob(pro[0].technology).then(blob => {
                     saveAs(blob, pro[0].technologyName);
                 });
-            }else{
+            }else if(pro&&pro.length>1){
                 this.titfile = '查看工艺'
                 this.$refs.filemodel.getall(pro)
                 this.dialogFormVisiblefile = true
+            }else if(!pro || pro.length<1){
+                this.$message.error('暂无文艺文件')
             }
         },
         handleblack(val){
@@ -397,15 +443,17 @@ export default {
             .catch(() => {});
         },
         selectEnable(row, rowIndex) {
-            if (row.state=='0') {
+            if (row.state=='0' || row.state=='7' || row.state=='8') {
                 return true
             } else {
                 return false// 不禁用
             }
         },
-        handleSelectionChange(val){
-            this.multipleSelection  = val
-        },
+        // handleSelectionChange(val){
+           
+           
+        // },
+       
         getSpanArr(data) {　
                 this.spanArr = []
                 for (var i = 0; i < data.length; i++) {
@@ -480,10 +528,14 @@ export default {
                     
                     this.pagesize = parseInt(res.data.current)
                     this.totals = parseInt(res.data.total)
+                    //  setTimeout(()=>{
+                    //         this.setSelectRow();
+                    //     }, 200)
                 }
             })
         },
         handleCurrentChange(val){
+            
             this.page.current=val
             this.getorderpage()
         },
@@ -526,7 +578,9 @@ export default {
         close(num){
             this.dialogFormVisible = false
             if(num==='0'){
+                
                 this.getorderpage()
+                this.$refs.table.clearSelection()
             }
         },
         handleEdit(h,m){
@@ -568,6 +622,7 @@ export default {
          .upload-demo1 {
           float:left;
           flex: 1;
+          margin-top:6px
         }
         .el-upload {
         width: 60px;

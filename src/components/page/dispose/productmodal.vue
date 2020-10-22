@@ -160,7 +160,7 @@
           </el-col>
           <el-col :span="11">
             <el-form-item
-              label="元件编码"
+              label="元件编号"
               :label-width="formLabelWidth"
               class="formitem formitem1"
               prop="partNumber"
@@ -262,7 +262,7 @@
             </el-col>
             <el-col :span="11">
               <el-form-item
-                label="元件编码"
+                label="元件编号"
                 :label-width="formLabelWidth"
                 class="formitem formitem1"
                 prop="partNumber"
@@ -356,6 +356,7 @@ import {
   productaddExcel
 } from 'api/main';
 import { deviceTypeList } from 'api/index';
+// import { delete } from 'vue/types/umd';
 
 export default {
   name: 'productmodal',
@@ -395,13 +396,13 @@ export default {
       },
       formLabelWidth: '90px',
       rules: {
-        productCode: [
-          {
-            required: true,
-            message: '请输入货品编码',
-            trigger: 'blur'
-          }
-        ],
+        // productCode: [
+        //   {
+        //     required: true,
+        //     message: '请输入货品编码',
+        //     trigger: 'blur'
+        //   }
+        // ],
         // productName: [
         //   {
         //     required: true,
@@ -428,7 +429,7 @@ export default {
       columnList: [
           {prop:'stWorkprocess',label:'发料工序'},
           {prop:'partCode',label:'部件编码'},
-          {prop:'partNumber',label:'元件编码(内部)'},
+          {prop:'partNumber',label:'元件编号(内部)'},
           {prop:'partName',label:'元件名(名称)'},
           {prop:'useCount',label:'单件用量'},
           {prop:'source',label:'来源'},
@@ -524,10 +525,10 @@ export default {
     // 添加
     addpro() {
       if (this.tit === '新增产品') {
-        if(!this.form.productCode){
-          this.$message.error('请先输入货品编号')
-          return
-        }
+        // if(!this.form.productCode){
+        //   this.$message.error('请先输入货品编号')
+        //   return
+        // }
         this.getListByIds();
       } 
     },
@@ -543,7 +544,7 @@ export default {
       //   }
       // });
       let obj = {
-        productCode:this.form.productCode,
+        // productCode:this.form.productCode,
         partCode:this.form.partCode
       }
       partInfoByProductCodeAndPartCode(obj).then(res=>{
@@ -601,11 +602,14 @@ export default {
       this.infolist = ''
     },
     marksure(form) {
-      let arr = [];
+      let arr = JSON.parse(JSON.stringify(this.tableData1))
       console.log(this.tableData1);
-       this.tableData1.map((item,index)=>{
+       arr.map((item,index)=>{
               item.productCode = this.form.productCode
               item.zhNumber = this.form.zhNumber
+              delete item.id
+              delete item.createTime
+              delete item.updateTime
       })
       // this.tableData1.map(item => {
       //   arr.push({
@@ -623,10 +627,12 @@ export default {
             //     this.close('0');
             //   }
             // });
-            productaddExcel(this.tableData1).then(res=>{
+            productaddExcel(arr).then(res=>{
                  if (res.code == '0') {
                   this.$message.success(res.msg);
                   this.close('0');
+                }else{
+                  this.$message.error(res.msg)
                 }
             })
           } else {

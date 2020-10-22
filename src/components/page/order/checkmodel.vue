@@ -32,7 +32,7 @@
                      </el-col>
                      <el-col :span="24" style="margin-top:25px">
                         <el-form-item label="驳回原因" :label-width="formLabelWidth" prop='refuteCause'>
-                                <el-input v-model="form.refuteCause"type="textarea" :rows="2"></el-input>
+                                <el-input v-model="form.refuteCause" type="textarea" :rows="2"></el-input>
                         </el-form-item>
                     </el-col>
             </el-form> 
@@ -95,15 +95,15 @@ export default {
                 {prop:'customerRequireModel',label:'客户要求型号'},
                 {prop:'manufacturer',label:'制造商'},
                 {prop:'orderCount',label:'订单量'},
-                {prop:'zhNumber',label:'实际生产量'},
+                {prop:'produceCount',label:'实际生产量'},
 
                 {prop:'sparyPowder',label:'喷涂塑粉'},
                 {prop:'encasementCount',label:'装箱数'},
                 {prop:'filterMaterial',label:'滤材'},
-                {prop:'customerRequireModel',label:'交货日期'},
-                {prop:'manufacturer',label:'下单日期'},
-                {prop:'orderCount',label:'下单人'},
-              
+                {prop:'planFinishTime',label:'交货日期'},
+                {prop:'createTime',label:'下单日期'},
+                {prop:'createUserName',label:'下单人'},
+            
             ]
         }
     },
@@ -165,13 +165,21 @@ export default {
                }
                
            })
-           checkOrderByIds(arr).then(res=>{
-               if(res.code==='0'){
-                   this.$message.success(res.msg)
-                   this.init()
-                   this.close('0')
-               }
-           })
+           let warn = val==='no'?'确定不通过吗？':'确定通过吗？'
+           this.$confirm(warn, '提示', {
+                type: 'warning'
+            })
+            .then(() => {
+                     checkOrderByIds(arr).then(res=>{
+                            if(res.code==='0'){
+                                this.$message.success(res.msg)
+                                this.init()
+                                this.close('0')
+                            }
+                        })
+            })
+            .catch(() => {});
+          
        },
      
       

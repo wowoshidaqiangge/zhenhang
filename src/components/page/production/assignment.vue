@@ -34,8 +34,8 @@
                     </el-form-item>
                 </el-col>
                 <el-col :span="3" style="margin-right:10px">
-                    <el-form-item label=""  prop="zhNumberOrTaskNumber" >
-                        <el-input  placeholder="臻航号或工单号" v-model="seachinfo.zhNumberOrTaskNumber"> </el-input>
+                    <el-form-item label=""  prop="zhNumberOrProductCode" >
+                        <el-input  placeholder="请输入臻航号或货品编码" v-model="seachinfo.zhNumberOrProductCode"> </el-input>
                     </el-form-item>
                     
                 </el-col>
@@ -51,18 +51,21 @@
            <el-table
                 :data="tableData"
                 stripe
+                ref="table"
                 border
+                :row-key="getRowKeys"
                  @selection-change="handleSelectionChange"
                 :height="screenWidth"
                >
                  <el-table-column
                     type="selection"
                     :selectable='selectEnable'
+                    :reserve-selection="true"
                     align="center"
                     width="50">
                  </el-table-column>   
                  <el-table-column
-                    show-overflow-tooltip
+                  
                     v-for="(item,index) in columnlist"
                     :key="index"
                     :width="item.width"
@@ -197,7 +200,7 @@ export default {
                 {prop:'taskNumber',label:'工单号'},
                 {prop:'zhNumber',label:'臻航号'},
                 {prop:'productCode',label:'货品编码'},
-                {prop:'partNumber',label:'元件编码'},
+                {prop:'partNumber',label:'元件编号'},
                 {prop:'partCode',label:'部件编码'},
                 {prop:'stWorkprocess',label:'发料工序'},
             
@@ -218,7 +221,7 @@ export default {
                 beginDate:'',
                 endDate:'',
                 state:'',
-                zhNumberOrTaskNumber:''
+                zhNumberOrProductCode:''
             },
             orderlist:[],
             multipleSelection:[]
@@ -241,6 +244,10 @@ export default {
         handleSelectionChange(val){
            
             this.multipleSelection  = val
+        },
+         getRowKeys(row){
+          
+            return row.produceTaskPlanId
         },
          // 查询状态
         getproduceTaskStateList(){
@@ -265,7 +272,7 @@ export default {
                 beginDate:'',
                 endDate:'',
                 state:'',
-                zhNumberOrTaskNumber:''
+                zhNumberOrProductCode:''
             }
             this.value1=[]
             this.page.current = 1
@@ -299,6 +306,9 @@ export default {
          this.dialogFormVisible = false
          if(num==='0'){
              this.getproduceTaskPlanpage()
+         }else if(num==='1'){
+             this.getproduceTaskPlanpage()
+             this.$refs.table.clearSelection()
          }
      },
      close1(){

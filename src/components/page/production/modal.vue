@@ -133,7 +133,7 @@
                 <el-row>
                         <el-form :model="form1" :rules="rules1"  ref="form1">
                             <el-col :span="11">
-                                <el-form-item label="元件编码" :label-width="formLabelWidth" class="formitem formitem1" prop="partNumber">
+                                <el-form-item label="元件编号" :label-width="formLabelWidth" class="formitem formitem1" prop="partNumber">
                                         <el-input v-model="form1.partNumber" disabled></el-input>
                                 </el-form-item>
                             </el-col>
@@ -255,7 +255,7 @@ export default {
             tableData2:[],
             columnList:[
                 {prop:'partCode',label:'部件编码'},
-                {prop:'partNumber',label:'元件编码'},
+                {prop:'partNumber',label:'元件编号'},
                 {prop:'partName',label:'元件名称'},
                 {prop:'stWorkprocess',label:'发料工序'},
                 {prop:'source',label:'来源'},

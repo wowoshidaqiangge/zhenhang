@@ -1,7 +1,7 @@
 <template>
   <div class="ordermodal">
     
-    <el-dialog :title="tit"  :visible.sync="dialogFormVisible" :before-close='beforclose' center>
+    <el-dialog :title="tit" width="60%" :visible.sync="dialogFormVisible" :before-close='beforclose' center>
         <el-row>
            <el-form :model="form" :rules="rules" ref='form'>
                <el-col :span="11" v-if="tit==='修改订单'">
@@ -37,7 +37,7 @@
                             ref="updata" 
                             :on-change="changeupdata" 
                             id="excel-file" 
-                            
+                            style="margin-top:0"
                             :on-success="handleSuccess"
                             :before-upload="beforeUpload"
                             :before-remove="beforeRemove"
@@ -70,6 +70,7 @@
                                 <template slot-scope="scope">
                                 <el-button
                                     type="info"
+                                 
                                     plain
                                     @click="handleEdit1(scope.row)"
                                     >修改</el-button
@@ -93,7 +94,7 @@
             :visible.sync="innerVisible"
             append-to-body>
             <el-row>
-                <el-form :model="form1" ref="form1">
+                <el-form :model="form1" ref="form1" :rules="rules1">
                     <el-col :span="11">
                         <el-form-item label="臻航号" :label-width="formLabelWidth" class="formitem formitem1" prop="zhNumber" >
                             <el-input
@@ -121,7 +122,7 @@
                      <el-col :span="11">
                         <el-form-item label="订单数量" :label-width="formLabelWidth" class="formitem formitem1" prop="orderCount" >
                             <el-input
-                            v-model="form1.orderCount"   ></el-input>
+                            v-model="form1.orderCount"   @keyup.native='form1.orderCount=form1.orderCount.replace(/[^\d.]/g,"")'></el-input>
                         </el-form-item>
                     </el-col>
                      <el-col :span="11">
@@ -212,6 +213,11 @@ export default {
                planFinishTime:''
             },
             value2:[],
+             rules1: {
+                  
+                  
+                   
+                },
             formLabelWidth: '110px',
               rules: {
                 orderCode: [
@@ -259,6 +265,7 @@ export default {
                 {prop:'sparyPowder',label:'喷涂塑粉'},
                 {prop:'encasementCount',label:'装箱数'},
                 {prop:'filterMaterial',label:'滤材'},
+                {prop:'remark',label:'备注'},
             ],
             issuccess:false
         }
@@ -268,7 +275,7 @@ export default {
     },
     methods: {
     changeupdata(file) {
-            console.log(file)
+           
             if(!this.issuccess){
                 let fileName = file.name.substring(file.name.lastIndexOf('.') + 1);
             let that = this;
@@ -323,6 +330,7 @@ export default {
                         obj.sparyPowder = JSON.parse(JSON.stringify(item))["__EMPTY_7"]
                         obj.encasementCount = JSON.parse(JSON.stringify(item))["__EMPTY_14"]
                         obj.filterMaterial = JSON.parse(JSON.stringify(item))["__EMPTY_15"]
+                        obj.remark = JSON.parse(JSON.stringify(item))["__EMPTY_16"]
                         arr.push(obj)
                     }
                 })
@@ -347,7 +355,10 @@ export default {
                      item.index = index + 1
                  })
                  this.tableData1 = res.data
-                 this.form.planFinishTime = res.data[res.data.length-1].planFinishTime
+                 if(res.data&&res.data[res.data.length-1].planFinishTime){
+                     this.form.planFinishTime = res.data[res.data.length-1].planFinishTime
+                 }
+                 
              }
          })
      },
@@ -559,6 +570,7 @@ export default {
             this.after =0
             this.ossParamskey=[]
             this.tableData1 = []
+            this.issuccess = false
        }
     }
 }

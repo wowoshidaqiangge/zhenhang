@@ -54,7 +54,7 @@ export default {
             sureload: false,
             columnList:[
                 {prop:'index',label:'序号'},
-                {prop:'partNumber',label:'元件编码(公司内部)'},
+                {prop:'partNumber',label:'元件编号(公司内部)'},
                 {prop:'partCode',label:'部件编码'},
                 {prop:'partName',label:'元件名称(规格)'},
             ]
