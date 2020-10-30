@@ -29,12 +29,12 @@
                                 v-model="form.customerModel"></el-input>
                             </el-form-item>
                         </el-col>
-                         <el-col :span="11">
+                         <!-- <el-col :span="11">
                             <el-form-item label="客户要求型号" :label-width="formLabelWidth" class="formitem formitem1" prop="customerRequireModel" >
                                 <el-input
                                 v-model="form.customerRequireModel"></el-input>
                             </el-form-item>
-                        </el-col>
+                        </el-col> -->
                          <el-col :span="11">
                             <el-form-item label="制造商" :label-width="formLabelWidth" class="formitem formitem1" prop="manufacturer" >
                                 <el-input
@@ -65,13 +65,30 @@
                                 v-model="form.filterMaterial"></el-input>
                             </el-form-item>
                         </el-col>
-                         <el-col :span="22">
+                         <!-- <el-col :span="22">
                             <el-form-item label="备注" :label-width="formLabelWidth" class="formitem formitem1" prop="remark" >
                                 <el-input
                                 v-model="form.remark"  type="textarea" :rows="2"></el-input>
                             </el-form-item>
-                        </el-col>
-                        
+                        </el-col> -->
+                          <el-col :span="22">
+                        <el-form-item label="备注1" :label-width="formLabelWidth" class="formitem formitem1" prop="remarkOne" >
+                            <el-input
+                            v-model="form.remarkOne"  type="textarea" :rows="1" ></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="22">
+                        <el-form-item label="备注2" :label-width="formLabelWidth" class="formitem formitem1" prop="remarkTwo" >
+                            <el-input
+                            v-model="form.remarkTwo"   type="textarea" :rows="1"></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="22">
+                        <el-form-item label="备注3" :label-width="formLabelWidth" class="formitem formitem1" prop="remarkThree" >
+                            <el-input
+                            v-model="form.remarkThree"  type="textarea" :rows="1" ></el-input>
+                        </el-form-item>
+                    </el-col>
                     </el-form>
                
             </el-row>

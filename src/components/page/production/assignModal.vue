@@ -66,7 +66,14 @@
             </el-upload>
           </el-col>
           </el-col>
+          <el-col>  
+            <el-form-item label="元件编号：" :label-width="formLabelWidth" >
+                    <el-input v-model="partnumber"  autocomplete="off" style="width:40%;margin-right:20px"></el-input>
+                    <el-button size="small" type="primary" @click="addpart">点击添加</el-button>
+                </el-form-item>
+          </el-col>
           <el-col v-if="tit === '派单' || tit === '修改'">
+              
               <el-form-item label="关联部件：" :label-width="formLabelWidth" prop="planYield">
                   <div style="border:2px solid #ccc;padding:6px;font-weight:600;min-height:30px">{{parts}}</div>
               </el-form-item>
@@ -95,6 +102,36 @@
                       align="center"
                   >
                   </el-table-column>
+                   <el-table-column
+                    label="部件编码"
+                    align="center"
+                    >
+                    <template slot-scope="scope">
+                        <div slot="reference" class="name-wrapper">
+                            <span v-if="scope.row.partName">{{ scope.row.partCode }}</span>
+                        </div>
+                    </template>
+                </el-table-column>
+                 <el-table-column
+                    label="元件名称"
+                    align="center"
+                    >
+                    <template slot-scope="scope">
+                        <div slot="reference" class="name-wrapper">
+                            <span >{{ scope.row.partName }}</span>
+                        </div>
+                    </template>
+                </el-table-column>
+                 <el-table-column
+                    label="单位"
+                    align="center"
+                    >
+                    <template slot-scope="scope">
+                        <div slot="reference" class="name-wrapper">
+                            <span >{{ scope.row.unit }}</span>
+                        </div>
+                    </template>
+                </el-table-column>
             </el-table>
           </el-col>
           <div v-if="tit !== '工单分解'">
@@ -162,6 +199,7 @@ export default {
   },
   data() {
     return {
+      partnumber:'',
       limit: 1,
       host: 'http://thingcom-dianliuji.oss-cn-hangzhou.aliyuncs.com',
       ossParams: {
@@ -230,13 +268,14 @@ export default {
       columnlist2:[
         {prop:'index',label:'序号',width:'60'},
         {prop:'partNumber',label:'元件编号'},
-        {prop:'partCode',label:'部件编号'},
-        {prop:'partName',label:'元件名称'},
-        {prop:'unit',label:'单位'},
+        // {prop:'partCode',label:'部件编号'},
+        // {prop:'partName',label:'元件名称'},
+        // {prop:'unit',label:'单位'},
         
       ],
       multipleSelection:[],
-      parts:''
+      parts:'',
+      infoway:''
     };
   },
   created() {
@@ -247,9 +286,20 @@ export default {
   watch: {},
 
   methods: {
+    addpart(){
+        // let pro = this.tableData2.filter(v=>v.partNumber===this.partnumber)
+        // if(pro.length>0){
+        //   debugger
+        // }
+        // this.multipleSelection.push({partNumber:this.partnumber})
+        let time = new Date().getTime()
+        this.tableData2.push({partNumber:this.partnumber,index:this.tableData2.length+1,productCode:this.infoway.productCode,partCode:time,type:1})
+        this.$refs.dataTable.toggleRowSelection(this.tableData2[this.tableData2.length-1]);
+        this.$message.success('添加成功')
+        this.partnumber = ''
+    },
     handleSelectionChange(val){
-           
-           
+        
             let arr = []
             // let at = []
             val.map((item)=>{
@@ -349,6 +399,7 @@ export default {
     // 获取详情
     getproduceTaskPlanid( m) {
      
+     
       let pro = ''
       if(Array.isArray(m)){
         m.map((item,index)=>{
@@ -356,6 +407,7 @@ export default {
         })
         this.tableData1 = m
       }else{
+         this.infoway = m
         // pro = JSON.parse(JSON.stringify(m))
        
         // if (pro.technologyName) {
@@ -367,7 +419,7 @@ export default {
         // this.getPartListByZhNumber(pro.zhNumber)
         // pro.userId = pro.executeUserId;
         // this.form = pro
-        this.getPartListByZhNumber(m.zhNumber)
+        this.getPartListByZhNumber(m.productCode)
         setTimeout(()=>{
           this.getPartListByTaskPlanId(m.produceTaskPlanId)
         },0)
@@ -386,11 +438,12 @@ export default {
     },
     // 根据臻航号查询部件
     getPartListByZhNumber(val){
-      let obj = {zhNumber:val}
+      let obj = {productCode:val}
       getPartListByZhNumber(obj).then(res=>{
         if(res.code==='0'){
           res.data.map((item,index)=>{
             item.index = index +1 
+            
           })
           this.tableData2 = res.data
         }
@@ -412,7 +465,7 @@ export default {
     },
     toggleRowSelection(rows){
            rows.forEach(row => {
-              let a = this.tableData2.filter(v=>v.partCode===row.partCode)
+              let a = this.tableData2.filter(v=>v.partCode==row.partCode)
               console.log(rows.indexOf(row.partCode))
                 if(a.length> 0){
                   this.$refs.dataTable.toggleRowSelection(a[0],true);
@@ -496,6 +549,7 @@ export default {
                 this.form.deviceListStr = JSON.stringify(this.form.deviceListStr)
 
               }
+              
               //  this.form.deptId = this.form.userId[0];
               //   this.form.userId = this.form.userId[1];
               //   this.form.deviceId = '1144426692996108331'

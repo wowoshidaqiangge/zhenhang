@@ -103,7 +103,8 @@ export default {
                     let arr = []
                     let arr1 = []
                      res.data.menus.map(item=>{
-                         item.children.map(v=>{
+                         if(item.children){
+                             item.children.map(v=>{
                             if(v.children){
                                 v.children.map(m=>{
                                      arr.push(m.id)
@@ -114,6 +115,7 @@ export default {
                             }
                              arr.push(v.id)
                         })
+                         }
                         arr.push(item.id)
                     })
                      this.ruleForm = res.data
@@ -139,7 +141,7 @@ export default {
        },
        //初始化
        init(){
-          this.ruleForm = { menuIds:[],pmenuIds:[],name:'',remark:''}
+          this.ruleForm = { menuIds:[],menus:[],name:'',remark:''}
           this.checklist = []
        },
        checktree(data,node){

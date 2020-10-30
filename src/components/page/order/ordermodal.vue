@@ -1,7 +1,7 @@
 <template>
   <div class="ordermodal">
     
-    <el-dialog :title="tit" width="60%" :visible.sync="dialogFormVisible" :before-close='beforclose' center>
+    <el-dialog :title="tit" width="65%" :visible.sync="dialogFormVisible" :before-close='beforclose' center>
         <el-row>
            <el-form :model="form" :rules="rules" ref='form'>
                <el-col :span="11" v-if="tit==='修改订单'">
@@ -48,8 +48,18 @@
                             :show-file-list="false"
                             >
                               <el-button size="small" type="add" >批量导入</el-button>
+                              
                           <!-- <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div> -->
                           </el-upload>
+                          <span style="position: absolute;top:-8px">
+                              <el-popover
+                                    placement="top-start"
+                                    title="提示"
+                                    trigger="hover"
+                                    >
+                                    <el-link type="primary" href="https://thingcom-test.oss-cn-hangzhou.aliyuncs.com/%E8%87%BB%E8%88%AA-%E8%AE%A2%E5%8D%95-%E6%A8%A1%E6%9D%BF.xls">点此下载模板</el-link>
+                                    <i class="el-icon-question" slot="reference" style="color:#409eff"></i>
+                                </el-popover></span>
                       </el-form-item>
                     </el-col>
                      <el-col :span="24">
@@ -107,12 +117,12 @@
                             v-model="form1.customerModel"   ></el-input>
                         </el-form-item>
                     </el-col>
-                     <el-col :span="22">
+                     <!-- <el-col :span="22">
                         <el-form-item label="客户要求型号" :label-width="formLabelWidth" class="formitem formitem1" prop="customerRequireModel" >
                             <el-input
                             v-model="form1.customerRequireModel"   ></el-input>
                         </el-form-item>
-                    </el-col>
+                    </el-col> -->
                      <el-col :span="11">
                         <el-form-item label="制造商" :label-width="formLabelWidth" class="formitem formitem1" prop="manufacturer" >
                             <el-input
@@ -144,9 +154,21 @@
                         </el-form-item>
                     </el-col>
                     <el-col :span="22">
-                        <el-form-item label="备注" :label-width="formLabelWidth" class="formitem formitem1" prop="remark" >
+                        <el-form-item label="备注1" :label-width="formLabelWidth" class="formitem formitem1" prop="remarkOne" >
                             <el-input
-                            v-model="form1.remark"   ></el-input>
+                            v-model="form1.remarkOne"  type="textarea" :rows="1" ></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="22">
+                        <el-form-item label="备注2" :label-width="formLabelWidth" class="formitem formitem1" prop="remarkTwo" >
+                            <el-input
+                            v-model="form1.remarkTwo"   type="textarea" :rows="1"></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="22">
+                        <el-form-item label="备注3" :label-width="formLabelWidth" class="formitem formitem1" prop="remarkThree" >
+                            <el-input
+                            v-model="form1.remarkThree"  type="textarea" :rows="1" ></el-input>
                         </el-form-item>
                     </el-col>
                 </el-form>
@@ -259,13 +281,15 @@ export default {
                 {prop:'index',label:'序号'},
                 {prop:'zhNumber',label:'臻航号'},
                 {prop:'customerModel',label:'客户型号'},
-                {prop:'customerRequireModel',label:'客户要求型号'},
+                // {prop:'customerRequireModel',label:'客户要求型号'},
                 {prop:'manufacturer',label:'制造商'},
                 {prop:'orderCount',label:'订单量'},
                 {prop:'sparyPowder',label:'喷涂塑粉'},
                 {prop:'encasementCount',label:'装箱数'},
                 {prop:'filterMaterial',label:'滤材'},
-                {prop:'remark',label:'备注'},
+                {prop:'remarkOne',label:'备注1'},
+                {prop:'remarkTwo',label:'备注2'},
+                {prop:'remarkThree',label:'备注3'},
             ],
             issuccess:false
         }
@@ -324,24 +348,35 @@ export default {
                         let obj = {}
                         obj.customerModel = JSON.parse(JSON.stringify(item))["__EMPTY_2"]
                         obj.zhNumber = JSON.parse(JSON.stringify(item))["__EMPTY_3"]
-                        obj.customerRequireModel = JSON.parse(JSON.stringify(item))["__EMPTY_4"]
-                        obj.manufacturer = JSON.parse(JSON.stringify(item))["__EMPTY_5"]
-                        obj.orderCount = JSON.parse(JSON.stringify(item))["__EMPTY_6"]
-                        obj.sparyPowder = JSON.parse(JSON.stringify(item))["__EMPTY_7"]
+                        // obj.customerRequireModel = JSON.parse(JSON.stringify(item))["__EMPTY_4"]
+                        obj.manufacturer = JSON.parse(JSON.stringify(item))["__EMPTY_4"]
+                        obj.orderCount = JSON.parse(JSON.stringify(item))["__EMPTY_5"]
+                        obj.sparyPowder = JSON.parse(JSON.stringify(item))["__EMPTY_6"]
                         obj.encasementCount = JSON.parse(JSON.stringify(item))["__EMPTY_14"]
                         obj.filterMaterial = JSON.parse(JSON.stringify(item))["__EMPTY_15"]
-                        obj.remark = JSON.parse(JSON.stringify(item))["__EMPTY_16"]
+                        obj.remarkOne = JSON.parse(JSON.stringify(item))["__EMPTY_16"]
+                        obj.remarkTwo = JSON.parse(JSON.stringify(item))["__EMPTY_17"]
+                        obj.remarkThree = JSON.parse(JSON.stringify(item))["__EMPTY_18"]
                         arr.push(obj)
                     }
                 })
             console.log(arr)
             let arr1 = []
-            arr.map((item,index)=>{
-                if(item.customerModel&&item.zhNumber&&item.customerRequireModel){
-                    item.index = index+1
-                    arr1.push(item)
+            for (let i=0;i<arr.length;i++){
+                if(arr[i].customerModel=='合计'|| arr[i].zhNumber=='合计' ){
+                   break 
                 }
-            })
+                 arr[i].index = i+1
+                 if(!arr[i].sparyPowder&&arr[i-1].sparyPowder){
+                        arr[i].sparyPowder = arr[i-1].sparyPowder
+                 }
+                 arr1.push(arr[i])
+            }
+            // arr.forEach((item,index)=>{
+                
+                
+            // })
+      
             this.tableData1 = arr1
         },
         
@@ -359,6 +394,8 @@ export default {
                      this.form.planFinishTime = res.data[res.data.length-1].planFinishTime
                  }
                  
+             }else{
+                 this.$message.error(res.msg)
              }
          })
      },

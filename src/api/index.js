@@ -412,7 +412,7 @@ export const pageByProduceTaskPlanId = query => {
 
 export const getPartListByZhNumber = query => {
   return request({
-      url: `/api/producetask/product/getPartListByZhNumber`,
+      url: `/api/producetask/taskPlanPart/getPartListByProductCode`,
       method: 'get',
       params:query
   });
