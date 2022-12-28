@@ -14,6 +14,17 @@ export const login = query => {
     })
 }
 
+// 枚举查询
+export const listEnum = query => {
+  return request({
+      url: `/api/auth/listEnum`,
+      method: 'get',
+      params:query
+  });
+}
+
+
+
 // 左侧菜单栏
 
 export const userListMenu = query => {
@@ -364,7 +375,6 @@ export const produceTaskPlanid = query => {
 
 
 //工单状态查询
-
 export const produceTaskStateList = query => {
   return request({
       url: `/api/producetask/produceTask/produceTaskStateList`,
@@ -381,6 +391,67 @@ export const saveProduceTaskPlan = query => {
       data:query
   });
 }
+
+// 采购管理模块
+
+//采购分页
+export const produceTaskbuyPage = query => {
+  return request({
+      url: `/api/producetask/produceTaskbuy/page`,
+      method: 'get',
+      params:query
+  });
+}
+
+// 采购详情分页
+export const produceTaskbuyPartPage = query => {
+  return request({
+      url: `/api/producetask/produceTaskbuyPart/page`,
+      method: 'get',
+      params:query
+  });
+}
+
+
+//采购详情修改状态
+
+export const produceTaskbuyPartPut = query => {
+  return request({
+      url: `/api/producetask/produceTaskbuyPart/updateState`,
+      method: 'put',
+      data:query
+  });
+}
+
+
+// 仓库fenye
+export const produceWarehousePage = query => {
+  return request({
+      url: `/api/producetask/produceWarehouse/page`,
+      method: 'get',
+      params:query
+  });
+}
+
+
+//仓库详情分页
+export const produceWarehousePartPage = query => {
+  return request({
+      url: `/api/producetask/produceWarehousePart/page`,
+      method: 'get',
+      params:query
+  });
+}
+
+//仓库状态修改
+export const produceWarehousePartPut = query => {
+  return request({
+      url: `/api/producetask/produceWarehousePart/updateState`,
+      method: 'put',
+      data:query
+  });
+}
+
 //  查询部门下用户
 
 export const userListByDept = query => {

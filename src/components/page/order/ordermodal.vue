@@ -236,9 +236,7 @@ export default {
             },
             value2:[],
              rules1: {
-                  
-                  
-                   
+            
                 },
             formLabelWidth: '110px',
               rules: {
@@ -274,7 +272,6 @@ export default {
             },
             innerVisible:false,
             form1:{
-
             },
             tableData1:[],
             columnList:[
@@ -326,49 +323,75 @@ export default {
                         return;
                     } // 表格的表格范围，可用于判断表头是否数量是否正确
                     var fromTo = ''; // 遍历每张表读取
+                    console.log(workbook);
                     for (var sheet in workbook.Sheets) {
                         if (workbook.Sheets.hasOwnProperty(sheet)) {
                             fromTo = workbook.Sheets[sheet]['!ref'];
                             persons = persons.concat(xlsx.utils.sheet_to_json(workbook.Sheets[sheet])); // break; // 如果只取第一张表，就取消注释这行
+                             console.log(workbook.Sheets[sheet],xlsx.utils.sheet_to_json(workbook.Sheets[sheet]));
                         }
                     }
-                    console.log(persons);
+                   
                     that.deliver(persons);
                 }; // 以二进制方式打开文件
                 fileReader.readAsBinaryString(file.raw);
             }
             }
         },
+        getval(obj,name){
+            let val = ''
+            Object.keys(obj).map((item=>{
+                if(item.indexOf(name)!=-1){
+                    val = obj[item]
+                }
+            }))
+            return val
+        },
         deliver(val) {
-            console.log(val)
+            // console.log(val)
            
              let arr = []
                 val.map((item,index)=>{
                     if(index>2){
                         let obj = {}
-                        obj.customerModel = JSON.parse(JSON.stringify(item))["__EMPTY_2"]
-                        obj.zhNumber = JSON.parse(JSON.stringify(item))["__EMPTY_3"]
-                        // obj.customerRequireModel = JSON.parse(JSON.stringify(item))["__EMPTY_4"]
-                        obj.manufacturer = JSON.parse(JSON.stringify(item))["__EMPTY_4"]
-                        obj.orderCount = JSON.parse(JSON.stringify(item))["__EMPTY_5"]
-                        obj.sparyPowder = JSON.parse(JSON.stringify(item))["__EMPTY_6"]
-                        obj.encasementCount = JSON.parse(JSON.stringify(item))["__EMPTY_14"]
-                        obj.filterMaterial = JSON.parse(JSON.stringify(item))["__EMPTY_15"]
-                        obj.remarkOne = JSON.parse(JSON.stringify(item))["__EMPTY_16"]
-                        obj.remarkTwo = JSON.parse(JSON.stringify(item))["__EMPTY_17"]
-                        obj.remarkThree = JSON.parse(JSON.stringify(item))["__EMPTY_18"]
+                        obj.customerModel = this.getval(JSON.parse(JSON.stringify(item)),"_2")
+                        obj.zhNumber = this.getval(JSON.parse(JSON.stringify(item)),"_3")
+                         obj.manufacturer = this.getval(JSON.parse(JSON.stringify(item)),"_4")
+                        obj.orderCount =this.getval(JSON.parse(JSON.stringify(item)),"_5")
+                        obj.sparyPowder = this.getval(JSON.parse(JSON.stringify(item)),"_6")
+                        obj.encasementCount = this.getval(JSON.parse(JSON.stringify(item)),"_14")
+                        obj.filterMaterial = this.getval(JSON.parse(JSON.stringify(item)),"_15")
+                        obj.remarkOne = this.getval(JSON.parse(JSON.stringify(item)),"_16")
+                        obj.remarkTwo = this.getval(JSON.parse(JSON.stringify(item)),"_17")
+                        obj.remarkThree = this.getval(JSON.parse(JSON.stringify(item)),"_18")
+                        // obj.manufacturer = JSON.parse(JSON.stringify(item))["__EMPTY_4"]
+                        // obj.orderCount = JSON.parse(JSON.stringify(item))["__EMPTY_5"]
+                        // obj.sparyPowder = JSON.parse(JSON.stringify(item))["__EMPTY_6"]
+                        // obj.encasementCount = JSON.parse(JSON.stringify(item))["__EMPTY_14"]
+                        // obj.filterMaterial = JSON.parse(JSON.stringify(item))["__EMPTY_15"]
+                        // obj.remarkOne = JSON.parse(JSON.stringify(item))["__EMPTY_16"]
+                        // obj.remarkTwo = JSON.parse(JSON.stringify(item))["__EMPTY_17"]
+                        // obj.remarkThree = JSON.parse(JSON.stringify(item))["__EMPTY_18"]
                         arr.push(obj)
                     }
                 })
-            console.log(arr)
+          
+          
             let arr1 = []
             for (let i=0;i<arr.length;i++){
-                if(arr[i].customerModel=='合计'|| arr[i].zhNumber=='合计' ){
+                if(arr[i].customerModel=='合计'|| arr[i].zhNumber=='合计'|| !arr[i].zhNumber ){
                    break 
                 }
                  arr[i].index = i+1
                  if(!arr[i].sparyPowder&&arr[i-1].sparyPowder){
                         arr[i].sparyPowder = arr[i-1].sparyPowder
+                 }
+                 if(!arr[i].encasementCount&&arr[i-1].encasementCount){
+                        arr[i].encasementCount = arr[i-1].encasementCount
+                 }
+            
+                 if(!arr[i].customerModel&&arr[i-1].customerModel){
+                        arr[i].customerModel = arr[i-1].customerModel
                  }
                  arr1.push(arr[i])
             }
@@ -376,7 +399,7 @@ export default {
                 
                 
             // })
-      
+        
             this.tableData1 = arr1
         },
         

@@ -251,7 +251,7 @@
                                     <template slot-scope="scope">
                                         <el-button
                                                 type="info"
-                                                v-if="scope.row.state==1 || scope.row.state==2"
+                                                v-if="scope.row.state==1 || scope.row.state==2 || scope.row.state==7"
                                                 plain
                                                 icon="el-icon-edit"
                                                 @click="handleEdit(scope.$index, scope.row)"
@@ -316,7 +316,7 @@
                                         <el-input v-model="form1.planBuyYield" ></el-input>
                                 </el-form-item>
                             </el-col>
-                            <el-col :span="11">
+                            <!-- <el-col :span="11">
                                 <el-form-item label="计划时间" :label-width="formLabelWidth" >
                                     <el-date-picker
                                         style='width:100%'
@@ -328,7 +328,7 @@
                                         end-placeholder="结束日期"> 
                                     </el-date-picker>
                                 </el-form-item>
-                            </el-col>
+                            </el-col> -->
                             
                         </el-form>
                     </el-row>
@@ -386,8 +386,8 @@ export default {
                 yieid:'',
                 planYield:'',
                 planBuyYield:'',
-                planStartTime:'',
-                planEndTime:''
+                // planStartTime:'',
+                // planEndTime:''
             },
             formpro:{
 
@@ -407,8 +407,8 @@ export default {
                 {prop:'orderCount',label:'订单量'},
                 {prop:'planYield',label:'计划生产量'},
                 {prop:'planBuyYield',label:'计划采购量'},
-                {prop:'planStartTime',label:'开始时间'},
-                {prop:'planEndTime',label:'结束时间'},
+                // {prop:'planStartTime',label:'开始时间'},
+                // {prop:'planEndTime',label:'结束时间'},
             ],
             columnList1:[
                 {prop:'partCode',label:'部件编码'},
@@ -475,7 +475,7 @@ export default {
                     if(this.bz){
                         this.tableData2.push(this.bz)
                     }else{
-                        this.tableData2.push({partCode:'包装',itemCode:'300',planYield:0,orderCount:this.yieid,planBuyYield:0,planStartTime:'',planEndTime:''})
+                        this.tableData2.push({partCode:'包装',itemCode:'300',planYield:0,orderCount:this.yieid,planBuyYield:0})
                     }
                     
                 }
@@ -494,7 +494,7 @@ export default {
                     if(this.cy){
                         this.tableData2.push(this.cy)
                     }else{
-                        this.tableData2.push({partCode:'冲压',itemCode:'400',planYield:0,orderCount:this.yieid,planBuyYield:0,planStartTime:'',planEndTime:''})
+                        this.tableData2.push({partCode:'冲压',itemCode:'400',planYield:0,orderCount:this.yieid,planBuyYield:0,})
                     }
                     
                 }
@@ -513,7 +513,7 @@ export default {
                     if(this.zx){
                         this.tableData2.push(this.zx)
                     }else{
-                        this.tableData2.push({partCode:'纸芯',itemCode:'500',planYield:0,orderCount:this.yieid,planBuyYield:0,planStartTime:'',planEndTime:''})
+                        this.tableData2.push({partCode:'纸芯',itemCode:'500',planYield:0,orderCount:this.yieid,planBuyYield:0,})
                     }
                     
                 }
@@ -532,7 +532,7 @@ export default {
                     if(this.fb){
                         this.tableData2.push(this.fb)
                     }else{
-                        this.tableData2.push({partCode:'封边',itemCode:'100',planYield:0,orderCount:this.yieid,planBuyYield:0,planStartTime:'',planEndTime:''})
+                        this.tableData2.push({partCode:'封边',itemCode:'100',planYield:0,orderCount:this.yieid,planBuyYield:0})
                     }
                     
                 }
@@ -551,7 +551,7 @@ export default {
                     if(this.ps){
                         this.tableData2.push(this.ps)
                     }else{
-                        this.tableData2.push({partCode:'喷塑',itemCode:'200',planYield:0,orderCount:this.yieid,planBuyYield:0,planStartTime:'',planEndTime:''})
+                        this.tableData2.push({partCode:'喷塑',itemCode:'200',planYield:0,orderCount:this.yieid,planBuyYield:0})
                     }
                     
                 }
@@ -580,7 +580,7 @@ export default {
         //修改物料
         handleEdit(h,m){
            
-            this.value2 = [m.planStartTime,m.planEndTime]
+            // this.value2 = [m.planStartTime,m.planEndTime]
             this.form1 = JSON.parse(JSON.stringify(m))
             this.innerVisible = true
         },
@@ -733,11 +733,13 @@ export default {
                 partName:item.partName,
                 stWorkprocess:item.stWorkprocess,
                 source:item.source,
+                partId:item.id,
                 orderCount:item.orderCount,
                 partCode:item.partCode,
                 planBuyYield:item.planBuyYield,
-                planStartTime:item.planStartTime,
-                planEndTime:item.planEndTime})
+                // planStartTime:item.planStartTime,
+                // planEndTime:item.planEndTime
+                })
             })
             this.form.taskItemList = arr
             this.$refs[form].validate((valid) => {
@@ -764,8 +766,8 @@ export default {
                 specificationModel: '',
                 planYield: '',
                 delivery: false,
-                planStartTime: '',
-                planEndTime: '',
+                // planStartTime: '',
+                // planEndTime: '',
                 
             }
             this.value3 = false

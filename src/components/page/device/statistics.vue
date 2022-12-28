@@ -527,11 +527,12 @@ export default {
                 testinfo.push({time:item.dateTime,value:Number(item.state)+1})
               });
               
-              res.data[0].deviceRunList.map(item => {
-                hour.push(item.dateTime.split(' ')[1]);
-                hou1.push(item.dateTime.split(' ')[1]);
-              });
-              hou1.pop()
+              // res.data[0].deviceRunList.map(item => {
+              //   hour.push(item.dateTime.split(' ')[1]);
+              //   hou1.push(item.dateTime.split(' ')[1]);
+              // });
+              // hou1.pop()
+              console.log(testinfo)
               // this.drawStateChart(hour, state,hou1);
               this.drawStateChart(testinfo);
               

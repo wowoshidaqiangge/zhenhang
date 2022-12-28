@@ -174,7 +174,7 @@
                                         <el-input v-model="form1.planBuyYield" ></el-input>
                                 </el-form-item>
                             </el-col>
-                            <el-col :span="11">
+                            <!-- <el-col :span="11">
                                 <el-form-item label="计划时间" :label-width="formLabelWidth" >
                                     <el-date-picker
                                         style='width:100%'
@@ -186,7 +186,7 @@
                                         end-placeholder="结束日期"> 
                                     </el-date-picker>
                                 </el-form-item>
-                            </el-col>
+                            </el-col> -->
                             
                         </el-form>
                     </el-row>
@@ -232,7 +232,8 @@ export default {
                 productCode: '',
                 planYield:'',
                 customerModel: '',
-                
+                orderCount:'',
+                planFinishTime:'',
                 taskItemList:[]
             },
             form1:{
@@ -243,8 +244,8 @@ export default {
                 yieid:'',
                 planYield:'',
                 planBuyYield:'',
-                planStartTime:'',
-                planEndTime:''
+                // planStartTime:'',
+                // planEndTime:''
             },
             innerVisible:false,
             value2:[],
@@ -262,8 +263,8 @@ export default {
                 {prop:'orderCount',label:'订单量'},
                 {prop:'planYield',label:'计划生产量'},
                 {prop:'planBuyYield',label:'计划采购量'},
-                {prop:'planStartTime',label:'开始时间'},
-                {prop:'planEndTime',label:'结束时间'},
+                // {prop:'planStartTime',label:'开始时间'},
+                // {prop:'planEndTime',label:'结束时间'},
             ],
             prolist:[],
             yieid:'',
@@ -304,7 +305,7 @@ export default {
             if(val&&this.tableData2.length>0){
                 let a = this.tableData2.filter(v=>v.partCode==="冲压")
                 if(a.length<1){
-                    this.tableData2.push({partCode:'冲压',itemCode:'400',planYield:this.yieid,orderCount:this.yieid,planBuyYield:0,planStartTime:'',planEndTime:''})
+                    this.tableData2.push({partCode:'冲压',itemCode:'400',planYield:this.yieid,orderCount:this.yieid,planBuyYield:0,})
                 }
             }else if(!val&&this.tableData2.length>0){
                 this.tableData2.map((item,index)=>{
@@ -318,7 +319,7 @@ export default {
             if(val&&this.tableData2.length>0){
                 let a = this.tableData2.filter(v=>v.partCode==="纸芯")
                 if(a.length<1){
-                    this.tableData2.push({partCode:'纸芯',itemCode:'500',planYield:this.yieid,orderCount:this.yieid,planBuyYield:0,planStartTime:'',planEndTime:''})
+                    this.tableData2.push({partCode:'纸芯',itemCode:'500',planYield:this.yieid,orderCount:this.yieid,planBuyYield:0,})
                 }
             }else if(!val&&this.tableData2.length>0){
                 this.tableData2.map((item,index)=>{
@@ -332,7 +333,7 @@ export default {
             if(val&&this.tableData2.length>0){
                 let a = this.tableData2.filter(v=>v.partCode==="封边")
                 if(a.length<1){
-                    this.tableData2.push({partCode:'封边',itemCode:'100',planYield:this.yieid,orderCount:this.yieid,planBuyYield:0,planStartTime:'',planEndTime:''})
+                    this.tableData2.push({partCode:'封边',itemCode:'100',planYield:this.yieid,orderCount:this.yieid,planBuyYield:0})
                 }
             }else if(!val&&this.tableData2.length>0){
                 this.tableData2.map((item,index)=>{
@@ -346,7 +347,7 @@ export default {
              if(val&&this.tableData2.length>0){
                 let a = this.tableData2.filter(v=>v.partCode==="喷塑")
                 if(a.length<1){
-                    this.tableData2.push({partCode:'喷塑',itemCode:'200',planYield:this.yieid,orderCount:this.yieid,planBuyYield:0,planStartTime:'',planEndTime:''})
+                    this.tableData2.push({partCode:'喷塑',itemCode:'200',planYield:this.yieid,orderCount:this.yieid,planBuyYield:0})
                 }
             }else if(!val&&this.tableData2.length>0){
                 this.tableData2.map((item,index)=>{
@@ -360,7 +361,7 @@ export default {
             if(val&&this.tableData2.length>0){
                 let a = this.tableData2.filter(v=>v.partCode==="包装")
                 if(a.length<1){
-                    this.tableData2.push({partCode:'包装',itemCode:'300',planYield:this.yieid,orderCount:this.yieid,planBuyYield:0,planStartTime:'',planEndTime:''})
+                    this.tableData2.push({partCode:'包装',itemCode:'300',planYield:this.yieid,orderCount:this.yieid,planBuyYield:0})
                 }
             }else if(!val&&this.tableData2.length>0){
                 this.tableData2.map((item,index)=>{
@@ -376,9 +377,9 @@ export default {
             this.innerVisible = true
         },
         close1(){
-            this.value2 = []
-            this.form1.planEndTime = ''
-            this.form1.planStartTime = ''
+            // this.value2 = []
+            // this.form1.planEndTime = ''
+            // this.form1.planStartTime = ''
             this.innerVisible = false
         },
         marksure1(){
@@ -392,11 +393,11 @@ export default {
                         if(item.itemCode ===this.form1.itemCode){
                             this.tableData2[index].planYield = this.form1.planYield
                             this.tableData2[index].planBuyYield = this.form1.planBuyYield
-                            this.tableData2[index].planEndTime = this.form1.planEndTime
-                            this.tableData2[index].planStartTime = this.form1.planStartTime
-                            this.value2 = []
-                            this.form1.planEndTime = ''
-                            this.form1.planStartTime = ''
+                            // this.tableData2[index].planEndTime = this.form1.planEndTime
+                            // this.tableData2[index].planStartTime = this.form1.planStartTime
+                            // this.value2 = []
+                            // this.form1.planEndTime = ''
+                            // this.form1.planStartTime = ''
                         }
                     })
                     this.$forceUpdate()
@@ -413,24 +414,24 @@ export default {
                         item.planYield = this.yieid
                         item.orderCount = this.yieid
                         item.planBuyYield = 0
-                        item.planStartTime = ''
-                        item.planEndTime = ''
+                        // item.planStartTime = ''
+                        // item.planEndTime = ''
                         item.itemCode = item.id
                     })
                     if(this.value6){
-                        res.data.push({partCode:'冲压',itemCode:'400',planYield:this.yieid,orderCount:this.yieid,planBuyYield:0,planStartTime:'',planEndTime:''})
+                        res.data.push({partCode:'冲压',itemCode:'400',planYield:this.yieid,orderCount:this.yieid,planBuyYield:0,})
                     }
                      if(this.value7){
-                        res.data.push({partCode:'纸芯',itemCode:'500',planYield:this.yieid,orderCount:this.yieid,planBuyYield:0,planStartTime:'',planEndTime:''})
+                        res.data.push({partCode:'纸芯',itemCode:'500',planYield:this.yieid,orderCount:this.yieid,planBuyYield:0})
                     }
                     if(this.value4){
-                        res.data.push({partCode:'封边',itemCode:'100',planYield:this.yieid,orderCount:this.yieid,planBuyYield:0,planStartTime:'',planEndTime:''})
+                        res.data.push({partCode:'封边',itemCode:'100',planYield:this.yieid,orderCount:this.yieid,planBuyYield:0})
                     }
                     if(this.value5){
-                        res.data.push({partCode:'喷塑',itemCode:'200',planYield:this.yieid,orderCount:this.yieid,planBuyYield:0,planStartTime:'',planEndTime:''})
+                        res.data.push({partCode:'喷塑',itemCode:'200',planYield:this.yieid,orderCount:this.yieid,planBuyYield:0})
                     }
                     if(this.value3){
-                        res.data.push({partCode:'包装',itemCode:'300',planYield:this.yieid,orderCount:this.yieid,planBuyYield:0,planStartTime:'',planEndTime:''})
+                        res.data.push({partCode:'包装',itemCode:'300',planYield:this.yieid,orderCount:this.yieid,planBuyYield:0})
                     }
                     this.tableData2 = res.data
                 }
@@ -500,15 +501,16 @@ export default {
             // 切换订单重置产品编码
             this.form.productCode = ''
             this.tableData2 = []
-             this.form.customerModel = ''
-                 this.form.taskNumber = ''
-         
-                this.tableData2 = []
-                this.optionshp = []
-                this.optionszh = []
-                this.form.zhNumber = ''
-               
-                 this.form.taskNumber = val 
+            this.form.customerModel = ''
+            this.form.orderCount = ''
+            this.form.planFinishTime = ''
+            this.form.taskNumber = ''    
+            this.tableData2 = []
+            this.optionshp = []
+            this.optionszh = []
+            this.form.zhNumber = ''
+           
+             this.form.taskNumber = val 
         },
         changeselzh(val){
           
@@ -517,7 +519,8 @@ export default {
                     return item.zhNumber === val;  
                 });
                 this.form.customerModel =obj.customerModel
-                
+                this.form.orderCount = obj.orderCount
+                this.form.planFinishTime = obj.planFinishTime
                 this.yieid = obj.orderCount
                 this.tableData2 = []
                 this.optionshp = []
@@ -553,10 +556,10 @@ export default {
                }
            })
        },
-       changetime(h){
-           this.form1.planStartTime = moment(h[0]).format('YYYY-MM-DD')
-           this.form1.planEndTime = moment(h[1]).format('YYYY-MM-DD')
-       },
+    //    changetime(h){
+    //        this.form1.planStartTime = moment(h[0]).format('YYYY-MM-DD')
+    //        this.form1.planEndTime = moment(h[1]).format('YYYY-MM-DD')
+    //    },
        close(num){
            this.init()
            this.$emit('close',num)
@@ -564,7 +567,7 @@ export default {
        getproduceTaskid(id){
            produceTaskid(id).then(res=>{
                if(res.code==='0'){
-                   this.value1 = [res.data.planStartTime,res.data.planEndTime]
+                //    this.value1 = [res.data.planStartTime,res.data.planEndTime]
                    this.form = res.data
                }
            })
@@ -582,9 +585,11 @@ export default {
                 source:item.source,
                 orderCount:item.orderCount,
                 partCode:item.partCode,
+                partId:item.id,
                 planBuyYield:item.planBuyYield,
-                planStartTime:item.planStartTime,
-                planEndTime:item.planEndTime})
+                // planStartTime:item.planStartTime,
+                // planEndTime:item.planEndTime
+                })
             })
             this.form.taskItemList = arr
             this.$refs[form].validate((valid) => {
@@ -615,6 +620,8 @@ export default {
                 productCode: '',
                 planYield:'',
                 customerModel: '',
+                orderCount:'',
+                planFinishTime:'',
                 taskItemList:[]
                 
             }

@@ -135,6 +135,20 @@
             </el-table>
           </el-col>
           <div v-if="tit !== '工单分解'">
+            <el-col :span="24" >
+              <el-form-item label="计划时间：" :label-width="formLabelWidth" >
+                 <el-date-picker
+                    v-model="dateval"
+                    @change="datechange"
+                    type="daterange"
+                    range-separator="至"
+                    start-placeholder="开始日期"
+                    end-placeholder="结束日期">
+                  </el-date-picker>
+              </el-form-item>
+            </el-col>
+          </div>
+          <div v-if="tit !== '工单分解'">
             <p style="line-height:32px;font-size: 18px;color: #324170;padding:10px 0">请选择派单设备和人员:</p>
             <el-col :span="12">
               <el-form-item label="部门" :label-width="formLabelWidth" prop="userId">
@@ -275,7 +289,8 @@ export default {
       ],
       multipleSelection:[],
       parts:'',
-      infoway:''
+      infoway:'',
+      dateval:''
     };
   },
   created() {
@@ -286,6 +301,10 @@ export default {
   watch: {},
 
   methods: {
+    datechange(val){
+      this.form.planStartTime = moment(val[0]).format("YYYY-MM-DD")
+      this.form.planEndTime = moment(val[1]).format("YYYY-MM-DD")
+    },
     addpart(){
         // let pro = this.tableData2.filter(v=>v.partNumber===this.partnumber)
         // if(pro.length>0){
@@ -408,17 +427,7 @@ export default {
         this.tableData1 = m
       }else{
          this.infoway = m
-        // pro = JSON.parse(JSON.stringify(m))
-       
-        // if (pro.technologyName) {
-        //   this.fileList.push({ name: pro.technologyName, url: pro.technology });
-        // }
-        // if(pro.deviceListStr){
-        //   pro.deviceListStr = JSON.parse(pro.deviceListStr)
-        // }
-        // this.getPartListByZhNumber(pro.zhNumber)
-        // pro.userId = pro.executeUserId;
-        // this.form = pro
+      
         this.getPartListByZhNumber(m.productCode)
         setTimeout(()=>{
           this.getPartListByTaskPlanId(m.produceTaskPlanId)
@@ -432,6 +441,10 @@ export default {
             if(res.data.deviceListStr){
               res.data.deviceListStr = JSON.parse(res.data.deviceListStr)
             }
+            if(res.data.planStartTime){
+              this.dateval = [res.data.planStartTime,res.data.planEndTime]
+            }
+            
             this.form = res.data;
           });
       }
@@ -519,6 +532,7 @@ export default {
             
              let at = []
             if(this.tableData1.length>0){
+              debugger
               this.tableData1.map((v)=>{
                   if (Array.isArray(this.form.userId)) {
                     v.deptId = this.form.userId[0];
@@ -532,7 +546,10 @@ export default {
                     v.deviceId = arr.toString()
                     v.deviceListStr = JSON.stringify(this.form.deviceListStr)
                   }
-                 
+                  if(this.form.planStartTime){
+                    v.planStartTime = this.form.planStartTime
+                    v.planEndTime = this.form.planEndTime
+                  }
               })
               at = this.tableData1
             }else{
@@ -550,9 +567,7 @@ export default {
 
               }
               
-              //  this.form.deptId = this.form.userId[0];
-              //   this.form.userId = this.form.userId[1];
-              //   this.form.deviceId = '1144426692996108331'
+            
               this.form.partList = this.multipleSelection
               at.push(this.form)
             }
@@ -592,6 +607,7 @@ export default {
         planEndTime: '',
         yieldList: []
       };
+      this.dateval = ''
       this.value0 = '';
       this.value1 = '';
       this.value2 = '';

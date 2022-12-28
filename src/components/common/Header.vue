@@ -208,7 +208,7 @@ export default {
       this.collapse = !this.collapse;
       bus.$emit('collapse', this.collapse);
     },
-    // 全屏事件
+    // 全屏事件+
     handleFullScreen() {
       let element = document.documentElement;
       if (this.fullscreen) {

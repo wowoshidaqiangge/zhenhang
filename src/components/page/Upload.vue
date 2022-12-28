@@ -1,6 +1,8 @@
 <template>
     <div class="charts">
-      <el-button type="primary" @click="jump">添加路由</el-button>
+      <!-- <el-button type="primary" @click="jump">添加路由</el-button> -->
+      
+      123456
   </div>
 </template>
 

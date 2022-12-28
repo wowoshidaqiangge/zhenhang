@@ -7,7 +7,6 @@
                       <el-button type="add" v-if="$_has('materialAdd')" icon='el-icon-circle-plus-outline' @click="add">新增</el-button>
                       <el-button type="add" v-if="$_has('materialAddList')" @click="addexcel">EXCEL导入</el-button>
                 </div>
-              
                 <el-col :span="2" style="margin:0 20px">
                   <el-form-item label=""  prop="state" >
                       <el-select v-model="seachinfo.state"  placeholder="状态" >
@@ -21,18 +20,16 @@
                   </el-form-item>
                 </el-col>
                 <el-col :span="3" >
-                    <el-form-item label=""  prop="itemNameOrCode" >
+                  <el-form-item label=""  prop="itemNameOrCode" >
                       <el-input  placeholder="部件名称或编码" v-model="seachinfo.itemNameOrCode" class="elinput"> </el-input>
                   </el-form-item>
-                    
                 </el-col>
                 <div style="margin:0 15px">
-                        <el-button type="add" icon="el-icon-search" @click="seachinfo1">搜索</el-button>
-                         <el-button type="success" icon="el-icon-refresh-right" @click="resetting">重置</el-button>
+                      <el-button type="add" icon="el-icon-search" @click="seachinfo1">搜索</el-button>
+                      <el-button type="success" icon="el-icon-refresh-right" @click="resetting">重置</el-button>
                 </div>
                 </el-row>
               </el-form>
-            
       </div>
         <div class="bot">
             <el-table

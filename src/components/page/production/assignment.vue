@@ -76,14 +76,16 @@
                  </el-table-column>
                   <el-table-column
                     label="状态"
-                    width="70">
+                    align="center"
+                    width="100">
                     <template slot-scope="scope">
                         <div slot="reference" class="name-wrapper">
-                            <span v-if="scope.row.state=='1' " style="color:rgb(40,176,40);font-weight:600">未派单</span>
-                            <span v-if="scope.row.state=='2' " style="color:rgb(255,153,19);font-weight:600">未领单</span>
-                            <span v-if="scope.row.state=='3' " style="color:rgb(69,79,201);font-weight:600">生产中</span>
-                            <span v-if="scope.row.state=='4' " style="color:rgb(231,52,58);font-weight:600">已完工</span>
-                            <span v-if="scope.row.state=='5' " style="color:rgb(143,143,143);font-weight:600">已锁定</span>
+                            <span v-if="scope.row.state=='1' " style="color:rgb(40,176,40);font-weight:600">{{scope.row.produceTaskPlanState}}</span>
+                            <span v-if="scope.row.state=='2' " style="color:rgb(255,153,19);font-weight:600">{{scope.row.produceTaskPlanState}}</span>
+                            <span v-if="scope.row.state=='3' " style="color:rgb(69,79,201);font-weight:600">{{scope.row.produceTaskPlanState}}</span>
+                            <span v-if="scope.row.state=='4' " style="color:rgb(231,52,58);font-weight:600">{{scope.row.produceTaskPlanState}}</span>
+                            <span v-if="scope.row.state=='5' " style="color:rgb(143,143,143);font-weight:600">{{scope.row.produceTaskPlanState}}</span>
+                              <span v-if="scope.row.state=='7' " style="color:rgb(143,143,143);font-weight:600">{{scope.row.produceTaskPlanState}}</span>
                         </div>
                     </template>
                 </el-table-column>
@@ -124,7 +126,7 @@
                                 <el-button
                                     type="add"
                                     plain
-                                     v-if="scope.row.state=='1' &&$_has('assignmentPlan') "
+                                     v-if="(scope.row.state=='1'||scope.row.state=='7' )&&$_has('assignmentPlan') "
                                     class="red"
                                     @click="handlesplit(scope.$index, scope.row)"
                                 >工单分解</el-button>
@@ -137,7 +139,7 @@
                                 <el-button
                                     type="danger"
                                     plain
-                                     v-if="scope.row.state=='1'&& $_has('assignmentAssign') "
+                                     v-if="(scope.row.state=='1'||scope.row.state=='7')&& $_has('assignmentAssign') "
                                     class="red"
                                     @click="handledistribute(scope.$index, scope.row)"
                                 >派单</el-button>

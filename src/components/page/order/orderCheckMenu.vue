@@ -53,7 +53,7 @@
                 stripe
                 :height='screenWidth'
                 :span-method="objectSpanMethod"
-               :row-key="getRowKeys"
+                 :row-key="getRowKeys"
                  @selection-change="handleSelectionChange"
               
                 border
@@ -310,7 +310,6 @@ export default {
            
         },
         getRowKeys(row){
-          
             return row.id
         },
         handleedit(val){

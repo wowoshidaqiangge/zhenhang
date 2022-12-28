@@ -1,10 +1,20 @@
+<!--
+ * @Descripttion: 
+ * @version: 
+ * @Author: renqiang_hu
+ * @Date: 2021-06-17 14:32:35
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2021-06-28 18:05:01
+ * @FilePath: \vue-manage-system\src\components\page\production\warehouseManage.vue
+-->
+
 <template>
-  <div class="production">
+  <div class="warehouseManage">
       <div class="top" >
               <el-form :model="seachinfo"  ref="seachinfo"  class="demo-ruleForm">
               <el-row type="flex" justify="end">
                     <div style="flex:1">
-                        <el-button type="add" v-if="$_has('productionAdd')" icon='el-icon-circle-plus-outline' @click="add">新增</el-button>
+                        
                     </div>
                     
                     <el-col :span="5">
@@ -68,64 +78,35 @@
                 </el-table-column>
                 <el-table-column
                     label="状态"
-                    width="90">
+                    align="center"
+                   >
                     <template slot-scope="scope">
                         <div slot="reference" class="name-wrapper">
-                            <span v-if="scope.row.state=='1' " style="color:rgb(40,176,40);font-weight:600">{{ scope.row.produceTaskState }}</span>
-                            <span v-if="scope.row.state=='2' " style="color:rgb(255,153,19);font-weight:600">{{ scope.row.produceTaskState }}</span>
-                            <span v-if="scope.row.state=='3' " style="color:rgb(69,79,201);font-weight:600">{{ scope.row.produceTaskState }}</span>
-                            <span v-if="scope.row.state=='4' " style="color:rgb(231,52,58);font-weight:600">{{ scope.row.produceTaskState }}</span>
-                            <span v-if="scope.row.state=='5' " style="color:rgb(143,143,143);font-weight:600">{{ scope.row.produceTaskState }}</span>
+                            <span v-if="scope.row.state=='1' " style="color:rgb(40,176,40);font-weight:600">{{ scope.row.taskWarehouseState }}</span>
+                            <span v-if="scope.row.state=='2' " style="color:rgb(255,153,19);font-weight:600">{{ scope.row.taskWarehouseState }}</span>
+                            <span v-if="scope.row.state=='3' " style="color:rgb(69,79,201);font-weight:600">{{ scope.row.taskWarehouseState }}</span>
                            
-                            <span v-if="scope.row.state=='7' " style="color:rgb(143,143,143);font-weight:600">{{ scope.row.produceTaskState }}</span>
                         </div>
                     </template>
                 </el-table-column>
                 <el-table-column
                     label="进度"
-                    width="55">
+                   >
                     <template slot-scope="scope">
                         <div slot="reference" class="name-wrapper">
                             <span style="color:rgb(40,176,40)">{{ scope.row.produceProgress }}</span>
                         </div>
                     </template>
                 </el-table-column>
-                <el-table-column
-                    label="用时"
-                    width="50">
-                    <template slot-scope="scope">
-                        <div slot="reference" class="name-wrapper">
-                            <span v-if='scope.row.produceDuration'>{{ scope.row.produceDuration }}</span>
-                        </div>
-                    </template>
-                </el-table-column>
+            
                 <el-table-column label="操作" width="210" >
                             <template slot-scope="scope">
                                 <el-button
                                     type="success"
-                                    v-if="(scope.row.state=='3' || scope.row.state=='2' ||scope.row.state=='1' || scope.row.state=='7') && $_has('productionLock') "
                                     plain
-                                    @click="handleUntie(5, scope.row)"
-                                >锁定</el-button>
-                                <el-button
-                                    type="warning"
-                                     v-if="scope.row.state=='5' && $_has('productionUnlock') "
-                                    plain
-                                    @click="handleUntie(6, scope.row)"
-                                >解锁</el-button>
-                                 <el-button
-                                    type="info"
-                                     v-if="(scope.row.state=='1' || scope.row.state=='2' ||scope.row.state=='3'||scope.row.state=='7') && $_has('productionDetail')"
-                                    plain
-                                    @click="handleEdit(scope.$index, scope.row)"
-                                >详情</el-button>
-                                <el-button
-                                    type="danger"
-                                    plain
-                                     v-if="(scope.row.state=='1' || scope.row.state=='2' || scope.row.state=='7') && $_has('productionDelete')"
-                                    class="red"
-                                    @click="handleDelete(scope.$index, scope.row)"
-                                >删除</el-button>
+                                    @click="handleUntie(scope.row)"
+                                >部件详情</el-button>
+                               
                             </template>
                     </el-table-column>
             
@@ -133,28 +114,26 @@
             <div class="page">
                 <el-pagination
                     :background='true'
-                    :current-page.sync="pagesize"
+                    :current-page.sync="page.current"
                     @current-change="handleCurrentChange"
                     layout="total, prev, pager, next"
                     :total="totals">
                 </el-pagination>
             </div>
           </div>
-          <Modal :dialogFormVisible='dialogFormVisible' @close='close' :tit='tit' />
-          <editmodal :dialogFormVisibledit='dialogFormVisibledit' @close='close' :tit='tit' ref='promodal'/>
+         <WareModel :dialogFormVisible='dialogFormVisible' :orderlist="orderlist" @close='close' :tit='tit' ref="war"/>
   </div>
 </template>
-
 <script>
-import { produceTaskpage,produceTaskdelete,updateProduceTaskLockById,produceTaskStateList } from 'api/index'
-import Modal from './modal'
+import { produceWarehousePage,listEnum } from 'api/index'
+
 import moment from 'moment'
-import editmodal from './proeditmodal'
+import WareModel from './wareModel.vue'
 import { mapState } from 'vuex'
 export default {
-    name: 'production',
+    name: 'warehouseManage',
     components:{
-        Modal,editmodal
+        WareModel
     },
     computed:{
         ...mapState(['screenHeight'])
@@ -171,15 +150,15 @@ export default {
         return {
             loading:false,
             dialogFormVisible:false,
-            dialogFormVisibledit:false,
+            
             value:'',
             value1:'',
-            tit:'',
+            tit:'部件详情',
             page:{
                 current:1,
                 size:10
             },
-            tableData:[],
+            tableData:[1],
             columnlist:[
                 {prop:'index',label:'序号',width:'50'},
                 {prop:'taskNumber',label:'任务单号'},
@@ -188,10 +167,9 @@ export default {
                 {prop:'customerModel',label:'客户型号'},
                 {prop:'orderCount',label:'订单量'},
                 {prop:'planYield',label:'计划生产量',width:'95'},
-                {prop:'planFinishTime',label:'交货时间',width:'90'},
-               
-                {prop:'createTime',label:'创建时间',width:'90'},
-                {prop:'createUser',label:'下单人'},
+            
+                {prop:'planFinishTime',label:'交货时间',},
+
             ],
             pagesize:1,
             totals:0,
@@ -206,13 +184,13 @@ export default {
         }
     },
     created(){
-        this.getproduceTaskpage()
-        this.getproduceTaskStateList()
+       this.getproduceWarehousePage()
+       this.getproduceTaskStateList()
     },
     methods: {
         // 查询状态
-        getproduceTaskStateList(){
-            produceTaskStateList().then(res=>{
+         getproduceTaskStateList(){
+           listEnum({type:'produce_warehouse_state'}).then(res=>{
                 if(res.code==='0'){
                     this.orderlist = res.data
                 }
@@ -220,18 +198,14 @@ export default {
         },
         //重置
         resetting(){
-            this.seachinfo = {
-                beginDate:'',
-                endDate:'',
-                state:'',
-                zhNumberOrTaskNumber:''
-            }
+         
             this.page={
                 current:1,
                 size:10
             }
+            this.seachinfo = {}
             this.value1 = ''
-            this.getproduceTaskpage()
+            this.getproduceWarehousePage()
         },
         changedate(val){
             this.seachinfo.beginDate = moment(val[0]).format('YYYY-MM-DD')
@@ -240,84 +214,42 @@ export default {
         //搜索
         seachinfo1(){
             this.page.current = 1
-           this.getproduceTaskpage(this.seachinfo)
+           this.getproduceWarehousePage(this.seachinfo)
         },
         // 获取列表
-        getproduceTaskpage(){
-            let  obj = {...this.seachinfo,...this.page}
-            this.loading = true
-            produceTaskpage(obj).then(res=>{
-                if(res.code==='0'){
+        getproduceWarehousePage(){
+            produceWarehousePage({...this.page,...this.seachinfo}).then(res=>{
+              
+                if(res.code=='0'){
                     res.data.records.map((item,index)=>{
                         item.index = index + 1
-                        // item.planFinishTime = item.planFinishTime.split(' ')[0]
-                        // item.planEndTime = item.planEndTime.split(' ')[0]
-                        item.createTime = item.createTime.split(' ')[0]
                     })
                     this.tableData = res.data.records
-                    this.pagesize = parseInt(res.data.current)
-                    this.totals = parseInt(res.data.total)
+                    this.page.current = Number(res.data.current)
+                    this.totals = Number(res.data.total)
                 }
-                this.loading = false
             })
         },
         handleCurrentChange(val){
             this.page.current=val
-            this.getproduceTaskpage()
+            this.getproduceWarehousePage()
         },
-        add(){
-            this.tit = '新增任务'
+       async handleUntie(info){
+            
+            await this.$refs.war.getpro(info)
             this.dialogFormVisible = true
         },
-        close(num){
+        close(){
             this.dialogFormVisible = false
-            this.dialogFormVisibledit = false
-            if(num==='0'){
-                this.getproduceTaskpage()
-            }
-        },
-        handleEdit(h,m){
-             this.tit = '详情'
-             this.$refs.promodal.getproduceTaskid(m)
-             this.$refs.promodal.getProduceProgress(m)
-             
-             this.dialogFormVisibledit = true
-           
-        },
-        handleDelete(h,m){
-             this.$confirm('确定要删除吗？', '提示', {
-                type: 'warning'
-            })
-            .then(() => {
-                    produceTaskdelete(m).then(res=>{
-                        if(res.code==='0'){
-                            this.$message.success(res.msg)
-                            this.getproduceTaskpage()
-                        }
-                    })
-            })
-            .catch(() => {});
-           
-        },
-        // 锁定解锁
-        handleUntie(h,m){
-            var obj = {id:m.id,state:h,orderId:m.orderId}
-      
-            updateProduceTaskLockById(obj).then(res=>{
-                if(res.code==='0'){
-                    this.$message.success(res.msg)
-                    this.getproduceTaskpage()
-                }else{
-                    this.$message.error(res.msg)
-                }
-            })
+            this.getproduceWarehousePage()
         }
+       
     }
 }
 </script>
 
 <style lang='less'>
-    .production{
+    .warehouseManage{
          .top{
                 height: 50px;
             

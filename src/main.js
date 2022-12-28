@@ -1,3 +1,12 @@
+/*
+ * @Descripttion: 
+ * @version: 
+ * @Author: renqiang_hu
+ * @Date: 2020-04-15 18:01:58
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2021-08-16 11:22:07
+ * @FilePath: \vue-manage-system\src\main.js
+ */
 import Vue from 'vue';
 import App from './App.vue';
 import router from './router';
@@ -45,7 +54,6 @@ router.beforeEach((to, from, next) => {
                 confirmButtonText: '确定'
             });
         } else {
-            
             next();
         }
     }

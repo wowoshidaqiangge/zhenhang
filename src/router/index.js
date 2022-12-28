@@ -112,6 +112,24 @@ const router = new Router({
                     meta: { title: '任务管理', keepAlive: false }
                 },
                 {
+                    path: '/warehouseManage',
+                    component: () =>
+                        import (
+                            /* webpackChunkName: "table" */
+                            '../components/page/production/warehouseManage.vue'
+                        ),
+                    meta: { title: '仓库管理', keepAlive: false }
+                },
+                {
+                    path: '/purchaseManage',
+                    component: () =>
+                        import (
+                            /* webpackChunkName: "table" */
+                            '../components/page/production/purchaseManage.vue'
+                        ),
+                    meta: { title: '采购管理', keepAlive: false }
+                },
+                {
                     path: '/purchase',
                     component: () =>
                         import (
@@ -220,6 +238,33 @@ const router = new Router({
                 },
 
                 // 配置管理
+                {
+                    path: '/productManage',
+                    component: () =>
+                        import (
+                            /* webpackChunkName: "table" */
+                            '../components/page/dispose/productManage/index.vue'
+                        ),
+                    meta: { title: '产品管理', keepAlive: false }
+                },
+                {
+                    path: '/part',
+                    component: () =>
+                        import (
+                            /* webpackChunkName: "table" */
+                            '../components/page/dispose/part/index.vue'
+                        ),
+                    meta: { title: '配件管理', keepAlive: false }
+                },
+                {
+                    path: '/module',
+                    component: () =>
+                        import (
+                            /* webpackChunkName: "table" */
+                            '../components/page/dispose/module/index.vue'
+                        ),
+                    meta: { title: '组件管理', keepAlive: false }
+                },
                 {
                     path: '/material',
                     component: () =>
